@@ -5,6 +5,8 @@ title: "Pre-Class Learning Summaries"
 ## R
 
 ![](0808-r.png)
+![Mindmap for Fri. Sept. 11](0911-mindmap.png)
+
 
 ## Quarto
 

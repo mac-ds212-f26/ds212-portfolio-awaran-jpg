@@ -49,8 +49,7 @@ cleaned_weather <- cleaned_weather %>%
 4. Create a variable called `month_name` that shows the 3-letter abbreviation for each case.
 ```{r}
 cleaned_weather <- cleaned_weather %>%
-  month= 1:12
-  mutate(month_name = month.abb)
+  mutate(month_name = month.abb[Month])
 ```
 
 5. Save the wrangled data to the `data/processed/` folder using `write_csv()`. Name this file `weather_clean.csv`. Look up the documentation for this function by typing `?write_csv` in the Console. You'll need to write an appropriate relative path.
