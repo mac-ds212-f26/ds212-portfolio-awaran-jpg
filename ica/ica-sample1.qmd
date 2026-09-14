@@ -3,3 +3,15 @@ title: "ICA Sample 1"
 ---
 
 Add content here
+
+# Data Story Critique
+
+## What is the data story?
+
+```{r}
+library(tidyverse)
+weather_link <- "https://hash-mac.github.io/ds212site-f26/activities/data/raw/weather.csv"
+weather <- read_csv(weather_link)
+head(weather)
+
+```
