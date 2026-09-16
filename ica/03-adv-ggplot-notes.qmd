@@ -240,7 +240,7 @@ ggplot(weather) +
 
 ## Exercise 6 
 
-Create a precipitation plot that looks like the following.  Note that 
+Create a precipitation plot that looks like the following.  Note that
 
 - The triangles point to precipitation records--refer to the data codebook above for the `RecordP` variable.
 - The numbers on the plot indicate the total precipitation for the month--search the `hjust` and `vjust` options to adjust the alignment of the numbers.
@@ -255,6 +255,22 @@ ggplot(weather) +
     aes(x = dateInYear, y = CulmPrec, group = Month),
     fill = "#ebeae2",
     color = "#32a3d8"
+  ) +
+   geom_point(
+    data = weather %>%
+      filter(RecordP == TRUE),
+    aes(x = dateInYear, y = CulmPrec),
+    fill = "black",
+    shape = 25,
+    size = 2
+  ) +
+  geom_text(
+    data = weather %>%
+      group_by(Month) %>%
+      slice_tail(n = 1),
+    aes(x = dateInYear, y = CulmPrec, label = CulmPrec),
+    vjust = -0.5,
+    hjust = 1
   ) +
   theme_classic()
 ```
