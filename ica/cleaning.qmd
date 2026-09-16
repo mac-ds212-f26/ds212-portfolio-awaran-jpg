@@ -43,7 +43,6 @@ cleaned_weather <- weather %>%
 cleaned_weather <- cleaned_weather %>%
   arrange(Month, Day) %>%
   mutate(dateInYear = 1:365)
-
 ```
 
 4. Create a variable called `month_name` that shows the 3-letter abbreviation for each case.
