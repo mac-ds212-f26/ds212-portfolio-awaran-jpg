@@ -21,25 +21,25 @@
     ]
   },
   {
-    "objectID": "tt/2025-07-08.html",
-    "href": "tt/2025-07-08.html",
-    "title": "TidyTuesday Sample 1",
+    "objectID": "tt/hw01-tt.html",
+    "href": "tt/hw01-tt.html",
+    "title": "Homework 01",
     "section": "",
-    "text": "Add content here",
+    "text": "TidyTuesday Part\nExplore the week’s TidyTuesday challenge. Develop a research question, then answer it through a short data story mainly composed of effective visualizations. Provide sufficient background for readers to grasp your narrative. Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.",
     "crumbs": [
       "TidyTuesday",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>TidyTuesday Sample 1</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Homework 01</span>"
     ]
   },
   {
-    "objectID": "tt/2025-07-15.html",
-    "href": "tt/2025-07-15.html",
-    "title": "TidyTuesday Sample 2",
+    "objectID": "tt/hw01-tt.html#tidytuesday-part",
+    "href": "tt/hw01-tt.html#tidytuesday-part",
+    "title": "Homework 01",
     "section": "",
-    "text": "Add content here",
+    "text": "Background\nThe TidyTuesday data I will investigate is a set of crowdsourced prices of cappuccinos at cafes across the world, along with the estimated hourly wages of baristas from all countries where prices were reported. This make it possible to compare how much a cappuccino costs in different places, and also how affordable that price is relative to local wages.\nThe full dataset covers dozens of countries, some with small sample sizes. As such, my analysis at first is restricted to countries with at least 10 reported prices, and then highlights four countries (Australia, Switzerland, Mexico, and India) with interesting patterns.\nResearch question\nDoes the price of a cappuccino actually reflect how affordable it is, and why or why not?\nAnalysis\n\nCodelibrary(tidyverse)\n\ncafe &lt;- read_csv(\"https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cafe.csv\")\n\ncappuccino_index &lt;- read_csv(\"https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cappuccino_index.csv\")\n\ncafe_summary &lt;- cafe %&gt;%\n  group_by(country) %&gt;%\n  summarise(\n    average_price = mean(price_gbp),\n    average_wage = mean(hourly_wage_gbp),\n    .groups = \"drop\"\n  )\n\ncoffee &lt;- cappuccino_index %&gt;%\n  select(country, n, work_minutes = index) %&gt;%\n  left_join(cafe_summary, by = \"country\")\n\n\n\nCodecoffee_larger &lt;- coffee %&gt;% filter(n &gt;= 10)\n\nfocus_countries &lt;- coffee %&gt;%\n  filter(\n    country %in% c(\"Australia\", \"Switzerland\", \"Mexico\", \"India\")\n  ) %&gt;%\n  mutate(\n    country_label = paste0(country, \"  (n = \", n, \")\"),\n    country_label = reorder(country_label, -work_minutes)\n  )\n\ntheme_coffee &lt;- theme_bw(base_size = 12) +\n  theme(panel.grid.minor = element_blank())\n\n\nThe first step is to see whether a cappuccino’s price actually predicts how much local work-time it costs. Plotting price against the cappuccino index (limited to countries with 10 or more data points) shows that is not often the case.\n\nCodeplot1 &lt;- ggplot(coffee_larger, aes(x = average_price, y = work_minutes)) +\n  geom_point(\n    color = \"gray\", size = 3, alpha = 0.7\n  ) +\n  geom_point(\n    data = focus_countries,\n    color = \"darkcyan\", size = 3.75\n  ) +\n  geom_text(\n    data = focus_countries,\n    aes(label = paste0(country, \" (n = \", n, \")\")),\n    hjust = 0,\n    nudge_x = 0.08,\n    nudge_y = -5,\n    size = 3.5,\n    color = \"black\"\n  ) +\n    labs(\n    title = \"Low coffee prices do not always mean short work times\",\n    subtitle = \"Four labeled examples show combinations of price and affordability\",\n    x = \"Average price of a small cappuccino (£)\",\n    y = \"Minutes of work to afford one cappuccino\",\n    caption = \"Each country has at least 10 reported cafes. Source: TidyTuesday data, September 8, 2026\"\n    ) +\n  scale_x_continuous(expand = expansion(mult = c(0.05, 0), add = c(0, 1))) +\n  theme_coffee\n\nplot1\n\n\n\n\n\n\n\nIn India, the cappuccino is the cheapest of the four labeled examples (£1.96), but it takes almost three hours to earn. Switzerland’s cappuccino is more than twice the price, but it takes under 15 minutes to earn.\nSince price cannot explain the difference between cost and time worked, we can investigate wages next. We see that the hourly wages tell a different story when compared to prices.\n\nCodeplot2 &lt;- ggplot(focus_countries, aes(x = average_wage, y = country_label)) +\n  geom_col(fill = \"darkcyan\", width = 0.55) +\n  geom_text(aes(label = sprintf(\"£%.2f\", average_wage)), \n            hjust = -0.15, \n            size = 4\n  ) +\n  labs(\n    title = \"Average wages vary more sharply than coffee prices\",\n    subtitle = \"The highest average hourly wage is about 33 times the lowest in the sample\",\n    x = \"Average hourly barista wage (GBP)\",\n    y = NULL,\n    caption = paste(\"Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026\")\n  ) +\n  scale_x_continuous(\n    limits = c(0, 25), \n    breaks = seq(0, 25, 5)) +\n  theme_coffee\n\nplot2\n\n\n\n\n\n\n\nSwitzerland’s average hourly wage (£22.54) is over 33 times India’s (£0.68), which is a far bigger gap than the roughly 3x difference in cappuccino prices. Because wages vary more than prices, this completely changes the narrative from the first plot, we now have an explanation for the difference between cost and time worked.\nNow that we know the mechanism behind the cost-time worked gap, we can now place all countries on a scale to make the relationship more concrete.\n\nCodeplot3 &lt;- ggplot(focus_countries, aes(x = work_minutes, y = country_label)) +\n#| fig-alt: \"Horizontal dot plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia 10 minutes and £2.75, Switzerland 14 minutes and £5.41, Mexico 75 minutes and £2.71, India 172 minutes and £1.96.\"\n  geom_segment(aes(x = 0, xend = work_minutes, yend = country_label),\n    color = \"darkcyan\",\n    linewidth = 1.3\n  ) +\n  geom_point(color = \"darkcyan\", size = 4) +\n  geom_label(\n    aes(label = sprintf(\"%.0f min; £%.2f per cup\",work_minutes, average_price)\n    ),\n    hjust = -0.08,\n    size = 4,\n    fill = \"white\",\n    linewidth = 0\n\n  ) +\n  labs(\n    title = \"Time to afford a cappuccino in selected countries\",\n    subtitle = \"It costs about 10 minutes of work in Australia, but nearly three hours in India\",\n    x = \"Minutes of work to afford one small cappuccino\",\n    y = NULL,\n    caption =\n    \"Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026\"\n  ) +\n  scale_x_continuous(\n    limits = c(0, 260),\n    breaks = seq(0, 240, 60)\n  ) +\n  theme_coffee\n\nplot3\n\n\n\n\n\n\n\nThis graph follows the second one closely. The clearest illustration is Mexico versus Australia; their average cappuccino prices are nearly identical (£2.71 vs. £2.75), yet Mexico’s time-cost is more than seven times Australia’s.\nFinal takeaways\n\nA cappuccino’s price does not accurately represent how affordable it is. India’s coffee is the cheapest in pounds and the most expensive in time, whereas Switzerland is the reverse.\nHourly wages for baristas across these four countries vary by more than 30-fold, while cappuccino prices vary by less than 3-fold. This is the main reason for the affordability gap.\nThe same logic likely will extend beyond the four selected countries, which were chosen to illustrate the combinations I found the most interesting.",
     "crumbs": [
       "TidyTuesday",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>TidyTuesday Sample 2</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Homework 01</span>"
     ]
   },
   {
@@ -50,7 +50,7 @@
     "text": "R",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -61,7 +61,7 @@
     "text": "Mindmap for Monday, September 14",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -72,7 +72,7 @@
     "text": "Quarto\n\n\n\nfrom qmd4sci.njtierney.com",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -83,7 +83,7 @@
     "text": "Data Story Critique\nAdd content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>ICA Sample 1</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>ICA Sample 1</span>"
     ]
   },
   {
@@ -94,7 +94,7 @@
     "text": "What is the data story?\n\nCodelibrary(tidyverse)\nweather_link &lt;- \"https://hash-mac.github.io/ds212site-f26/activities/data/raw/weather.csv\"\nweather &lt;- read_csv(weather_link)\nhead(weather)\n\n# A tibble: 6 × 18\n  Month   Day   Low  High NormalLow NormalHigh RecordLow LowYr RecordHigh HiYear\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;\n1    11    20    48    55        48         62        35  1964         69   2005\n2     6    16    52    68        53         70        46  1952         90   1961\n3     5     9    47    63        50         66        41  1950         88   1993\n4    10    26    47    69        52         69        39  1954         89   2003\n5     9    27    55    82        55         73        47  1955         96   2010\n6     7     6    52    70        54         71        47  1953         86   1957\n# ℹ 8 more variables: Precip &lt;dbl&gt;, RecordPrecip &lt;dbl&gt;, PrecipYr &lt;dbl&gt;,\n#   date &lt;chr&gt;, Record &lt;lgl&gt;, RecordText &lt;chr&gt;, RecordP &lt;lgl&gt;, CulmPrec &lt;dbl&gt;",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>ICA Sample 1</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>ICA Sample 1</span>"
     ]
   },
   {
@@ -105,7 +105,7 @@
     "text": "Add content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>ICA Sample 2</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>ICA Sample 2</span>"
     ]
   },
   {
@@ -116,7 +116,7 @@
     "text": "Exercise\nCarryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.\nCodelibrary(tidyverse)\nweather &lt;- read_csv(\"data/raw/weather.csv\")\nhead(weather)\n\n# A tibble: 6 × 18\n  Month   Day   Low  High NormalLow NormalHigh RecordLow LowYr RecordHigh HiYear\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;\n1    11    20    48    55        48         62        35  1964         69   2005\n2     6    16    52    68        53         70        46  1952         90   1961\n3     5     9    47    63        50         66        41  1950         88   1993\n4    10    26    47    69        52         69        39  1954         89   2003\n5     9    27    55    82        55         73        47  1955         96   2010\n6     7     6    52    70        54         71        47  1953         86   1957\n# ℹ 8 more variables: Precip &lt;dbl&gt;, RecordPrecip &lt;dbl&gt;, PrecipYr &lt;dbl&gt;,\n#   date &lt;chr&gt;, Record &lt;lgl&gt;, RecordText &lt;chr&gt;, RecordP &lt;lgl&gt;, CulmPrec &lt;dbl&gt;\nCodecleaned_weather &lt;- weather %&gt;%\n  mutate(PrecipYr = na_if(PrecipYr, 99999))\nCodecleaned_weather &lt;- cleaned_weather %&gt;%\n  arrange(Month, Day) %&gt;%\n  mutate(dateInYear = 1:365)\nCodecleaned_weather &lt;- cleaned_weather %&gt;%\n  mutate(month_name = month.abb[Month])\nCodewrite_csv(cleaned_weather, file = \"data/processed/weather_clean.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -127,7 +127,7 @@
     "text": "Read in the weather data in this file with the correct relative file path after you move it to the instructed location.\n\n\n\nThere is a variable that has values that don’t make sense in the data context. Figure out which variable this is and clean it up by making those values missing using na_if().\n\n\n\nCreate a variable called dateInYear that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).\n\n\n\nCreate a variable called month_name that shows the 3-letter abbreviation for each case.\n\n\n\nSave the wrangled data to the data/processed/ folder using write_csv(). Name this file weather_clean.csv. Look up the documentation for this function by typing ?write_csv in the Console. You’ll need to write an appropriate relative path.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -138,7 +138,7 @@
     "text": "🧩 Learning Goals\nBy the end of this lesson, you should be able to:",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -149,7 +149,7 @@
     "text": "Navigate ggplot2 reference page to find needed functions for a desired visualization\nNavigate the different sections of a function help page to construct desired plot features, in particular,\n\nNavigate the Usage section to identify arguments that must be set\nNavigate the Arguments section to understand how arguments work\nNavigate the Aesthetics section to learn how plot appearance can be controlled\nNavigate the Examples section for some usage examples\n\n\nIdentify when to use different data arguments within ggplot() and geom_() layers",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -160,7 +160,7 @@
     "text": "Introduction 1\n\nIn this lesson, we are going to recreate NYTimes 2015 Temperature Visualization (html) using data from San Francisco (SFO) in 2011.\n\n\nScreenshot of NYTimes 2015 Temperature Visualization",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -171,7 +171,7 @@
     "text": "Reading Data\nRun the code chunk below to load the tidyverse package and read in the San Francisco weather data.\n\nCodelibrary(tidyverse)\nweather &lt;- read_csv(\"https://mac-stat.github.io/data/sfo_weather.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -182,7 +182,7 @@
     "text": "Understanding Data\nBelow is the codebook of the data. Familiarize yourself with the meaning of each variable. Use the codebook as a reference when using the data.\n\n\nMonth: Month of the year (1-12)\n\nDay: Day within the month (1-31)\n\nLow/High: Low/high temperature this day\n\nNormalLow/NormalHigh: Typical low/high temperature for this day of the year\n\nRecordLow/RecordHigh: Record low/high temperature for this day of the year\n\nLowYr/HighYr: Year in which the record low/high was observed\n\nPrecip: Amount of precipitation (inches) this day\n\nRecordPrecip: Record amount of precipitation for this day of the year\n\nPrecipYr: Year in which the record precipitation was observed\n\ndate: The actual date in 2011 for this day in YYYY-MM-DD format\n\ndateInYear: What day of the year is it? (1-365)\n\nRecord: Logical (TRUE/FALSE) indicating whether this day had a high temperature record\n\nRecordText: Text that displays the record high for this day (\"Record high: ##\")\n\nRecordP: Logical (TRUE/FALSE) indicating whether this day had a precipitation record\n\nCulmPrec: Cumulative precipitation for the month up to this day",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -193,7 +193,7 @@
     "text": "Exercise 1\nExamine the NYTimes 2015 Temperature Visualization (html) then answer the following questions.\nData Storytelling\n\nRelate the intro paragraph: “Scientists declared that 2015 was Earth’s hottest year on record…” to the design of the visualization. In particular, based on the intro paragraph,\n\nWhat key message/claim does NYTimes want readers to be able to explore?\nHow did this goal inform what information is displayed in the visualization?\n\n\nGlobal warming, in particular the increase in temperature in various cities throughout the year. With this design, we can see the normalized average from 1981 to 2010, and compare it to the recorded temperatures for each day in 2015, as well as the year’s average. So, this informed the inclusion of the record high/low, and the normal temperature ranges.\n\n\n\nAesthetic Mapping\n\nWhat specific variables (from the data codebook) underlie the visualization?\nHow do these variables map to aesthetics of the visual elements, eg, position, size, shape, and color of glyphs?\n\n\nNormalLow/NormalHigh, Month, Day, Low/High, RecordLow/RecordHigh, date (possibly), RecordText, Record\n\n\nDate and month are linked to the line range plot, (so the position). Color, shape, and size is based on Low/High, NormalLow/NormalHigh and RecordLow/RecordHigh.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -204,7 +204,7 @@
     "text": "Exercise 2\nNavigate the Geoms section of the ggplot2 reference page to find a geom that corresponds to the visual elements in the temperature plot. Using both the small thumbnail visuals on the right and the names of the geom’s, brainstorm some possibilities for geom’s you might use to recreate the temperature visualization.\n\ngeom_linerange() for the individual dates, or geom_ribbon() for the normalized range.\n\n\n\n\n\n\n\nNoteNavigating Documentation / Reference Pages\n\n\n\nYou need to navigate the geoms further by opening up their reference pages to understand if a particular geom is suitable for our task. Let’s look at the geom_point documentation page to learn how to read a documentation page..\nThe Usage section shows all of the possible inputs (arguments) to the geom. These are all of the ways that a geom can be customized. Just looking at the argument names can help give a hint as to what arguments might fit our needs.\nThe Arguments section, on the other hand, explains in detail what each argument does and the possible values the argument can take. The mapping, data, and ... arguments will be the most commonly used by far.\n\n\nmapping is the argument that is being used when we specify which variables should link or map to the plot aesthetics (the code inside aes()).\n\ndata is the argument where we specify the dataset containing the variables that the geom is using.\n\n... is used for fixed aesthetics (ones that don’t correspond to a variable), eg, to set the color of all points, we use color = \"red\" and to set the size of all points, we use size = 3.\n\nThe Aesthetics section of a geom documentation page gives information on how the visual elements of the geom correspond to data. For example, the geom_point documentation page shows that x and y aesthetics are available. It also shows some new aesthetics like stroke.\n\n\n\n\n\n\n\n\nNotedata Argument\n\n\n\nPreviously you have used one dataset per plot by specifying that as the first argument of ggplot(). However, multiple data sets can be passed into ggplot as shown in the example below.\n\nCodedata(diamonds)\n\ndiamonds_avg_price &lt;- diamonds |&gt;\n  group_by(carat) |&gt;\n  summarize(avg_price = mean(price)) |&gt;\n  arrange(carat)\ndiamonds_avg_price &lt;- diamonds_avg_price[seq(1, nrow(diamonds_avg_price), 3), ]\n\nggplot(diamonds, aes(x = carat, y = price)) +\n  geom_point() +\n  geom_point(\n    data = diamonds_avg_price,\n    aes(x = carat, y = avg_price),\n    color = \"deepskyblue\",\n    size = 3\n  )\n\n\n\n\n\n\n\n\n\nLook at the geom_linerange documentation page and start off your temperature visualization with the record lows and highs. Your plot should look like the one below. The hex code of the used light tan color is #ECEBE3.\n\n\nSFO Weather Records in 2011\n\n\nCodeggplot(weather) +\n  geom_linerange(\n    aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh),\n    color = \"#ECEBE3\")+\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipKeyboard Shortcuts\n\n\n\nAs you work on this plot, try to use some new keyboard shortcuts. Focus on the following:\n\nInsert code chunk: Ctrl+Alt+I (Windows). Option+Command+I (Mac).\nRun current code chunk: Ctrl+Shift+Enter (Windows). Command+Shift+Return (Mac).\nRun current line/currently selected lines: Ctrl+Enter (Windows). Command+Return (Mac).",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -215,7 +215,7 @@
     "text": "Exercise 3\nIn your visualization, also display the usual temperatures (NormalLow and NormalHigh) and actual 2011 temperatures (Low and High). Your plot should look like the one below. The hex code of the color used for the usual temperatures is \"#C8B8BA\" and for the color used for actual temperatures is \"#A90248\".\n\n\nSFO observed, Average, and Record Daily Temperatures in 2011\n\n\nCodeggplot(weather) +\n  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh),\n    color = \"#ECEBE3\") +\n  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh),\n    color = \"#C8B8BA\") +\n  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High),\n    color = \"#A90248\") +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipFiner Control\n\n\n\nIf you’d like finer control of the width of these lines/rectangles, check out the geom_rect documentation page.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -226,7 +226,7 @@
     "text": "Exercise 4\nRecreate the visual demarcations of the months by adding vertical lines separating the months. Brainstorm how we might draw those vertical lines. What geom might we use? What subset of the data might we use in that geom layer to draw lines only at the month divisions?\n\nCodeggplot(weather) +\n  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh),\n    color = \"#ECEBE3\") +\n  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh),\n    color = \"#C8B8BA\") +\n  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High),\n    color = \"#A90248\") +\n  geom_vline(\n  data = weather %&gt;% \n    filter(Day == 1),\n  aes(xintercept = dateInYear),\n  color = \"black\",\n  linetype = \"dashed\"\n  ) +\n  theme_classic()",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -237,7 +237,7 @@
     "text": "Exercise 5\nChange the x-axis labels so that the month names display in the center of each month’s slice of the plot.\n\n\n\n\n\n\nTipMonth Names\n\n\n\nR has built-in variables called month.abb and month.name that contain abbreviated and full month names.\n\n\nTry to figuring out this new challenge using search engines and LLMs:\n\nSearch Engines. Use Google to search for possible solutions using the jargon that is most likely to return the most relevant results. Record search queries and your thought process in selecting which search results to look at first.\nLLMs. Use ChatGPT or Gemini with prompts that will most efficiently get you the desired results. Record the chat prompts used and output given. Evaluate the output. Do you fully understand the code generated? How can you tell that the generated code is correct?\n\n\nCodeggplot(weather) +\n  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh),\n    color = \"#ECEBE3\") +\n  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh),\n    color = \"#C8B8BA\") +\n  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High),\n    color = \"#A90248\") +\n  geom_vline(\n  data = weather %&gt;% \n    filter(Day == 1),\n  aes(xintercept = dateInYear),\n  color = \"black\",\n  linetype = \"dashed\"\n  ) +\n  scale_x_continuous(\n  breaks = weather %&gt;%\n    group_by(Month) %&gt;%\n    summarize(midpoint = mean(dateInYear)) %&gt;%\n    pull(midpoint),\n  labels = month.abb\n  ) +\n  theme_classic()",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -248,7 +248,7 @@
     "text": "Exercise 6\nCreate a precipitation plot that looks like the following. Note that\n\nThe triangles point to precipitation records–refer to the data codebook above for the RecordP variable.\nThe numbers on the plot indicate the total precipitation for the month–search the hjust and vjust options to adjust the alignment of the numbers.\nThe blue and tan colors hex codes are \"#32a3d8\" and \"#ebeae2\", respectively.\n\n\n\nSFO Precipitation in 2011\n\n\nCodeggplot(weather) +\n  geom_area(\n    aes(x = dateInYear, y = CulmPrec, group = Month),\n    fill = \"#ebeae2\",\n    color = \"#32a3d8\"\n  ) +\n   geom_point(\n    data = weather %&gt;%\n      filter(RecordP == TRUE),\n    aes(x = dateInYear, y = CulmPrec),\n    fill = \"black\",\n    shape = 25,\n    size = 2\n  ) +\n  geom_text(\n    data = weather %&gt;%\n      group_by(Month) %&gt;%\n      slice_tail(n = 1),\n    aes(x = dateInYear, y = CulmPrec, label = CulmPrec),\n    vjust = -0.5,\n    hjust = 1\n  ) +\n  theme_classic()",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -259,7 +259,7 @@
     "text": "Done!\n\nCheck the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -270,7 +270,7 @@
     "text": "The exercise in this lesson are inspired by an assignment from the Concepts in Computing with Data course at UC Berkeley taught by Dr. Deborah Nolan.↩︎",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -281,7 +281,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 1</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extra Sample 1</span>"
     ]
   },
   {
@@ -292,7 +292,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extra Sample 2</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 2</span>"
     ]
   }
 ]

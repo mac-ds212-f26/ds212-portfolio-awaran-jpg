@@ -304,7 +304,7 @@ cookieconsent.run({
       <a href="../index.html" class="sidebar-logo-link">
       <img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">Your Name Here</a> 
+      <a href="../">Arun Waran</a> 
         <div class="sidebar-tools-main">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
@@ -354,12 +354,7 @@ cookieconsent.run({
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tt/2025-07-08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">TidyTuesday Sample 1</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../tt/2025-07-15.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">TidyTuesday Sample 2</span></a>
+  <a href="../tt/hw01-tt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Homework 01</span></a>
   </div>
 </li>
       </ul>
@@ -1083,19 +1078,18 @@ cookieconsent.run({
 <span id="cb7-49"><a href="#cb7-49"></a>cleaned_weather <span class="ot">&lt;-</span> cleaned_weather <span class="sc">%&gt;%</span></span>
 <span id="cb7-50"><a href="#cb7-50"></a>  <span class="fu">arrange</span>(Month, Day) <span class="sc">%&gt;%</span></span>
 <span id="cb7-51"><a href="#cb7-51"></a>  <span class="fu">mutate</span>(<span class="at">dateInYear =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>)</span>
-<span id="cb7-52"><a href="#cb7-52"></a></span>
-<span id="cb7-53"><a href="#cb7-53"></a><span class="in">```</span></span>
-<span id="cb7-54"><a href="#cb7-54"></a></span>
-<span id="cb7-55"><a href="#cb7-55"></a><span class="ss">4. </span>Create a variable called <span class="in">`month_name`</span> that shows the 3-letter abbreviation for each case.</span>
-<span id="cb7-58"><a href="#cb7-58"></a><span class="in">```{r}</span></span>
-<span id="cb7-59"><a href="#cb7-59"></a>cleaned_weather <span class="ot">&lt;-</span> cleaned_weather <span class="sc">%&gt;%</span></span>
-<span id="cb7-60"><a href="#cb7-60"></a>  <span class="fu">mutate</span>(<span class="at">month_name =</span> month.abb[Month])</span>
-<span id="cb7-61"><a href="#cb7-61"></a><span class="in">```</span></span>
-<span id="cb7-62"><a href="#cb7-62"></a></span>
-<span id="cb7-63"><a href="#cb7-63"></a><span class="ss">5. </span>Save the wrangled data to the <span class="in">`data/processed/`</span> folder using <span class="in">`write_csv()`</span>. Name this file <span class="in">`weather_clean.csv`</span>. Look up the documentation for this function by typing <span class="in">`?write_csv`</span> in the Console. You'll need to write an appropriate relative path.</span>
-<span id="cb7-66"><a href="#cb7-66"></a><span class="in">```{r}</span></span>
-<span id="cb7-67"><a href="#cb7-67"></a><span class="fu">write_csv</span>(cleaned_weather, <span class="at">file =</span> <span class="st">"data/processed/weather_clean.csv"</span>)</span>
-<span id="cb7-68"><a href="#cb7-68"></a><span class="in">```</span></span>
+<span id="cb7-52"><a href="#cb7-52"></a><span class="in">```</span></span>
+<span id="cb7-53"><a href="#cb7-53"></a></span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="ss">4. </span>Create a variable called <span class="in">`month_name`</span> that shows the 3-letter abbreviation for each case.</span>
+<span id="cb7-57"><a href="#cb7-57"></a><span class="in">```{r}</span></span>
+<span id="cb7-58"><a href="#cb7-58"></a>cleaned_weather <span class="ot">&lt;-</span> cleaned_weather <span class="sc">%&gt;%</span></span>
+<span id="cb7-59"><a href="#cb7-59"></a>  <span class="fu">mutate</span>(<span class="at">month_name =</span> month.abb[Month])</span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="in">```</span></span>
+<span id="cb7-61"><a href="#cb7-61"></a></span>
+<span id="cb7-62"><a href="#cb7-62"></a><span class="ss">5. </span>Save the wrangled data to the <span class="in">`data/processed/`</span> folder using <span class="in">`write_csv()`</span>. Name this file <span class="in">`weather_clean.csv`</span>. Look up the documentation for this function by typing <span class="in">`?write_csv`</span> in the Console. You'll need to write an appropriate relative path.</span>
+<span id="cb7-65"><a href="#cb7-65"></a><span class="in">```{r}</span></span>
+<span id="cb7-66"><a href="#cb7-66"></a><span class="fu">write_csv</span>(cleaned_weather, <span class="at">file =</span> <span class="st">"data/processed/weather_clean.csv"</span>)</span>
+<span id="cb7-67"><a href="#cb7-67"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
