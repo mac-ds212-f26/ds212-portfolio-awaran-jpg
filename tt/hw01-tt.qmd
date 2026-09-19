@@ -1,0 +1,161 @@
+---
+title: "Homework 01"
+---
+
+## TidyTuesday Part
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge.
+Develop a research question, then answer it through a short data story mainly composed of [effective visualizations]({{< var effective-viz-url >}}).
+Provide sufficient background for readers to grasp your narrative.
+Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.
+
+### Background
+
+The TidyTuesday data I will investigate is a set of crowdsourced prices of cappuccinos at cafes across the world, along with the reported hourly wages of baristas where prices were reported. This makes it possible to compare how much a cappuccino costs in different places, and also how affordable that price is relative to local wages.
+
+The full dataset covers dozens of countries, some with small sample sizes. As such, my analysis is initially restricted to countries with at least 10 reported prices, and then highlights four countries (Australia, Switzerland, Mexico, and India) with interesting patterns.
+
+### Research question
+
+How well does the price of a cappuccino reflect how affordable it is, and what explains the difference?
+
+### Analysis
+
+```{r}
+library(tidyverse)
+
+cafe <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cafe.csv")
+
+cappuccino_index <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cappuccino_index.csv")
+
+cafe_summary <- cafe %>%
+  group_by(country) %>%
+  summarise(
+    average_price = mean(price_gbp),
+    average_wage = mean(hourly_wage_gbp),
+    .groups = "drop"
+  )
+
+coffee <- cappuccino_index %>%
+  select(country, n, work_minutes = index) %>%
+  left_join(cafe_summary, by = "country")
+
+coffee_larger <- coffee %>% filter(n >= 10)
+
+focus_countries <- coffee %>%
+  filter(
+    country %in% c("Australia", "Switzerland", "Mexico", "India")
+  ) %>%
+  mutate(
+    country_label = paste0(country, "  (n = ", n, ")"),
+    country_label = reorder(country_label, -work_minutes)
+  )
+
+theme_coffee <- theme_bw(base_size = 12) +
+  theme(panel.grid.minor = element_blank())
+```
+
+The first step is to see whether a cappuccino's price actually predicts how much work it takes to afford one. Plotting price against the cappuccino index (limited to countries with 10 or more reported cafes) shows that is not necessarily the case.
+
+```{r}
+#| fig-alt: "Scatterplot of average price against work time to afford a cappuccino for 36 countries. Australia and Mexico have similar prices but require 10 and 75 minutes. Switzerland has an expensive cup but short work time of 14 minutes. India has a cheaper cup but requires about 172 minutes."
+plot1 <- ggplot(coffee_larger, aes(x = average_price, y = work_minutes)) +
+  geom_point(
+    color = "gray", size = 3, alpha = 0.7
+  ) +
+  geom_point(
+    data = focus_countries,
+    color = "darkcyan", size = 3.75
+  ) +
+  geom_text(
+    data = focus_countries,
+    aes(label = paste0(country, " (n = ", n, ")")),
+    hjust = 0,
+    nudge_x = 0.08,
+    nudge_y = -5,
+    size = 3.5,
+    color = "black"
+  ) +
+  labs(
+    title = "Low coffee prices do not always mean short work times",
+    subtitle = "Four labeled examples show combinations of price and affordability",
+    x = "Average price of a small cappuccino (£)",
+    y = "Minutes of work to afford one cappuccino",
+    caption = "Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026"
+    ) +
+  scale_x_continuous(expand = expansion(mult = c(0.05, 0), add = c(0, 1))) +
+  theme_coffee
+
+plot1
+```
+
+In India, the cappuccino is the cheapest of the four labeled examples (£1.96), but a barista must work almost three hours to earn enough to buy one. Switzerland's cappuccino is more than twice the price, but it takes under 15 minutes to afford one.
+
+Since price alone cannot explain the difference between cost and time worked, we can investigate wages next. We see that the hourly wages tell a different story when compared to prices.
+
+```{r}
+#| fig-alt: "Bar chart of the average hourly wages for baristas in Australia, Switzerland, Mexico, and India. Australia £16.39, Switzerland £22.54, Mexico £2.19, and India £0.68."
+plot2 <- ggplot(focus_countries, aes(x = average_wage, y = country_label)) +
+  geom_col(fill = "darkcyan", width = 0.55) +
+  geom_text(
+    aes(label = sprintf("£%.2f", average_wage)),
+    hjust = -0.15,
+    size = 4
+  ) +
+  labs(
+    title = "Average wages vary more sharply than coffee prices",
+    subtitle = "The highest average hourly wage is about 33 times the lowest in the sample",
+    x = "Average hourly barista wage (GBP)",
+    y = NULL,
+    caption = ("Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026")
+  ) +
+  scale_x_continuous(
+    limits = c(0, 25), 
+    breaks = seq(0, 25, 5)
+  ) +
+  theme_coffee
+
+plot2
+```
+
+Switzerland's average hourly wage (£22.54) is over 33 times India's (£0.68), which is a much larger gap than the roughly threefold difference in cappuccino prices. Because wages vary more than prices, these wage differences help explain why similar coffee prices can translate to different amounts of work time.
+
+Now that we have seen how wage differences help explain the gap, we can now place the four highlighted countries on a scale to make the relationship more concrete.
+
+```{r}
+#| fig-alt: "Horizontal dot plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia 10 minutes and £2.75, Switzerland 14 minutes and £5.41, Mexico 75 minutes and £2.71, India 172 minutes and £1.96."
+plot3 <- ggplot(focus_countries, aes(x = work_minutes, y = country_label)) +
+  geom_segment(aes(x = 0, xend = work_minutes, yend = country_label),
+    color = "darkcyan",
+    linewidth = 1.3
+  ) +
+  geom_point(color = "darkcyan", size = 4) +
+  geom_label(aes(label = sprintf("%.0f min; £%.2f per cup", work_minutes, average_price)),
+    hjust = -0.08,
+    size = 4,
+    fill = "white",
+    linewidth = 0
+  ) +
+  labs(
+    title = "Time to afford a cappuccino in selected countries",
+    subtitle = "It costs about 10 minutes of work in Australia, but nearly three hours in India",
+    x = "Minutes of work to afford one small cappuccino",
+    y = NULL,
+    caption = "Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 260),
+    breaks = seq(0, 240, 60)
+  ) +
+  theme_coffee
+
+plot3
+```
+
+The clearest illustration is Mexico versus Australia; their average cappuccino prices are nearly identical (£2.71 vs. £2.75), yet Mexico's required work time is more than seven times Australia's.
+
+### Final takeaways
+
+- Among the four highlighted countries, cappuccino's price does not accurately represent how affordable it is. India's coffee is the cheapest in pounds and the most expensive in time, whereas Switzerland has the highest average price but requires 14 minutes of work.
+- Hourly wages for baristas across these four countries vary by more than 30-fold, while cappuccino prices vary by less than 3-fold. This is the main reason for the affordability gap.
+- The same logic likely will extend beyond the four selected countries, which were chosen to illustrate the combinations I found the most interesting.
