@@ -23,6 +23,7 @@ How well does the price of a cappuccino reflect how affordable it is, and what e
 
 ```{r}
 library(tidyverse)
+library(ggtext)
 
 cafe <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cafe.csv")
 
@@ -47,7 +48,7 @@ focus_countries <- coffee %>%
     country %in% c("Australia", "Switzerland", "Mexico", "India")
   ) %>%
   mutate(
-    country_label = paste0(country, "  (n = ", n, ")"),
+    country_label = paste0(country, "\n(n = ", n, ")"),
     country_label = reorder(country_label, -work_minutes)
   )
 
@@ -123,14 +124,25 @@ Switzerland's average hourly wage (£22.54) is over 33 times India's (£0.68), w
 Now that we have seen how wage differences help explain the gap, we can now place the four highlighted countries on a scale to make the relationship more concrete.
 
 ```{r}
-#| fig-alt: "Horizontal dot plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia 10 minutes and £2.75, Switzerland 14 minutes and £5.41, Mexico 75 minutes and £2.71, India 172 minutes and £1.96."
-plot3 <- ggplot(focus_countries, aes(x = work_minutes, y = country_label)) +
-  geom_segment(aes(x = 0, xend = work_minutes, yend = country_label),
-    color = "darkcyan",
+#| fig-alt: "Horizontal dot plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia requires 10 minutes of work, Switzerland 14 minutes, Mexico 75 minutes, and India 172 minutes."
+
+plot3 <- ggplot(
+  focus_countries,
+  aes(x = work_minutes, y = country_label)
+) +
+  geom_segment(
+    aes(x = 0, xend = work_minutes, yend = country_label),
+    color = "#0072B2",
     linewidth = 1.3
   ) +
-  geom_point(color = "darkcyan", size = 4) +
-  geom_label(aes(label = sprintf("%.0f min; £%.2f per cup", work_minutes, average_price)),
+  geom_point(
+    color = "#0072B2",
+    size = 4
+  ) +
+  geom_label(
+    aes(
+      label = sprintf("%.0f min; £%.2f", work_minutes, average_price)
+    ),
     hjust = -0.08,
     size = 4,
     fill = "white",
@@ -141,14 +153,16 @@ plot3 <- ggplot(focus_countries, aes(x = work_minutes, y = country_label)) +
     subtitle = "It costs about 10 minutes of work in Australia, but nearly three hours in India",
     x = "Minutes of work to afford one small cappuccino",
     y = NULL,
-    caption = "Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026"
+    caption = paste(
+      "Countries selected to show contrasting and interesting combinations of price and work-time affordability.\n",
+      "Source: TidyTuesday, The Cappuccino Index, September 8, 2026. By Arun Waran."
+    )
   ) +
   scale_x_continuous(
-    limits = c(0, 260),
-    breaks = seq(0, 240, 60)
+    limits = c(0, 230),
+    breaks = seq(0, 220, 55)
   ) +
   theme_coffee
-
 plot3
 ```
 
