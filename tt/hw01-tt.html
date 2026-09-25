@@ -304,7 +304,9 @@ cookieconsent.run({
       <a href="../index.html" class="sidebar-logo-link">
       <img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">Arun Waran</a> 
+      <a href="../">
+      Arun Waran
+      </a> 
         <div class="sidebar-tools-main">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
@@ -451,7 +453,6 @@ cookieconsent.run({
 <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
   <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question">Research question</a></li>
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
-  <li><a href="#final-takeaways" id="toc-final-takeaways" class="nav-link" data-scroll-target="#final-takeaways">Final takeaways</a></li>
   </ul>
 </li>
   </ul></nav>
@@ -586,72 +587,344 @@ cookieconsent.run({
 <p>Switzerland’s average hourly wage (£22.54) is over 33 times India’s (£0.68), which is a much larger gap than the roughly threefold difference in cappuccino prices. Because wages vary more than prices, these wage differences help explain why similar coffee prices can translate to different amounts of work time.</p>
 <p>Now that we have seen how wage differences help explain the gap, we can now place the four highlighted countries on a scale to make the relationship more concrete.</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
-<span id="cb4-2"><a href="#cb4-2"></a>  focus_countries,</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">aes</span>(<span class="at">x =</span> work_minutes, <span class="at">y =</span> country_label)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>) <span class="sc">+</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">xend =</span> work_minutes, <span class="at">yend =</span> country_label),</span>
-<span id="cb4-7"><a href="#cb4-7"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    <span class="at">linewidth =</span> <span class="fl">1.3</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb4-11"><a href="#cb4-11"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="at">size =</span> <span class="dv">4</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a>  <span class="fu">geom_label</span>(</span>
-<span id="cb4-15"><a href="#cb4-15"></a>    <span class="fu">aes</span>(</span>
-<span id="cb4-16"><a href="#cb4-16"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%.0f min; £%.2f"</span>, work_minutes, average_price)</span>
-<span id="cb4-17"><a href="#cb4-17"></a>    ),</span>
-<span id="cb4-18"><a href="#cb4-18"></a>    <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.08</span>,</span>
-<span id="cb4-19"><a href="#cb4-19"></a>    <span class="at">size =</span> <span class="dv">4</span>,</span>
-<span id="cb4-20"><a href="#cb4-20"></a>    <span class="at">fill =</span> <span class="st">"white"</span>,</span>
-<span id="cb4-21"><a href="#cb4-21"></a>    <span class="at">linewidth =</span> <span class="dv">0</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-24"><a href="#cb4-24"></a>    <span class="at">title =</span> <span class="st">"Time to afford a cappuccino in selected countries"</span>,</span>
-<span id="cb4-25"><a href="#cb4-25"></a>    <span class="at">subtitle =</span> <span class="st">"It costs about 10 minutes of work in Australia, but nearly three hours in India"</span>,</span>
-<span id="cb4-26"><a href="#cb4-26"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
-<span id="cb4-27"><a href="#cb4-27"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb4-28"><a href="#cb4-28"></a>    <span class="at">caption =</span> <span class="fu">paste</span>(</span>
-<span id="cb4-29"><a href="#cb4-29"></a>      <span class="st">"Countries selected to show contrasting combinations of price and work-time affordability.</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-30"><a href="#cb4-30"></a>      <span class="st">"Source: TidyTuesday, The Cappuccino Index. Release date: September 8, 2026. By Arun Waran."</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>    )</span>
-<span id="cb4-32"><a href="#cb4-32"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a>  <span class="fu">scale_x_continuous</span>(</span>
-<span id="cb4-34"><a href="#cb4-34"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">230</span>)</span>
-<span id="cb4-35"><a href="#cb4-35"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a>  theme_coffee <span class="sc">+</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a>  <span class="fu">theme</span>(</span>
-<span id="cb4-38"><a href="#cb4-38"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb4-39"><a href="#cb4-39"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb4-40"><a href="#cb4-40"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb4-41"><a href="#cb4-41"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
-<span id="cb4-42"><a href="#cb4-42"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
-<span id="cb4-43"><a href="#cb4-43"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
-<span id="cb4-44"><a href="#cb4-44"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">25</span>)</span>
-<span id="cb4-45"><a href="#cb4-45"></a>    )</span>
-<span id="cb4-46"><a href="#cb4-46"></a>  )</span>
-<span id="cb4-47"><a href="#cb4-47"></a></span>
-<span id="cb4-48"><a href="#cb4-48"></a>plot3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>focus_countries <span class="ot">&lt;-</span> coffee <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">filter</span>(</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Australia"</span>, <span class="st">"Switzerland"</span>, <span class="st">"Mexico"</span>, <span class="st">"India"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="at">country_label =</span> <span class="fu">paste0</span>(</span>
+<span id="cb4-7"><a href="#cb4-7"></a>      country,</span>
+<span id="cb4-8"><a href="#cb4-8"></a>      <span class="st">"&lt;br&gt;&lt;span style='font-size:8pt; color:#555555'&gt;(n = "</span>, n, <span class="st">")&lt;/span&gt;"</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    ),</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    <span class="at">country_label =</span> <span class="fu">reorder</span>(country_label, <span class="sc">-</span>work_minutes)</span>
+<span id="cb4-11"><a href="#cb4-11"></a>  )</span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb4-14"><a href="#cb4-14"></a>  focus_countries,</span>
+<span id="cb4-15"><a href="#cb4-15"></a>  <span class="fu">aes</span>(<span class="at">x =</span> work_minutes, <span class="at">y =</span> country_label)</span>
+<span id="cb4-16"><a href="#cb4-16"></a>) <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">xend =</span> work_minutes, <span class="at">yend =</span> country_label),</span>
+<span id="cb4-19"><a href="#cb4-19"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="at">linewidth =</span> <span class="fl">1.3</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb4-23"><a href="#cb4-23"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24"></a>    <span class="at">size =</span> <span class="dv">4</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a>  <span class="fu">geom_label</span>(</span>
+<span id="cb4-27"><a href="#cb4-27"></a>    <span class="fu">aes</span>(</span>
+<span id="cb4-28"><a href="#cb4-28"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%.0f min; £%.2f"</span>, work_minutes, average_price)</span>
+<span id="cb4-29"><a href="#cb4-29"></a>    ),</span>
+<span id="cb4-30"><a href="#cb4-30"></a>    <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.08</span>,</span>
+<span id="cb4-31"><a href="#cb4-31"></a>    <span class="at">size =</span> <span class="dv">4</span>,</span>
+<span id="cb4-32"><a href="#cb4-32"></a>    <span class="at">fill =</span> <span class="st">"white"</span>,</span>
+<span id="cb4-33"><a href="#cb4-33"></a>    <span class="at">linewidth =</span> <span class="dv">0</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-36"><a href="#cb4-36"></a>    <span class="at">title =</span> <span class="st">"Time needed to afford a cappuccino in selected* countries"</span>,</span>
+<span id="cb4-37"><a href="#cb4-37"></a>    <span class="at">subtitle =</span> <span class="st">"It takes about 10 minutes of work in Australia, but nearly three hours in India,</span><span class="sc">\n</span><span class="st">to afford a small cappuccino."</span>,</span>
+<span id="cb4-38"><a href="#cb4-38"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb4-39"><a href="#cb4-39"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb4-40"><a href="#cb4-40"></a>    <span class="at">caption =</span> <span class="fu">paste</span>(</span>
+<span id="cb4-41"><a href="#cb4-41"></a>      <span class="st">"*Countries selected to illustrate contrasting relationships between cappuccino prices and work-time affordability.</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb4-42"><a href="#cb4-42"></a>      <span class="st">"Source: The Cappuccino Index via TidyTuesday (9/8/2026). By: Arun Waran."</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a>    )</span>
+<span id="cb4-44"><a href="#cb4-44"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-45"><a href="#cb4-45"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb4-46"><a href="#cb4-46"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">230</span>),</span>
+<span id="cb4-47"><a href="#cb4-47"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>))</span>
+<span id="cb4-48"><a href="#cb4-48"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a>  theme_coffee <span class="sc">+</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-51"><a href="#cb4-51"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-52"><a href="#cb4-52"></a>    <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-53"><a href="#cb4-53"></a>    <span class="at">axis.line.y =</span> <span class="fu">element_line</span>(</span>
+<span id="cb4-54"><a href="#cb4-54"></a>      <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb4-55"><a href="#cb4-55"></a>      <span class="at">linewidth =</span> <span class="fl">0.5</span></span>
+<span id="cb4-56"><a href="#cb4-56"></a>    ),</span>
+<span id="cb4-57"><a href="#cb4-57"></a>    <span class="at">axis.text.y =</span> ggtext<span class="sc">::</span><span class="fu">element_markdown</span>(</span>
+<span id="cb4-58"><a href="#cb4-58"></a>      <span class="at">size =</span> <span class="dv">11</span>,</span>
+<span id="cb4-59"><a href="#cb4-59"></a>      <span class="at">lineheight =</span> <span class="dv">1</span></span>
+<span id="cb4-60"><a href="#cb4-60"></a>    ),</span>
+<span id="cb4-61"><a href="#cb4-61"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-62"><a href="#cb4-62"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-63"><a href="#cb4-63"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
+<span id="cb4-64"><a href="#cb4-64"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
+<span id="cb4-65"><a href="#cb4-65"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
+<span id="cb4-66"><a href="#cb4-66"></a>      <span class="at">lineheight =</span> <span class="fl">1.1</span>,</span>
+<span id="cb4-67"><a href="#cb4-67"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)</span>
+<span id="cb4-68"><a href="#cb4-68"></a>    )</span>
+<span id="cb4-69"><a href="#cb4-69"></a>  )</span>
+<span id="cb4-70"><a href="#cb4-70"></a></span>
+<span id="cb4-71"><a href="#cb4-71"></a>plot3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="Horizontal dot plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia requires 10 minutes of work, Switzerland 14 minutes, Mexico 75 minutes, and India 172 minutes." width="672"></p>
+<figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="Horizontal lollipop plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia requires 10 minutes of work, Switzerland 14 minutes, Mexico 75 minutes, and India 172 minutes." width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The clearest illustration is Mexico versus Australia; their average cappuccino prices are nearly identical (£2.71 vs.&nbsp;£2.75), yet Mexico’s required work time is more than seven times Australia’s.</p>
-</section><section id="final-takeaways" class="level3"><h3 class="anchored" data-anchor-id="final-takeaways">Final takeaways</h3>
-<ul>
-<li>Among the four highlighted countries, cappuccino’s price does not accurately represent how affordable it is. India’s coffee is the cheapest in pounds and the most expensive in time, whereas Switzerland has the highest average price but requires 14 minutes of work.</li>
-<li>Hourly wages for baristas across these four countries vary by more than 30-fold, while cappuccino prices vary by less than 3-fold. This is the main reason for the affordability gap.</li>
-<li>The same logic likely will extend beyond the four selected countries, which were chosen to illustrate the combinations I found the most interesting.</li>
-</ul>
+<pre><code>
+The clearest illustration is Mexico versus Australia; their average cappuccino prices are nearly identical (£2.71 vs. £2.75), yet Mexico's required work time is more than seven times Australia's.
+
+### Final takeaways
+
+- Among the four highlighted countries, cappuccino's price does not accurately represent how affordable it is. India's coffee is the cheapest in pounds and the most expensive in time, whereas Switzerland has the highest average price but requires 14 minutes of work.
+- Hourly wages for baristas across these four countries vary by more than 30-fold, while cappuccino prices vary by less than 3-fold. This is the main reason for the affordability gap.
+- The same logic likely will extend beyond the four selected countries, which were chosen to illustrate the combinations I found the most interesting.
 
 
-<!-- -->
 
+
+:::{#quarto-navigation-envelope .hidden}
+[Arun Waran]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl"}
+[COMP/STAT212 Portfolio]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXItdGl0bGU="}
+[&lt;span class='chapter-number'&gt;4&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Pre-Class Learning Summaries&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uZXh0"}
+[&lt;span class='chapter-number'&gt;2&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Personal Visualization Journey&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1wcmV2"}
+[&lt;span class='chapter-number'&gt;1&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Welcome&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pbmRleC5odG1sPHNwYW4tY2xhc3M9J2NoYXB0ZXItbnVtYmVyJz4xPC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPldlbGNvbWU8L3NwYW4+"}
+[Personal Viz Journey]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tMQ=="}
+[&lt;span class='chapter-number'&gt;2&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Personal Visualization Journey&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9wdmovcHZqLTAxLmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjI8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+UGVyc29uYWwtVmlzdWFsaXphdGlvbi1Kb3VybmV5PC9zcGFuPg=="}
+[TidyTuesday]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tMg=="}
+[&lt;span class='chapter-number'&gt;3&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Homework 01&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi90dC9odzAxLXR0Lmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjM8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+SG9tZXdvcmstMDE8L3NwYW4+"}
+[Pre-Class Learnings]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tMw=="}
+[&lt;span class='chapter-number'&gt;4&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Pre-Class Learning Summaries&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9wY2wvcGNsLmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjQ8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+UHJlLUNsYXNzLUxlYXJuaW5nLVN1bW1hcmllczwvc3Bhbj4="}
+[In-Class Activities]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tNA=="}
+[&lt;span class='chapter-number'&gt;5&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;ICA Sample 1&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pY2EvaWNhLXNhbXBsZTEuaHRtbDxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+NTwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5JQ0EtU2FtcGxlLTE8L3NwYW4+"}
+[&lt;span class='chapter-number'&gt;6&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;ICA Sample 2&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pY2EvaWNhLXNhbXBsZTIuaHRtbDxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+Njwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5JQ0EtU2FtcGxlLTI8L3NwYW4+"}
+[&lt;span class='chapter-number'&gt;7&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Cleaning SFO Weather Data&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pY2EvY2xlYW5pbmcuaHRtbDxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+Nzwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5DbGVhbmluZy1TRk8tV2VhdGhlci1EYXRhPC9zcGFuPg=="}
+[&lt;span class='chapter-number'&gt;8&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;3 Adv Data Viz&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pY2EvMDMtYWR2LWdncGxvdC1ub3Rlcy5odG1sPHNwYW4tY2xhc3M9J2NoYXB0ZXItbnVtYmVyJz44PC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPjMtQWR2LURhdGEtVml6PC9zcGFuPg=="}
+[&lt;span class='chapter-number'&gt;9&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;4 Adv Spatial Viz&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pY2EvMDQtYWR2LW1hcHMvY29kZS8wNC1hZHYtbWFwcy0xLW5vdGVzLmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjk8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+NC1BZHYtU3BhdGlhbC1WaXo8L3NwYW4+"}
+[&lt;span class='chapter-number'&gt;10&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;6 Adv Data wrangling I&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pY2EvMDYtd3JhbmdsaW5nLTEtbm90ZXMuaHRtbDxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+MTA8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+Ni1BZHYtRGF0YS13cmFuZ2xpbmctSTwvc3Bhbj4="}
+[Extras]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tNQ=="}
+[&lt;span class='chapter-number'&gt;11&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Extra Sample 1&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9leHRyYS9leHRyYS1zYW1wbGUxLmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjExPC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPkV4dHJhLVNhbXBsZS0xPC9zcGFuPg=="}
+[&lt;span class='chapter-number'&gt;12&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Extra Sample 2&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9leHRyYS9leHRyYS1zYW1wbGUyLmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjEyPC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPkV4dHJhLVNhbXBsZS0yPC9zcGFuPg=="}
+[TidyTuesday]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWJyZWFkY3J1bWJzLVRpZHlUdWVzZGF5"}
+[&lt;span class='chapter-number'&gt;3&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Homework 01&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWJyZWFkY3J1bWJzLTxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+Mzwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5Ib21ld29yay0wMTwvc3Bhbj4="}
+
+:::{.hidden .quarto-markdown-envelope-contents render-id="Zm9vdGVyLWNlbnRlcg=="}
+ 
+:::
+
+:::
+
+
+
+:::{#quarto-meta-markdown .hidden}
+[[Homework 01]{.chapter-title} – COMP/STAT212 Portfolio]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW1ldGF0aXRsZQ=="}
+[[Homework 01]{.chapter-title} – COMP/STAT212 Portfolio]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU="}
+[[Homework 01]{.chapter-title} – COMP/STAT212 Portfolio]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW9nY2FyZHRpdGxl"}
+[COMP/STAT212 Portfolio]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW1ldGFzaXRlbmFtZQ=="}
+[]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw=="}
+[]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW9nY2FyZGRkZXNj"}
+:::
+
+
+
+
+&lt;!-- --&gt;
+
+::: {.quarto-embedded-source-code}
+```````````````````{.markdown shortcodes="false"}
+---
+title: "Homework 01"
+---
+
+## TidyTuesday Part
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge.
+Develop a research question, then answer it through a short data story mainly composed of [effective visualizations](?var:effective-viz-url).
+Provide sufficient background for readers to grasp your narrative.
+Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.
+
+### Background
+
+The TidyTuesday data I will investigate is a set of crowdsourced prices of cappuccinos at cafes across the world, along with the reported hourly wages of baristas where prices were reported. This makes it possible to compare how much a cappuccino costs in different places, and also how affordable that price is relative to local wages.
+
+The full dataset covers dozens of countries, some with small sample sizes. As such, my analysis is initially restricted to countries with at least 10 reported prices, and then highlights four countries (Australia, Switzerland, Mexico, and India) with interesting patterns.
+
+### Research question
+
+How well does the price of a cappuccino reflect how affordable it is, and what explains the difference?
+
+### Analysis
+
+quarto-executable-code-5450563D
+
+```r
+library(tidyverse)
+library(ggtext)
+
+cafe &lt;- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cafe.csv")
+
+cappuccino_index &lt;- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cappuccino_index.csv")
+
+cafe_summary &lt;- cafe %&gt;%
+  group_by(country) %&gt;%
+  summarise(
+    average_price = mean(price_gbp),
+    average_wage = mean(hourly_wage_gbp),
+    .groups = "drop"
+  )
+
+coffee &lt;- cappuccino_index %&gt;%
+  select(country, n, work_minutes = index) %&gt;%
+  left_join(cafe_summary, by = "country")
+
+coffee_larger &lt;- coffee %&gt;% filter(n &gt;= 10)
+
+focus_countries &lt;- coffee %&gt;%
+  filter(
+    country %in% c("Australia", "Switzerland", "Mexico", "India")
+  ) %&gt;%
+  mutate(
+    country_label = paste0(country, "\n(n = ", n, ")"),
+    country_label = reorder(country_label, -work_minutes)
+  )
+
+theme_coffee &lt;- theme_bw(base_size = 12) +
+  theme(panel.grid.minor = element_blank())</code></pre>
+<p>The first step is to see whether a cappuccino’s price actually predicts how much work it takes to afford one. Plotting price against the cappuccino index (limited to countries with 10 or more reported cafes) shows that is not necessarily the case.</p>
+<p>quarto-executable-code-5450563D</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#| fig-alt: "Scatterplot of average price against work time to afford a cappuccino for 36 countries. Australia and Mexico have similar prices but require 10 and 75 minutes. Switzerland has an expensive cup but short work time of 14 minutes. India has a cheaper cup but requires about 172 minutes."</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(coffee_larger, <span class="fu">aes</span>(<span class="at">x =</span> average_price, <span class="at">y =</span> work_minutes)) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    <span class="at">data =</span> focus_countries,</span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="at">color =</span> <span class="st">"darkcyan"</span>, <span class="at">size =</span> <span class="fl">3.75</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="at">data =</span> focus_countries,</span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(country, <span class="st">" (n = "</span>, n, <span class="st">")"</span>)),</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb6-14"><a href="#cb6-14"></a>    <span class="at">nudge_x =</span> <span class="fl">0.08</span>,</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    <span class="at">nudge_y =</span> <span class="sc">-</span><span class="dv">5</span>,</span>
+<span id="cb6-16"><a href="#cb6-16"></a>    <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb6-17"><a href="#cb6-17"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-20"><a href="#cb6-20"></a>    <span class="at">title =</span> <span class="st">"Low coffee prices do not always mean short work times"</span>,</span>
+<span id="cb6-21"><a href="#cb6-21"></a>    <span class="at">subtitle =</span> <span class="st">"Four labeled examples show combinations of price and affordability"</span>,</span>
+<span id="cb6-22"><a href="#cb6-22"></a>    <span class="at">x =</span> <span class="st">"Average price of a small cappuccino (£)"</span>,</span>
+<span id="cb6-23"><a href="#cb6-23"></a>    <span class="at">y =</span> <span class="st">"Minutes of work to afford one cappuccino"</span>,</span>
+<span id="cb6-24"><a href="#cb6-24"></a>    <span class="at">caption =</span> <span class="st">"Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026"</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a>    ) <span class="sc">+</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="dv">0</span>), <span class="at">add =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))) <span class="sc">+</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a>  theme_coffee</span>
+<span id="cb6-28"><a href="#cb6-28"></a></span>
+<span id="cb6-29"><a href="#cb6-29"></a>plot1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In India, the cappuccino is the cheapest of the four labeled examples (£1.96), but a barista must work almost three hours to earn enough to buy one. Switzerland’s cappuccino is more than twice the price, but it takes under 15 minutes to afford one.</p>
+<p>Since price alone cannot explain the difference between cost and time worked, we can investigate wages next. We see that the hourly wages tell a different story when compared to prices.</p>
+<p>quarto-executable-code-5450563D</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#| fig-alt: "Bar chart of the average hourly wages for baristas in Australia, Switzerland, Mexico, and India. Australia £16.39, Switzerland £22.54, Mexico £2.19, and India £0.68."</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(focus_countries, <span class="fu">aes</span>(<span class="at">x =</span> average_wage, <span class="at">y =</span> country_label)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"darkcyan"</span>, <span class="at">width =</span> <span class="fl">0.55</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"£%.2f"</span>, average_wage)),</span>
+<span id="cb7-6"><a href="#cb7-6"></a>    <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>,</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="at">size =</span> <span class="dv">4</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-10"><a href="#cb7-10"></a>    <span class="at">title =</span> <span class="st">"Average wages vary more sharply than coffee prices"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11"></a>    <span class="at">subtitle =</span> <span class="st">"The highest average hourly wage is about 33 times the lowest in the sample"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12"></a>    <span class="at">x =</span> <span class="st">"Average hourly barista wage (GBP)"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-14"><a href="#cb7-14"></a>    <span class="at">caption =</span> (<span class="st">"Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb7-17"><a href="#cb7-17"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">25</span>), </span>
+<span id="cb7-18"><a href="#cb7-18"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">5</span>)</span>
+<span id="cb7-19"><a href="#cb7-19"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a>  theme_coffee</span>
+<span id="cb7-21"><a href="#cb7-21"></a></span>
+<span id="cb7-22"><a href="#cb7-22"></a>plot2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Switzerland’s average hourly wage (£22.54) is over 33 times India’s (£0.68), which is a much larger gap than the roughly threefold difference in cappuccino prices. Because wages vary more than prices, these wage differences help explain why similar coffee prices can translate to different amounts of work time.</p>
+<p>Now that we have seen how wage differences help explain the gap, we can now place the four highlighted countries on a scale to make the relationship more concrete.</p>
+<p>quarto-executable-code-5450563D</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#| fig-alt: "Horizontal lollipop plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia requires 10 minutes of work, Switzerland 14 minutes, Mexico 75 minutes, and India 172 minutes."</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>focus_countries <span class="ot">&lt;-</span> coffee <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">filter</span>(</span>
+<span id="cb8-5"><a href="#cb8-5"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Australia"</span>, <span class="st">"Switzerland"</span>, <span class="st">"Mexico"</span>, <span class="st">"India"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="at">country_label =</span> <span class="fu">paste0</span>(</span>
+<span id="cb8-9"><a href="#cb8-9"></a>      country,</span>
+<span id="cb8-10"><a href="#cb8-10"></a>      <span class="st">"&lt;br&gt;&lt;span style='font-size:8pt; color:#555555'&gt;(n = "</span>, n, <span class="st">")&lt;/span&gt;"</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>    ),</span>
+<span id="cb8-12"><a href="#cb8-12"></a>    <span class="at">country_label =</span> <span class="fu">reorder</span>(country_label, <span class="sc">-</span>work_minutes)</span>
+<span id="cb8-13"><a href="#cb8-13"></a>  )</span>
+<span id="cb8-14"><a href="#cb8-14"></a></span>
+<span id="cb8-15"><a href="#cb8-15"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb8-16"><a href="#cb8-16"></a>  focus_countries,</span>
+<span id="cb8-17"><a href="#cb8-17"></a>  <span class="fu">aes</span>(<span class="at">x =</span> work_minutes, <span class="at">y =</span> country_label)</span>
+<span id="cb8-18"><a href="#cb8-18"></a>) <span class="sc">+</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb8-20"><a href="#cb8-20"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">xend =</span> work_minutes, <span class="at">yend =</span> country_label),</span>
+<span id="cb8-21"><a href="#cb8-21"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
+<span id="cb8-22"><a href="#cb8-22"></a>    <span class="at">linewidth =</span> <span class="fl">1.3</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb8-25"><a href="#cb8-25"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
+<span id="cb8-26"><a href="#cb8-26"></a>    <span class="at">size =</span> <span class="dv">4</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-28"><a href="#cb8-28"></a>  <span class="fu">geom_label</span>(</span>
+<span id="cb8-29"><a href="#cb8-29"></a>    <span class="fu">aes</span>(</span>
+<span id="cb8-30"><a href="#cb8-30"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%.0f min; £%.2f"</span>, work_minutes, average_price)</span>
+<span id="cb8-31"><a href="#cb8-31"></a>    ),</span>
+<span id="cb8-32"><a href="#cb8-32"></a>    <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.08</span>,</span>
+<span id="cb8-33"><a href="#cb8-33"></a>    <span class="at">size =</span> <span class="dv">4</span>,</span>
+<span id="cb8-34"><a href="#cb8-34"></a>    <span class="at">fill =</span> <span class="st">"white"</span>,</span>
+<span id="cb8-35"><a href="#cb8-35"></a>    <span class="at">linewidth =</span> <span class="dv">0</span></span>
+<span id="cb8-36"><a href="#cb8-36"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-38"><a href="#cb8-38"></a>    <span class="at">title =</span> <span class="st">"Time needed to afford a cappuccino in selected* countries"</span>,</span>
+<span id="cb8-39"><a href="#cb8-39"></a>    <span class="at">subtitle =</span> <span class="st">"It takes about 10 minutes of work in Australia, but nearly three hours in India,</span><span class="sc">\n</span><span class="st">to afford a small cappuccino."</span>,</span>
+<span id="cb8-40"><a href="#cb8-40"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb8-41"><a href="#cb8-41"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb8-42"><a href="#cb8-42"></a>    <span class="at">caption =</span> <span class="fu">paste</span>(</span>
+<span id="cb8-43"><a href="#cb8-43"></a>      <span class="st">"*Countries selected to illustrate contrasting relationships between cappuccino prices and work-time affordability.</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb8-44"><a href="#cb8-44"></a>      <span class="st">"Source: The Cappuccino Index via TidyTuesday (9/8/2026). By: Arun Waran."</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a>    )</span>
+<span id="cb8-46"><a href="#cb8-46"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-47"><a href="#cb8-47"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb8-48"><a href="#cb8-48"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">230</span>),</span>
+<span id="cb8-49"><a href="#cb8-49"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>))</span>
+<span id="cb8-50"><a href="#cb8-50"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-51"><a href="#cb8-51"></a>  theme_coffee <span class="sc">+</span></span>
+<span id="cb8-52"><a href="#cb8-52"></a>  <span class="fu">theme</span>(</span>
+<span id="cb8-53"><a href="#cb8-53"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-54"><a href="#cb8-54"></a>    <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-55"><a href="#cb8-55"></a>    <span class="at">axis.line.y =</span> <span class="fu">element_line</span>(</span>
+<span id="cb8-56"><a href="#cb8-56"></a>      <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb8-57"><a href="#cb8-57"></a>      <span class="at">linewidth =</span> <span class="fl">0.5</span></span>
+<span id="cb8-58"><a href="#cb8-58"></a>    ),</span>
+<span id="cb8-59"><a href="#cb8-59"></a>    <span class="at">axis.text.y =</span> ggtext<span class="sc">::</span><span class="fu">element_markdown</span>(</span>
+<span id="cb8-60"><a href="#cb8-60"></a>      <span class="at">size =</span> <span class="dv">11</span>,</span>
+<span id="cb8-61"><a href="#cb8-61"></a>      <span class="at">lineheight =</span> <span class="dv">1</span></span>
+<span id="cb8-62"><a href="#cb8-62"></a>    ),</span>
+<span id="cb8-63"><a href="#cb8-63"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-64"><a href="#cb8-64"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-65"><a href="#cb8-65"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
+<span id="cb8-66"><a href="#cb8-66"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
+<span id="cb8-67"><a href="#cb8-67"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
+<span id="cb8-68"><a href="#cb8-68"></a>      <span class="at">lineheight =</span> <span class="fl">1.1</span>,</span>
+<span id="cb8-69"><a href="#cb8-69"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)</span>
+<span id="cb8-70"><a href="#cb8-70"></a>    )</span>
+<span id="cb8-71"><a href="#cb8-71"></a>  )</span>
+<span id="cb8-72"><a href="#cb8-72"></a></span>
+<span id="cb8-73"><a href="#cb8-73"></a>plot3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>
+The clearest illustration is Mexico versus Australia; their average cappuccino prices are nearly identical (£2.71 vs. £2.75), yet Mexico's required work time is more than seven times Australia's.
+
+### Final takeaways
+
+- Among the four highlighted countries, cappuccino's price does not accurately represent how affordable it is. India's coffee is the cheapest in pounds and the most expensive in time, whereas Switzerland has the highest average price but requires 14 minutes of work.
+- Hourly wages for baristas across these four countries vary by more than 30-fold, while cappuccino prices vary by less than 3-fold. This is the main reason for the affordability gap.
+- The same logic likely will extend beyond the four selected countries, which were chosen to illustrate the combinations I found the most interesting.</code></pre>
+<p>:::</p>
 </section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1130,202 +1403,15 @@ cookieconsent.run({
         <span class="nav-page-text"><span class="chapter-title">Pre-Class Learning Summaries</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="an">title:</span><span class="co"> "Homework 01"</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">---</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">## TidyTuesday Part</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a>Explore the week's <span class="co">[</span><span class="ot">TidyTuesday</span><span class="co">](https://github.com/rfordatascience/tidytuesday)</span> challenge.</span>
-<span id="cb5-8"><a href="#cb5-8"></a>Develop a research question, then answer it through a short data story mainly composed of <span class="co">[</span><span class="ot">effective visualizations</span><span class="co">]({{&lt; var effective-viz-url &gt;}})</span>.</span>
-<span id="cb5-9"><a href="#cb5-9"></a>Provide sufficient background for readers to grasp your narrative.</span>
-<span id="cb5-10"><a href="#cb5-10"></a>Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.</span>
-<span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="fu">### Background</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a>The TidyTuesday data I will investigate is a set of crowdsourced prices of cappuccinos at cafes across the world, along with the reported hourly wages of baristas where prices were reported. This makes it possible to compare how much a cappuccino costs in different places, and also how affordable that price is relative to local wages.</span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a>The full dataset covers dozens of countries, some with small sample sizes. As such, my analysis is initially restricted to countries with at least 10 reported prices, and then highlights four countries (Australia, Switzerland, Mexico, and India) with interesting patterns.</span>
-<span id="cb5-17"><a href="#cb5-17"></a></span>
-<span id="cb5-18"><a href="#cb5-18"></a><span class="fu">### Research question</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a></span>
-<span id="cb5-20"><a href="#cb5-20"></a>How well does the price of a cappuccino reflect how affordable it is, and what explains the difference?</span>
-<span id="cb5-21"><a href="#cb5-21"></a></span>
-<span id="cb5-22"><a href="#cb5-22"></a><span class="fu">### Analysis</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a></span>
-<span id="cb5-26"><a href="#cb5-26"></a><span class="in">```{r}</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb5-28"><a href="#cb5-28"></a><span class="fu">library</span>(ggtext)</span>
-<span id="cb5-29"><a href="#cb5-29"></a></span>
-<span id="cb5-30"><a href="#cb5-30"></a>cafe <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cafe.csv"</span>)</span>
-<span id="cb5-31"><a href="#cb5-31"></a></span>
-<span id="cb5-32"><a href="#cb5-32"></a>cappuccino_index <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cappuccino_index.csv"</span>)</span>
-<span id="cb5-33"><a href="#cb5-33"></a></span>
-<span id="cb5-34"><a href="#cb5-34"></a>cafe_summary <span class="ot">&lt;-</span> cafe <span class="sc">%&gt;%</span></span>
-<span id="cb5-35"><a href="#cb5-35"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb5-37"><a href="#cb5-37"></a>    <span class="at">average_price =</span> <span class="fu">mean</span>(price_gbp),</span>
-<span id="cb5-38"><a href="#cb5-38"></a>    <span class="at">average_wage =</span> <span class="fu">mean</span>(hourly_wage_gbp),</span>
-<span id="cb5-39"><a href="#cb5-39"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb5-40"><a href="#cb5-40"></a>  )</span>
-<span id="cb5-41"><a href="#cb5-41"></a></span>
-<span id="cb5-42"><a href="#cb5-42"></a>coffee <span class="ot">&lt;-</span> cappuccino_index <span class="sc">%&gt;%</span></span>
-<span id="cb5-43"><a href="#cb5-43"></a>  <span class="fu">select</span>(country, n, <span class="at">work_minutes =</span> index) <span class="sc">%&gt;%</span></span>
-<span id="cb5-44"><a href="#cb5-44"></a>  <span class="fu">left_join</span>(cafe_summary, <span class="at">by =</span> <span class="st">"country"</span>)</span>
-<span id="cb5-45"><a href="#cb5-45"></a></span>
-<span id="cb5-46"><a href="#cb5-46"></a>coffee_larger <span class="ot">&lt;-</span> coffee <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">10</span>)</span>
-<span id="cb5-47"><a href="#cb5-47"></a></span>
-<span id="cb5-48"><a href="#cb5-48"></a>focus_countries <span class="ot">&lt;-</span> coffee <span class="sc">%&gt;%</span></span>
-<span id="cb5-49"><a href="#cb5-49"></a>  <span class="fu">filter</span>(</span>
-<span id="cb5-50"><a href="#cb5-50"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Australia"</span>, <span class="st">"Switzerland"</span>, <span class="st">"Mexico"</span>, <span class="st">"India"</span>)</span>
-<span id="cb5-51"><a href="#cb5-51"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-52"><a href="#cb5-52"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-53"><a href="#cb5-53"></a>    <span class="at">country_label =</span> <span class="fu">paste0</span>(country, <span class="st">"</span><span class="sc">\n</span><span class="st">(n = "</span>, n, <span class="st">")"</span>),</span>
-<span id="cb5-54"><a href="#cb5-54"></a>    <span class="at">country_label =</span> <span class="fu">reorder</span>(country_label, <span class="sc">-</span>work_minutes)</span>
-<span id="cb5-55"><a href="#cb5-55"></a>  )</span>
-<span id="cb5-56"><a href="#cb5-56"></a></span>
-<span id="cb5-57"><a href="#cb5-57"></a>theme_coffee <span class="ot">&lt;-</span> <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="cb5-58"><a href="#cb5-58"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb5-59"><a href="#cb5-59"></a><span class="in">```</span></span>
-<span id="cb5-60"><a href="#cb5-60"></a></span>
-<span id="cb5-61"><a href="#cb5-61"></a>The first step is to see whether a cappuccino's price actually predicts how much work it takes to afford one. Plotting price against the cappuccino index (limited to countries with 10 or more reported cafes) shows that is not necessarily the case.</span>
-<span id="cb5-62"><a href="#cb5-62"></a></span>
-<span id="cb5-65"><a href="#cb5-65"></a><span class="in">```{r}</span></span>
-<span id="cb5-66"><a href="#cb5-66"></a><span class="co">#| fig-alt: "Scatterplot of average price against work time to afford a cappuccino for 36 countries. Australia and Mexico have similar prices but require 10 and 75 minutes. Switzerland has an expensive cup but short work time of 14 minutes. India has a cheaper cup but requires about 172 minutes."</span></span>
-<span id="cb5-67"><a href="#cb5-67"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(coffee_larger, <span class="fu">aes</span>(<span class="at">x =</span> average_price, <span class="at">y =</span> work_minutes)) <span class="sc">+</span></span>
-<span id="cb5-68"><a href="#cb5-68"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb5-69"><a href="#cb5-69"></a>    <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span></span>
-<span id="cb5-70"><a href="#cb5-70"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-71"><a href="#cb5-71"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb5-72"><a href="#cb5-72"></a>    <span class="at">data =</span> focus_countries,</span>
-<span id="cb5-73"><a href="#cb5-73"></a>    <span class="at">color =</span> <span class="st">"darkcyan"</span>, <span class="at">size =</span> <span class="fl">3.75</span></span>
-<span id="cb5-74"><a href="#cb5-74"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-75"><a href="#cb5-75"></a>  <span class="fu">geom_text</span>(</span>
-<span id="cb5-76"><a href="#cb5-76"></a>    <span class="at">data =</span> focus_countries,</span>
-<span id="cb5-77"><a href="#cb5-77"></a>    <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(country, <span class="st">" (n = "</span>, n, <span class="st">")"</span>)),</span>
-<span id="cb5-78"><a href="#cb5-78"></a>    <span class="at">hjust =</span> <span class="dv">0</span>,</span>
-<span id="cb5-79"><a href="#cb5-79"></a>    <span class="at">nudge_x =</span> <span class="fl">0.08</span>,</span>
-<span id="cb5-80"><a href="#cb5-80"></a>    <span class="at">nudge_y =</span> <span class="sc">-</span><span class="dv">5</span>,</span>
-<span id="cb5-81"><a href="#cb5-81"></a>    <span class="at">size =</span> <span class="fl">3.5</span>,</span>
-<span id="cb5-82"><a href="#cb5-82"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
-<span id="cb5-83"><a href="#cb5-83"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-84"><a href="#cb5-84"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-85"><a href="#cb5-85"></a>    <span class="at">title =</span> <span class="st">"Low coffee prices do not always mean short work times"</span>,</span>
-<span id="cb5-86"><a href="#cb5-86"></a>    <span class="at">subtitle =</span> <span class="st">"Four labeled examples show combinations of price and affordability"</span>,</span>
-<span id="cb5-87"><a href="#cb5-87"></a>    <span class="at">x =</span> <span class="st">"Average price of a small cappuccino (£)"</span>,</span>
-<span id="cb5-88"><a href="#cb5-88"></a>    <span class="at">y =</span> <span class="st">"Minutes of work to afford one cappuccino"</span>,</span>
-<span id="cb5-89"><a href="#cb5-89"></a>    <span class="at">caption =</span> <span class="st">"Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026"</span></span>
-<span id="cb5-90"><a href="#cb5-90"></a>    ) <span class="sc">+</span></span>
-<span id="cb5-91"><a href="#cb5-91"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="dv">0</span>), <span class="at">add =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))) <span class="sc">+</span></span>
-<span id="cb5-92"><a href="#cb5-92"></a>  theme_coffee</span>
-<span id="cb5-93"><a href="#cb5-93"></a></span>
-<span id="cb5-94"><a href="#cb5-94"></a>plot1</span>
-<span id="cb5-95"><a href="#cb5-95"></a><span class="in">```</span></span>
-<span id="cb5-96"><a href="#cb5-96"></a></span>
-<span id="cb5-97"><a href="#cb5-97"></a>In India, the cappuccino is the cheapest of the four labeled examples (£1.96), but a barista must work almost three hours to earn enough to buy one. Switzerland's cappuccino is more than twice the price, but it takes under 15 minutes to afford one.</span>
-<span id="cb5-98"><a href="#cb5-98"></a></span>
-<span id="cb5-99"><a href="#cb5-99"></a>Since price alone cannot explain the difference between cost and time worked, we can investigate wages next. We see that the hourly wages tell a different story when compared to prices.</span>
-<span id="cb5-100"><a href="#cb5-100"></a></span>
-<span id="cb5-103"><a href="#cb5-103"></a><span class="in">```{r}</span></span>
-<span id="cb5-104"><a href="#cb5-104"></a><span class="co">#| fig-alt: "Bar chart of the average hourly wages for baristas in Australia, Switzerland, Mexico, and India. Australia £16.39, Switzerland £22.54, Mexico £2.19, and India £0.68."</span></span>
-<span id="cb5-105"><a href="#cb5-105"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(focus_countries, <span class="fu">aes</span>(<span class="at">x =</span> average_wage, <span class="at">y =</span> country_label)) <span class="sc">+</span></span>
-<span id="cb5-106"><a href="#cb5-106"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"darkcyan"</span>, <span class="at">width =</span> <span class="fl">0.55</span>) <span class="sc">+</span></span>
-<span id="cb5-107"><a href="#cb5-107"></a>  <span class="fu">geom_text</span>(</span>
-<span id="cb5-108"><a href="#cb5-108"></a>    <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"£%.2f"</span>, average_wage)),</span>
-<span id="cb5-109"><a href="#cb5-109"></a>    <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>,</span>
-<span id="cb5-110"><a href="#cb5-110"></a>    <span class="at">size =</span> <span class="dv">4</span></span>
-<span id="cb5-111"><a href="#cb5-111"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-112"><a href="#cb5-112"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-113"><a href="#cb5-113"></a>    <span class="at">title =</span> <span class="st">"Average wages vary more sharply than coffee prices"</span>,</span>
-<span id="cb5-114"><a href="#cb5-114"></a>    <span class="at">subtitle =</span> <span class="st">"The highest average hourly wage is about 33 times the lowest in the sample"</span>,</span>
-<span id="cb5-115"><a href="#cb5-115"></a>    <span class="at">x =</span> <span class="st">"Average hourly barista wage (GBP)"</span>,</span>
-<span id="cb5-116"><a href="#cb5-116"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb5-117"><a href="#cb5-117"></a>    <span class="at">caption =</span> (<span class="st">"Each country has at least 10 reported cafes. By Arun Waran. Source: TidyTuesday data, September 8, 2026"</span>)</span>
-<span id="cb5-118"><a href="#cb5-118"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-119"><a href="#cb5-119"></a>  <span class="fu">scale_x_continuous</span>(</span>
-<span id="cb5-120"><a href="#cb5-120"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">25</span>), </span>
-<span id="cb5-121"><a href="#cb5-121"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">5</span>)</span>
-<span id="cb5-122"><a href="#cb5-122"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-123"><a href="#cb5-123"></a>  theme_coffee</span>
-<span id="cb5-124"><a href="#cb5-124"></a></span>
-<span id="cb5-125"><a href="#cb5-125"></a>plot2</span>
-<span id="cb5-126"><a href="#cb5-126"></a><span class="in">```</span></span>
-<span id="cb5-127"><a href="#cb5-127"></a></span>
-<span id="cb5-128"><a href="#cb5-128"></a>Switzerland's average hourly wage (£22.54) is over 33 times India's (£0.68), which is a much larger gap than the roughly threefold difference in cappuccino prices. Because wages vary more than prices, these wage differences help explain why similar coffee prices can translate to different amounts of work time.</span>
-<span id="cb5-129"><a href="#cb5-129"></a></span>
-<span id="cb5-130"><a href="#cb5-130"></a>Now that we have seen how wage differences help explain the gap, we can now place the four highlighted countries on a scale to make the relationship more concrete.</span>
-<span id="cb5-131"><a href="#cb5-131"></a></span>
-<span id="cb5-134"><a href="#cb5-134"></a><span class="in">```{r}</span></span>
-<span id="cb5-135"><a href="#cb5-135"></a><span class="co">#| fig-alt: "Horizontal dot plot comparing the time needed to afford a small cappuccino in Australia, Switzerland, Mexico, and India. Australia requires 10 minutes of work, Switzerland 14 minutes, Mexico 75 minutes, and India 172 minutes."</span></span>
-<span id="cb5-136"><a href="#cb5-136"></a></span>
-<span id="cb5-137"><a href="#cb5-137"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
-<span id="cb5-138"><a href="#cb5-138"></a>  focus_countries,</span>
-<span id="cb5-139"><a href="#cb5-139"></a>  <span class="fu">aes</span>(<span class="at">x =</span> work_minutes, <span class="at">y =</span> country_label)</span>
-<span id="cb5-140"><a href="#cb5-140"></a>) <span class="sc">+</span></span>
-<span id="cb5-141"><a href="#cb5-141"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb5-142"><a href="#cb5-142"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">xend =</span> work_minutes, <span class="at">yend =</span> country_label),</span>
-<span id="cb5-143"><a href="#cb5-143"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
-<span id="cb5-144"><a href="#cb5-144"></a>    <span class="at">linewidth =</span> <span class="fl">1.3</span></span>
-<span id="cb5-145"><a href="#cb5-145"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-146"><a href="#cb5-146"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb5-147"><a href="#cb5-147"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>,</span>
-<span id="cb5-148"><a href="#cb5-148"></a>    <span class="at">size =</span> <span class="dv">4</span></span>
-<span id="cb5-149"><a href="#cb5-149"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-150"><a href="#cb5-150"></a>  <span class="fu">geom_label</span>(</span>
-<span id="cb5-151"><a href="#cb5-151"></a>    <span class="fu">aes</span>(</span>
-<span id="cb5-152"><a href="#cb5-152"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%.0f min; £%.2f"</span>, work_minutes, average_price)</span>
-<span id="cb5-153"><a href="#cb5-153"></a>    ),</span>
-<span id="cb5-154"><a href="#cb5-154"></a>    <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.08</span>,</span>
-<span id="cb5-155"><a href="#cb5-155"></a>    <span class="at">size =</span> <span class="dv">4</span>,</span>
-<span id="cb5-156"><a href="#cb5-156"></a>    <span class="at">fill =</span> <span class="st">"white"</span>,</span>
-<span id="cb5-157"><a href="#cb5-157"></a>    <span class="at">linewidth =</span> <span class="dv">0</span></span>
-<span id="cb5-158"><a href="#cb5-158"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-159"><a href="#cb5-159"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-160"><a href="#cb5-160"></a>    <span class="at">title =</span> <span class="st">"Time to afford a cappuccino in selected countries"</span>,</span>
-<span id="cb5-161"><a href="#cb5-161"></a>    <span class="at">subtitle =</span> <span class="st">"It costs about 10 minutes of work in Australia, but nearly three hours in India"</span>,</span>
-<span id="cb5-162"><a href="#cb5-162"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
-<span id="cb5-163"><a href="#cb5-163"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb5-164"><a href="#cb5-164"></a>    <span class="at">caption =</span> <span class="fu">paste</span>(</span>
-<span id="cb5-165"><a href="#cb5-165"></a>      <span class="st">"Countries selected to show contrasting combinations of price and work-time affordability.</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-166"><a href="#cb5-166"></a>      <span class="st">"Source: TidyTuesday, The Cappuccino Index. Release date: September 8, 2026. By Arun Waran."</span></span>
-<span id="cb5-167"><a href="#cb5-167"></a>    )</span>
-<span id="cb5-168"><a href="#cb5-168"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-169"><a href="#cb5-169"></a>  <span class="fu">scale_x_continuous</span>(</span>
-<span id="cb5-170"><a href="#cb5-170"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">230</span>)</span>
-<span id="cb5-171"><a href="#cb5-171"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-172"><a href="#cb5-172"></a>  theme_coffee <span class="sc">+</span></span>
-<span id="cb5-173"><a href="#cb5-173"></a>  <span class="fu">theme</span>(</span>
-<span id="cb5-174"><a href="#cb5-174"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb5-175"><a href="#cb5-175"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb5-176"><a href="#cb5-176"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb5-177"><a href="#cb5-177"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
-<span id="cb5-178"><a href="#cb5-178"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
-<span id="cb5-179"><a href="#cb5-179"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
-<span id="cb5-180"><a href="#cb5-180"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">25</span>)</span>
-<span id="cb5-181"><a href="#cb5-181"></a>    )</span>
-<span id="cb5-182"><a href="#cb5-182"></a>  )</span>
-<span id="cb5-183"><a href="#cb5-183"></a></span>
-<span id="cb5-184"><a href="#cb5-184"></a>plot3</span>
-<span id="cb5-185"><a href="#cb5-185"></a><span class="in">```</span></span>
-<span id="cb5-186"><a href="#cb5-186"></a></span>
-<span id="cb5-187"><a href="#cb5-187"></a>The clearest illustration is Mexico versus Australia; their average cappuccino prices are nearly identical (£2.71 vs. £2.75), yet Mexico's required work time is more than seven times Australia's.</span>
-<span id="cb5-188"><a href="#cb5-188"></a></span>
-<span id="cb5-189"><a href="#cb5-189"></a><span class="fu">### Final takeaways</span></span>
-<span id="cb5-190"><a href="#cb5-190"></a></span>
-<span id="cb5-191"><a href="#cb5-191"></a><span class="ss">- </span>Among the four highlighted countries, cappuccino's price does not accurately represent how affordable it is. India's coffee is the cheapest in pounds and the most expensive in time, whereas Switzerland has the highest average price but requires 14 minutes of work.</span>
-<span id="cb5-192"><a href="#cb5-192"></a><span class="ss">- </span>Hourly wages for baristas across these four countries vary by more than 30-fold, while cappuccino prices vary by less than 3-fold. This is the main reason for the affordability gap.</span>
-<span id="cb5-193"><a href="#cb5-193"></a><span class="ss">- </span>The same logic likely will extend beyond the four selected countries, which were chosen to illustrate the combinations I found the most interesting.</span>
-</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-
-<div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+      <div class="footer-contents"> </div>  
+    <div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
