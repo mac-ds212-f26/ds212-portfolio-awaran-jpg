@@ -12,7 +12,7 @@ title: "Pre-Class Learning Summaries"
 ![Mindmap for Friday, September 18](0918-mindmap.png)
 
 ![Mindmap for Wednesday, September 23](0923-mindmap.png)
-![Mindmap for Monday, September 28](0928-mindmap.png)
+![Mindmap for Wednesday, September 30](0928-mindmap.png)
 
 ## Quarto
 
