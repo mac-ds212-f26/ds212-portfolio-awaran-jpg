@@ -198,7 +198,6 @@ plot3 <- ggplot(
 
 plot3
 ```
-```
 
 The clearest illustration is Mexico versus Australia; their average cappuccino prices are nearly identical (£2.71 vs. £2.75), yet Mexico's required work time is more than seven times Australia's.
 

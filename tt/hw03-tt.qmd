@@ -1,0 +1,150 @@
+---
+title: "TidyTuesday HW3"
+author: "Arun Waran"
+---
+
+
+
+### Background
+
+The TidyTuesday dataset I will investigate records the urban green space in cities and urban areas and green area around the world. It was sourced from the UN Habitat Urban Indicators Dataset, for 1990, 2000, 2010, 2020 and 2025.
+
+The green areas are defined as parts of the city that are green for most of the year, and are calculated using satellite imagery based on the Normalized Difference Vegetation Index (NDVI).
+
+### Research question
+
+How has the share of green area in cities changed from 1990-2025, and which cities have seen the largest changes?
+
+### Analysis
+
+```{r}
+library(tidyverse)
+
+urban <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-22/urban.csv")
+
+urban_green <- urban %>%
+  select(country = countryOrTerritoryName, city_code = cityCode, city = cityName, year, green_share = averageShareOfGreenAreaInCityUrbanAreaPct)
+
+city_change <- urban_green %>%
+  filter(year %in% c(1990, 2025)) %>%
+  pivot_wider(names_from = year, values_from = green_share, names_prefix = "green_") %>%
+  drop_na(green_1990, green_2025) %>%
+  mutate(change = green_2025 - green_1990)
+
+focus_cities <- bind_rows(
+  city_change %>% slice_max(change, n = 4, with_ties = FALSE) %>% mutate(group = "Largest increases"),
+  city_change %>% slice_min(change, n = 4, with_ties = FALSE) %>% mutate(group = "Largest decreases")
+) %>%
+  mutate(
+    group = factor(group, levels = c("Largest decreases", "Largest increases")),
+    city_label = paste0(city, ", ", country),
+    city_label = fct_reorder(city_label, abs(change))
+  )
+
+theme_green <- theme_bw(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.caption = element_text(
+      size = 8,
+      color = "gray50",
+      lineheight = 1.1,
+      margin = margin(t = 15)
+    )
+  )
+```
+
+First, we will examine how the overall distribution of green-area shares has changed, via looking at the shares in each time of observation.
+
+```{r}
+#| fig-alt: "Boxplots show the distribution of green-area shares across cities in 1990, 2000, 2010, 2020, and 2025. The distributions shift downward over time."
+
+plot1 <- ggplot(urban_green %>% drop_na(green_share), aes(x = factor(year), y = green_share)) +
+  geom_boxplot(width = 0.55, outlier.alpha = 0.25, outlier.size = 1) +
+  scale_y_continuous(limits = c(0, 80), breaks = seq(0, 80, 20), expand = expansion(mult = c(0, 0.03))) +
+  labs(
+    title = "Urban green-area shares shifted downward after 1990",
+    subtitle = "The median and upper end of the distribution both decrease over time",
+    x = NULL,
+    y = "Share of urban area that is green (%)",
+    caption = "Source: UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."
+  ) +
+  theme_green +
+  theme(panel.grid.major.x = element_blank())
+
+plot1
+```
+
+The distribution consistently shifts downward over time, and the range of the data decreases significantly, especially with respect to the upper outliers. However, the visualization does not show which cities became less green.
+
+To compare the pattern within cities, we can investigate the green-area share for each city individually in 1990 and 2025 using a scatterplot.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6.5
+#| fig-alt: "Scatterplot comparing each city's green-area share in 1990 and 2025. Many cities fall below the dashed line of equal green-area shares, indicating lower green-area shares in 2025."
+
+plot2 <- ggplot(city_change, aes(x = green_1990, y = green_2025)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", linewidth = 0.75, color = "darkgray") +
+  geom_point(alpha = 0.3, size = 1.5) +
+  annotate("text", x = 55, y = 20, label = "Less green in 2025", hjust = 0, color = "black", size = 3.5) +
+  annotate("text", x = 8, y = 31, label = "More green in 2025", hjust = 0, color = "black", size = 3.5) +
+  scale_x_continuous(limits = c(0, 80), breaks = seq(0, 80, 20), expand = expansion(mult = c(0, 0.02))) +
+  scale_y_continuous(limits = c(0, 80), breaks = seq(0, 80, 20), expand = expansion(mult = c(0, 0.02))) +
+  coord_equal() +
+  labs(
+    title = "Green-area shares fell in many cities from 1990–2025",
+    subtitle = "Each point compares green-area share in 1990 and 2025",
+    x = "Green area in 1990 (%)",
+    y = "Green area in 2025 (%)",
+    caption = "Source: UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."
+  ) +
+  theme_green
+
+plot2
+```
+
+Most cities fall below the dashed line, so they have less green space in 2025 than in 1990. Several cities which began with high green-area shares in 1990 fell below the line, so we can see that there are some examples with declines larger than that indicated in the boxplot.
+
+To look at these outliers, it will next be helpful to consider the cities with the largest increases and decreases from 1990 to 2025.
+
+```{r}
+#| fig-width: 9
+#| fig-height: 7
+#| fig-alt: "Arrow chart showing the four cities with the largest increases and four cities with the largest decreases in green-area share between 1990 and 2025. The decreases are much larger (at up to 63.4 percentage points) than the increases (at up to 14.7 percentage points)."
+
+plot3 <- ggplot(focus_cities, aes(y = city_label)) +
+  geom_segment(aes(x = green_1990, xend = green_2025, yend = city_label), linewidth = 1, color = "gray", arrow = grid::arrow(length = grid::unit(0.10, "inches"), type = "closed")) +
+  geom_point(aes(x = green_1990), size = 3, shape = 21, fill = "white", color = "darkgray", stroke = 1) +
+  geom_point(aes(x = green_2025), size = 3.5, color = "darkgreen") +
+  geom_text(
+    aes(
+      x = green_2025,
+      label = sprintf("%+.1f pp", change)
+    ),
+    hjust = ifelse(focus_cities$change > 0, -0.35, 1.35),
+    size = 3.5,
+    fontface = "bold"
+  ) +
+  facet_wrap(~ group, ncol = 1, scales = "free_y") +
+  scale_x_continuous(limits = c(0, 80), breaks = seq(0, 80, 20), expand = expansion(mult = c(0, 0.05)), sec.axis = dup_axis(name = NULL)) +
+  labs(
+    title = "The largest changes in urban green-area share from 1990-2025",
+    subtitle = "Bissau fell 63.4 percentage points, while León had the largest increase at 14.7 percentage points",
+    x = "Share of urban area that is green (%)",
+    y = NULL,
+    caption = "Hollow circles show 1990 and green circles show 2025. Cities shown are the four largest increases and four largest decreases in green-area share from 1990–2025.\nSource: UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."
+  ) +
+  theme_green +
+  theme(panel.grid.major.y = element_blank(), strip.text = element_text(face = "bold", hjust = 0), strip.background = element_blank(),
+    strip.placement = "outside")
+
+plot3
+```
+
+Across these cases, we see that the largest decreases are greater than the largest increases. Bissau has declined by 63.4 percentage points, with the other cities decreasing by roughly 38-41 percentage points. The four largest increases, however, range from roughly 12-15 percentage points.
+
+### Final takeaways
+
+- Urban green-area shares generally shifted downward between 1990 and 2025. The median and the upper end decreased over time, and also consistently in the intervening periods.
+- Several individual cities also showed lower shares in 2025 than in 1990, showing that the observation stands on multiple levels.
+- The largest decreases were significantly bigger than the largest increases, at 63.4 percentage points (for Bissau) and 14.7 percentage points (for León), respectively.
