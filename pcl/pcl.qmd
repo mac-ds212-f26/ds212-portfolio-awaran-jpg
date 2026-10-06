@@ -14,6 +14,11 @@ title: "Pre-Class Learning Summaries"
 ![Mindmap for Wednesday, September 23](0923-mindmap.png)
 ![Mindmap for Wednesday, September 30](0928-mindmap.png)
 
+![Mindmap for Friday, October 2](1002-mindmap.png)
+
+![Mindmap for Monday, October 5](1005-mindmap.png)
+
+
 ## Quarto
 
 ![from qmd4sci.njtierney.com](0810-quarto.jpeg)
