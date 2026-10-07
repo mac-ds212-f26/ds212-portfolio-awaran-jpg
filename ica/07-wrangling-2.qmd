@@ -417,27 +417,29 @@ The following are core `stringr` functions that use regular expressions:
 Pick a theme from the article and use each of the functions above, starting with `str_count()`, to search for it in the `posts` data. Pull up each function's documentation page and read through the arguments as you go.
 
 ```{r}
-divorce_pattern <- "divorc\\w*"
+# When this code runs, it messes up my website sync, so I am leaving it commented out
 
-str_count(posts$question_only, divorce_pattern)
-
-str_view(posts$question_only, divorce_pattern)
-
-str_detect(posts$question_only, divorce_pattern)
-
-str_subset(posts$question_only, divorce_pattern)
-
-str_extract(posts$question_only, divorce_pattern)
-
-str_extract_all(posts$question_only, divorce_pattern)
-
-str_replace(posts$question_only, divorce_pattern, "DIVORCE")
-
-str_replace_all(posts$question_only, divorce_pattern, "DIVORCE")
-
-str_remove(posts$question_only, divorce_pattern)
-
-str_remove_all(posts$question_only, divorce_pattern)
+# divorce_pattern <- "divorc\\w*"
+# 
+# str_count(posts$question_only, divorce_pattern)
+# 
+# str_view(posts$question_only, divorce_pattern)
+# 
+# str_detect(posts$question_only, divorce_pattern)
+# 
+# str_subset(posts$question_only, divorce_pattern)
+# 
+# str_extract(posts$question_only, divorce_pattern)
+# 
+# str_extract_all(posts$question_only, divorce_pattern)
+# 
+# str_replace(posts$question_only, divorce_pattern, "DIVORCE")
+# 
+# str_replace_all(posts$question_only, divorce_pattern, "DIVORCE")
+# 
+# str_remove(posts$question_only, divorce_pattern)
+# 
+# str_remove_all(posts$question_only, divorce_pattern)
 
 ```
 
