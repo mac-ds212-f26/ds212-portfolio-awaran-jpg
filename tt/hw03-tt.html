@@ -608,12 +608,12 @@ cookieconsent.run({
 <span id="cb4-16"><a href="#cb4-16"></a>  ) <span class="sc">+</span></span>
 <span id="cb4-17"><a href="#cb4-17"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> group, <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
 <span id="cb4-18"><a href="#cb4-18"></a>  <span class="fu">scale_color_manual</span>(</span>
-<span id="cb4-19"><a href="#cb4-19"></a>  <span class="at">values =</span> <span class="fu">c</span>(</span>
-<span id="cb4-20"><a href="#cb4-20"></a>    <span class="st">"Largest decreases"</span> <span class="ot">=</span> <span class="st">"#D55E00"</span>,</span>
-<span id="cb4-21"><a href="#cb4-21"></a>    <span class="st">"Largest increases"</span> <span class="ot">=</span> <span class="st">"#0072B2"</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a>  ),</span>
-<span id="cb4-23"><a href="#cb4-23"></a>  <span class="at">guide =</span> <span class="st">"none"</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a>) <span class="sc">+</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb4-20"><a href="#cb4-20"></a>      <span class="st">"Largest decreases"</span> <span class="ot">=</span> <span class="st">"#D55E00"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21"></a>      <span class="st">"Largest increases"</span> <span class="ot">=</span> <span class="st">"#0072B2"</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>    ),</span>
+<span id="cb4-23"><a href="#cb4-23"></a>    <span class="at">guide =</span> <span class="st">"none"</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>  ) <span class="sc">+</span></span>
 <span id="cb4-25"><a href="#cb4-25"></a>  <span class="fu">scale_x_continuous</span>(</span>
 <span id="cb4-26"><a href="#cb4-26"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">80</span>),</span>
 <span id="cb4-27"><a href="#cb4-27"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">20</span>),</span>
@@ -622,10 +622,10 @@ cookieconsent.run({
 <span id="cb4-30"><a href="#cb4-30"></a>  ) <span class="sc">+</span></span>
 <span id="cb4-31"><a href="#cb4-31"></a>  <span class="fu">labs</span>(</span>
 <span id="cb4-32"><a href="#cb4-32"></a>    <span class="at">title =</span> <span class="st">"The largest changes in urban green-area share from 1990–2025"</span>,</span>
-<span id="cb4-33"><a href="#cb4-33"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, Bissau fell 63.4 percentage points while León rose 14.7"</span>,</span>
+<span id="cb4-33"><a href="#cb4-33"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, decreases were much larger: </span><span class="sc">\n</span><span class="st">Bissau fell 63.4 points while León rose 14.7 points"</span>,</span>
 <span id="cb4-34"><a href="#cb4-34"></a>    <span class="at">x =</span> <span class="st">"Share of urban area that is green (%)"</span>,</span>
 <span id="cb4-35"><a href="#cb4-35"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb4-36"><a href="#cb4-36"></a>    <span class="at">caption =</span> <span class="st">"Data from: UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>    <span class="at">caption =</span> <span class="st">"Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
 <span id="cb4-37"><a href="#cb4-37"></a>  ) <span class="sc">+</span></span>
 <span id="cb4-38"><a href="#cb4-38"></a>  theme_green <span class="sc">+</span></span>
 <span id="cb4-39"><a href="#cb4-39"></a>  <span class="fu">theme</span>(</span>
@@ -1274,12 +1274,12 @@ cookieconsent.run({
 <span id="cb5-138"><a href="#cb5-138"></a>  ) <span class="sc">+</span></span>
 <span id="cb5-139"><a href="#cb5-139"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> group, <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
 <span id="cb5-140"><a href="#cb5-140"></a>  <span class="fu">scale_color_manual</span>(</span>
-<span id="cb5-141"><a href="#cb5-141"></a>  <span class="at">values =</span> <span class="fu">c</span>(</span>
-<span id="cb5-142"><a href="#cb5-142"></a>    <span class="st">"Largest decreases"</span> <span class="ot">=</span> <span class="st">"#D55E00"</span>,</span>
-<span id="cb5-143"><a href="#cb5-143"></a>    <span class="st">"Largest increases"</span> <span class="ot">=</span> <span class="st">"#0072B2"</span></span>
-<span id="cb5-144"><a href="#cb5-144"></a>  ),</span>
-<span id="cb5-145"><a href="#cb5-145"></a>  <span class="at">guide =</span> <span class="st">"none"</span></span>
-<span id="cb5-146"><a href="#cb5-146"></a>) <span class="sc">+</span></span>
+<span id="cb5-141"><a href="#cb5-141"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb5-142"><a href="#cb5-142"></a>      <span class="st">"Largest decreases"</span> <span class="ot">=</span> <span class="st">"#D55E00"</span>,</span>
+<span id="cb5-143"><a href="#cb5-143"></a>      <span class="st">"Largest increases"</span> <span class="ot">=</span> <span class="st">"#0072B2"</span></span>
+<span id="cb5-144"><a href="#cb5-144"></a>    ),</span>
+<span id="cb5-145"><a href="#cb5-145"></a>    <span class="at">guide =</span> <span class="st">"none"</span></span>
+<span id="cb5-146"><a href="#cb5-146"></a>  ) <span class="sc">+</span></span>
 <span id="cb5-147"><a href="#cb5-147"></a>  <span class="fu">scale_x_continuous</span>(</span>
 <span id="cb5-148"><a href="#cb5-148"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">80</span>),</span>
 <span id="cb5-149"><a href="#cb5-149"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">20</span>),</span>
@@ -1288,10 +1288,10 @@ cookieconsent.run({
 <span id="cb5-152"><a href="#cb5-152"></a>  ) <span class="sc">+</span></span>
 <span id="cb5-153"><a href="#cb5-153"></a>  <span class="fu">labs</span>(</span>
 <span id="cb5-154"><a href="#cb5-154"></a>    <span class="at">title =</span> <span class="st">"The largest changes in urban green-area share from 1990–2025"</span>,</span>
-<span id="cb5-155"><a href="#cb5-155"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, Bissau fell 63.4 percentage points while León rose 14.7"</span>,</span>
+<span id="cb5-155"><a href="#cb5-155"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, decreases were much larger: </span><span class="sc">\n</span><span class="st">Bissau fell 63.4 points while León rose 14.7 points"</span>,</span>
 <span id="cb5-156"><a href="#cb5-156"></a>    <span class="at">x =</span> <span class="st">"Share of urban area that is green (%)"</span>,</span>
 <span id="cb5-157"><a href="#cb5-157"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb5-158"><a href="#cb5-158"></a>    <span class="at">caption =</span> <span class="st">"Data from: UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
+<span id="cb5-158"><a href="#cb5-158"></a>    <span class="at">caption =</span> <span class="st">"Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
 <span id="cb5-159"><a href="#cb5-159"></a>  ) <span class="sc">+</span></span>
 <span id="cb5-160"><a href="#cb5-160"></a>  theme_green <span class="sc">+</span></span>
 <span id="cb5-161"><a href="#cb5-161"></a>  <span class="fu">theme</span>(</span>
