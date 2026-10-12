@@ -130,12 +130,12 @@ plot3 <- ggplot(focus_cities, aes(y = city_label)) +
   ) +
   facet_wrap(~ group, ncol = 1, scales = "free_y") +
   scale_color_manual(
-  values = c(
-    "Largest decreases" = "#D55E00",
-    "Largest increases" = "#0072B2"
-  ),
-  guide = "none"
-) +
+    values = c(
+      "Largest decreases" = "#D55E00",
+      "Largest increases" = "#0072B2"
+    ),
+    guide = "none"
+  ) +
   scale_x_continuous(
     limits = c(0, 80),
     breaks = seq(0, 80, 20),
@@ -144,10 +144,10 @@ plot3 <- ggplot(focus_cities, aes(y = city_label)) +
   ) +
   labs(
     title = "The largest changes in urban green-area share from 1990–2025",
-    subtitle = "Among the four largest changes in each direction, Bissau fell 63.4 percentage points while León rose 14.7",
+    subtitle = "Among the four largest changes in each direction, decreases were much larger: \nBissau fell 63.4 points while León rose 14.7 points",
     x = "Share of urban area that is green (%)",
     y = NULL,
-    caption = "Data from: UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."
+    caption = "Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."
   ) +
   theme_green +
   theme(
