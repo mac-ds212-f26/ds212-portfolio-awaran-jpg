@@ -274,6 +274,22 @@ Create 2 small examples that show how `pmap()` works with `str_sub()`. Your exam
 - Use different arguments for `start` and `end` but a fixed `string`
 
 ```{r}
+string_data <- tibble(
+  string = c("red", "blue", "green"),
+  start = c(2, 3, 4),
+  end = c(3, 4, 5)
+)
+
+pmap_chr(string_data, str_sub)
+
+```
+
+```{r}
+string_data <- tibble(
+    start = c(2, 3, 4),
+    end = c(3, 4, 5)
+)
+pmap_chr(string_data, str_sub, string = "datascience")
 
 ```
 
@@ -316,6 +332,9 @@ fit_model <- function(data, mod_formula, remove_outliers) {
 }
 
 # use pmap()
+df_arg_combos %>%
+  mutate(fit_model = pmap(df_arg_combos, fit_model, data = diamonds)) %>%
+  head()
 
 ```
 
