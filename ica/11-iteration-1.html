@@ -578,9 +578,9 @@ cookieconsent.run({
 <code>for</code> Loops</h2>
 <p>In R, <code>for</code> loops have the following general structure:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">for</span> (i <span class="cf">in</span> some_vector) {</span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a> <span class="co"># for (i in some_vector) {</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="co"># Code to do stuff based on i</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3"></a> <span class="co"># }</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p><code>some_vector</code> can be <strong>any</strong> vector, including:</p>
@@ -745,7 +745,7 @@ NULL</code></pre>
 <pre><code># A tibble: 1 × 6
   expression                             min median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                          &lt;bch:&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 for (i in 1:1e+05) { x &lt;- c(x, i) }  29.1s  29.1s    0.0343    18.6GB     47.8</code></pre>
+1 for (i in 1:1e+05) { x &lt;- c(x, i) }  25.7s  25.7s    0.0390    18.6GB     54.2</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Example 2: Using a storage container!</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
@@ -759,7 +759,7 @@ NULL</code></pre>
 <pre><code># A tibble: 1 × 6
   expression                            min  median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 for (i in 1:1e+05) { x[i] &lt;- i }   5.45ms  5.62ms      178.     402KB        0</code></pre>
+1 for (i in 1:1e+05) { x[i] &lt;- i }   5.44ms  5.51ms      180.     402KB     2.00</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Example 3: Vectorized function</span></span>
 <span id="cb34-2"><a href="#cb34-2"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
@@ -770,7 +770,7 @@ NULL</code></pre>
 <pre><code># A tibble: 1 × 6
   expression                      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                 &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 x &lt;- seq(1, 1e+05, by = 1)    457µs    462µs     2148.    1.91MB     69.7</code></pre>
+1 x &lt;- seq(1, 1e+05, by = 1)    457µs    462µs     2146.    1.91MB     70.4</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Pair Programming">
@@ -1009,20 +1009,20 @@ Coefficients:
 <pre><code>$mean
 function (x, ...) 
 UseMethod("mean")
-&lt;bytecode: 0xaaf5f3ab8&gt;
+&lt;bytecode: 0x8d55ebab8&gt;
 &lt;environment: namespace:base&gt;
 
 $med
 function (x, na.rm = FALSE, ...) 
 UseMethod("median")
-&lt;bytecode: 0xaaeaa4e78&gt;
+&lt;bytecode: 0x8d4a9ce78&gt;
 &lt;environment: namespace:stats&gt;
 
 $sd
 function (x, na.rm = FALSE) 
 sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
     na.rm = na.rm))
-&lt;bytecode: 0xab959b8c0&gt;
+&lt;bytecode: 0x8df5b0dd0&gt;
 &lt;environment: namespace:stats&gt;</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">str</span>(list_of_fcts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1825,9 +1825,9 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 <span id="cb74-60"><a href="#cb74-60"></a><span class="in">```{r for_syntax}</span></span>
 <span id="cb74-61"><a href="#cb74-61"></a><span class="co">#| eval: false</span></span>
 <span id="cb74-62"><a href="#cb74-62"></a></span>
-<span id="cb74-63"><a href="#cb74-63"></a><span class="cf">for</span> (i <span class="cf">in</span> some_vector) {</span>
+<span id="cb74-63"><a href="#cb74-63"></a> <span class="co"># for (i in some_vector) {</span></span>
 <span id="cb74-64"><a href="#cb74-64"></a>    <span class="co"># Code to do stuff based on i</span></span>
-<span id="cb74-65"><a href="#cb74-65"></a>}</span>
+<span id="cb74-65"><a href="#cb74-65"></a> <span class="co"># }</span></span>
 <span id="cb74-66"><a href="#cb74-66"></a><span class="in">```</span></span>
 <span id="cb74-67"><a href="#cb74-67"></a></span>
 <span id="cb74-68"><a href="#cb74-68"></a><span class="in">`some_vector`</span> can be **any** vector, including:</span>
