@@ -745,7 +745,7 @@ NULL</code></pre>
 <pre><code># A tibble: 1 × 6
   expression                             min median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                          &lt;bch:&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 for (i in 1:1e+05) { x &lt;- c(x, i) }  25.8s  25.8s    0.0388    18.6GB     54.0</code></pre>
+1 for (i in 1:1e+05) { x &lt;- c(x, i) }  29.1s  29.1s    0.0343    18.6GB     47.8</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Example 2: Using a storage container!</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
@@ -759,7 +759,7 @@ NULL</code></pre>
 <pre><code># A tibble: 1 × 6
   expression                            min  median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 for (i in 1:1e+05) { x[i] &lt;- i }   5.43ms  5.48ms      182.     402KB     2.02</code></pre>
+1 for (i in 1:1e+05) { x[i] &lt;- i }   5.45ms  5.62ms      178.     402KB        0</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Example 3: Vectorized function</span></span>
 <span id="cb34-2"><a href="#cb34-2"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
@@ -770,7 +770,7 @@ NULL</code></pre>
 <pre><code># A tibble: 1 × 6
   expression                      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                 &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 x &lt;- seq(1, 1e+05, by = 1)    457µs    462µs     2150.    1.91MB     66.1</code></pre>
+1 x &lt;- seq(1, 1e+05, by = 1)    457µs    462µs     2148.    1.91MB     69.7</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Pair Programming">
@@ -1009,20 +1009,20 @@ Coefficients:
 <pre><code>$mean
 function (x, ...) 
 UseMethod("mean")
-&lt;bytecode: 0x9af5ebab8&gt;
+&lt;bytecode: 0xaaf5f3ab8&gt;
 &lt;environment: namespace:base&gt;
 
 $med
 function (x, na.rm = FALSE, ...) 
 UseMethod("median")
-&lt;bytecode: 0x9aea8ce78&gt;
+&lt;bytecode: 0xaaeaa4e78&gt;
 &lt;environment: namespace:stats&gt;
 
 $sd
 function (x, na.rm = FALSE) 
 sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
     na.rm = na.rm))
-&lt;bytecode: 0x9ba51f038&gt;
+&lt;bytecode: 0xab959b8c0&gt;
 &lt;environment: namespace:stats&gt;</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">str</span>(list_of_fcts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1036,12 +1036,49 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 <p>Using the <code>diamonds</code> dataset, complete the following exercises.</p>
 </section></section><section id="add-units" class="level2"><h2 class="anchored" data-anchor-id="add-units">✏️ Add Units</h2>
 <p>Transform the <code>x</code>, <code>y</code>, and <code>z</code> columns so that the units of millimeters are displayed (e.g., “4.0 mm”).</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>mm_display <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb59-2"><a href="#cb59-2"></a>    <span class="fu">str_c</span>(x, <span class="st">" mm"</span>)</span>
+<span id="cb59-3"><a href="#cb59-3"></a>}</span>
+<span id="cb59-4"><a href="#cb59-4"></a></span>
+<span id="cb59-5"><a href="#cb59-5"></a>diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb59-6"><a href="#cb59-6"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(x, y, z), <span class="at">.fns =</span> mm_display)) <span class="sc">%&gt;%</span></span>
+<span id="cb59-7"><a href="#cb59-7"></a>    <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+  carat cut       color clarity depth table price x       y       z      
+  &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+1  0.23 Ideal     E     SI2      61.5    55   326 3.95 mm 3.98 mm 2.43 mm
+2  0.21 Premium   E     SI1      59.8    61   326 3.89 mm 3.84 mm 2.31 mm
+3  0.23 Good      E     VS1      56.9    65   327 4.05 mm 4.07 mm 2.31 mm
+4  0.29 Premium   I     VS2      62.4    58   334 4.2 mm  4.23 mm 2.63 mm
+5  0.31 Good      J     SI2      63.3    58   335 4.34 mm 4.35 mm 2.75 mm
+6  0.24 Very Good J     VVS2     62.8    57   336 3.94 mm 3.96 mm 2.48 mm</code></pre>
+</div>
+</div>
 </section><section id="convert-to-character" class="level2"><h2 class="anchored" data-anchor-id="convert-to-character">✏️ Convert to Character</h2>
 <p>Convert all numeric columns into character columns.</p>
 <ul>
 <li>Hint: type <code>is.</code> and hit Tab in the Console. Scroll through the function options. Do the same with <code>as.</code>
 </li>
-</ul></section><section id="case-study" class="level2"><h2 class="anchored" data-anchor-id="case-study">Case Study</h2>
+</ul>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb61-2"><a href="#cb61-2"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">where</span>(is.numeric), <span class="at">.fns =</span> as.character)) <span class="sc">%&gt;%</span></span>
+<span id="cb61-3"><a href="#cb61-3"></a>    <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+  carat cut       color clarity depth table price x     y     z    
+  &lt;chr&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 0.23  Ideal     E     SI2     61.5  55    326   3.95  3.98  2.43 
+2 0.21  Premium   E     SI1     59.8  61    326   3.89  3.84  2.31 
+3 0.23  Good      E     VS1     56.9  65    327   4.05  4.07  2.31 
+4 0.29  Premium   I     VS2     62.4  58    334   4.2   4.23  2.63 
+5 0.31  Good      J     SI2     63.3  58    335   4.34  4.35  2.75 
+6 0.24  Very Good J     VVS2    62.8  57    336   3.94  3.96  2.48 </code></pre>
+</div>
+</div>
+</section><section id="case-study" class="level2"><h2 class="anchored" data-anchor-id="case-study">Case Study</h2>
 <p>One of my most common use cases for writing functions and iteration/looping is to perform some exploration or modeling repeatedly for several different “settings”.</p>
 <p>For example, our broad goal might be to fit a linear regression model to our data. However, there are often multiple choices that we have to make in practice:</p>
 <ul>
@@ -1058,31 +1095,31 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 <code>filter_to</code>: This could be a string description like “All cases”, “Group 1”, or “Groups 1 and 2”</li>
 </ul>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, impute, filter_to) {</span>
-<span id="cb59-2"><a href="#cb59-2"></a>    <span class="cf">if</span> (impute) {</span>
-<span id="cb59-3"><a href="#cb59-3"></a>        data <span class="ot">&lt;-</span> <span class="fu">some_imputation_function</span>(data)</span>
-<span id="cb59-4"><a href="#cb59-4"></a>    }</span>
-<span id="cb59-5"><a href="#cb59-5"></a></span>
-<span id="cb59-6"><a href="#cb59-6"></a>    <span class="cf">if</span> (filter_to<span class="sc">==</span><span class="st">"Group 1"</span>) {</span>
-<span id="cb59-7"><a href="#cb59-7"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb59-8"><a href="#cb59-8"></a>            <span class="fu">filter</span>(group <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb59-9"><a href="#cb59-9"></a>    } <span class="cf">else</span> <span class="cf">if</span> (filter_to <span class="sc">==</span> <span class="st">"Groups 1 and 2"</span>) {</span>
-<span id="cb59-10"><a href="#cb59-10"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb59-11"><a href="#cb59-11"></a>            <span class="fu">filter</span>(group <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb59-12"><a href="#cb59-12"></a>    }</span>
-<span id="cb59-13"><a href="#cb59-13"></a></span>
-<span id="cb59-14"><a href="#cb59-14"></a>    <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> data)</span>
-<span id="cb59-15"><a href="#cb59-15"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, impute, filter_to) {</span>
+<span id="cb63-2"><a href="#cb63-2"></a>    <span class="cf">if</span> (impute) {</span>
+<span id="cb63-3"><a href="#cb63-3"></a>        data <span class="ot">&lt;-</span> <span class="fu">some_imputation_function</span>(data)</span>
+<span id="cb63-4"><a href="#cb63-4"></a>    }</span>
+<span id="cb63-5"><a href="#cb63-5"></a></span>
+<span id="cb63-6"><a href="#cb63-6"></a>    <span class="cf">if</span> (filter_to<span class="sc">==</span><span class="st">"Group 1"</span>) {</span>
+<span id="cb63-7"><a href="#cb63-7"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb63-8"><a href="#cb63-8"></a>            <span class="fu">filter</span>(group <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb63-9"><a href="#cb63-9"></a>    } <span class="cf">else</span> <span class="cf">if</span> (filter_to <span class="sc">==</span> <span class="st">"Groups 1 and 2"</span>) {</span>
+<span id="cb63-10"><a href="#cb63-10"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb63-11"><a href="#cb63-11"></a>            <span class="fu">filter</span>(group <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb63-12"><a href="#cb63-12"></a>    }</span>
+<span id="cb63-13"><a href="#cb63-13"></a></span>
+<span id="cb63-14"><a href="#cb63-14"></a>    <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> data)</span>
+<span id="cb63-15"><a href="#cb63-15"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>The <code>tidyr</code> package has a useful function called <code>crossing()</code> that is useful for generating argument combinations.</p>
 <p>For each argument, we specify all possible values for that argument. <code>crossing()</code> generates all combinations:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>df_arg_combos <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
-<span id="cb60-2"><a href="#cb60-2"></a>    <span class="at">impute =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb60-3"><a href="#cb60-3"></a>    <span class="at">filter_to =</span> <span class="fu">c</span>(<span class="st">"All cases"</span>, <span class="st">"Group 1"</span>, <span class="st">"Groups 1 and 2"</span>)</span>
-<span id="cb60-4"><a href="#cb60-4"></a>)</span>
-<span id="cb60-5"><a href="#cb60-5"></a>df_arg_combos</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>df_arg_combos <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
+<span id="cb64-2"><a href="#cb64-2"></a>    <span class="at">impute =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb64-3"><a href="#cb64-3"></a>    <span class="at">filter_to =</span> <span class="fu">c</span>(<span class="st">"All cases"</span>, <span class="st">"Group 1"</span>, <span class="st">"Groups 1 and 2"</span>)</span>
+<span id="cb64-4"><a href="#cb64-4"></a>)</span>
+<span id="cb64-5"><a href="#cb64-5"></a>df_arg_combos</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
   impute filter_to     
@@ -1094,12 +1131,12 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 5 TRUE   Group 1       
 6 TRUE   Groups 1 and 2</code></pre>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="co"># Another example</span></span>
-<span id="cb62-2"><a href="#cb62-2"></a><span class="fu">crossing</span>(</span>
-<span id="cb62-3"><a href="#cb62-3"></a>    <span class="at">option1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb62-4"><a href="#cb62-4"></a>    <span class="at">option2 =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb62-5"><a href="#cb62-5"></a>    <span class="at">option3 =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>)</span>
-<span id="cb62-6"><a href="#cb62-6"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="co"># Another example</span></span>
+<span id="cb66-2"><a href="#cb66-2"></a><span class="fu">crossing</span>(</span>
+<span id="cb66-3"><a href="#cb66-3"></a>    <span class="at">option1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb66-4"><a href="#cb66-4"></a>    <span class="at">option2 =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb66-5"><a href="#cb66-5"></a>    <span class="at">option3 =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>)</span>
+<span id="cb66-6"><a href="#cb66-6"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 18 × 3
    option1 option2 option3
@@ -1144,17 +1181,68 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 <p>Work with your partner on the following exercises. As you work, make note of what is challenging and any helpful thought processes/strategies that arise from the collaboration.</p>
 </section></section><section id="build-argument-combos" class="level2"><h2 class="anchored" data-anchor-id="build-argument-combos">✏️ Build Argument Combos</h2>
 <p>Use <code>crossing()</code> to create the data frame of argument combinations for our analyses. Call it <code>df_arg_combos</code>. Note that you can create a list of <strong>formula</strong> objects in R with <code>c(y ~ x1, y ~ x1 + x2)</code>. (Something like this will be the right hand side of an argument to <code>crossing()</code>.)</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>df_arg_combos <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
+<span id="cb68-2"><a href="#cb68-2"></a>  <span class="at">mod_formula =</span> <span class="fu">c</span>(price <span class="sc">~</span> carat, price <span class="sc">~</span> carat <span class="sc">+</span> cut, price <span class="sc">~</span> carat <span class="sc">+</span> cut <span class="sc">+</span> clarity, price <span class="sc">~</span> carat <span class="sc">+</span> cut <span class="sc">+</span> clarity <span class="sc">+</span> color),</span>
+<span id="cb68-3"><a href="#cb68-3"></a>  <span class="at">remove_outliers =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb68-4"><a href="#cb68-4"></a>)</span>
+<span id="cb68-5"><a href="#cb68-5"></a></span>
+<span id="cb68-6"><a href="#cb68-6"></a>df_arg_combos</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 2
+  mod_formula remove_outliers
+  &lt;list&gt;      &lt;lgl&gt;          
+1 &lt;formula&gt;   FALSE          
+2 &lt;formula&gt;   TRUE           
+3 &lt;formula&gt;   FALSE          
+4 &lt;formula&gt;   TRUE           
+5 &lt;formula&gt;   FALSE          
+6 &lt;formula&gt;   TRUE           
+7 &lt;formula&gt;   FALSE          
+8 &lt;formula&gt;   TRUE           </code></pre>
+</div>
+</div>
 </section><section id="remove-outliers" class="level2"><h2 class="anchored" data-anchor-id="remove-outliers">✏️ Remove Outliers</h2>
 <p>Write a function called <code>remove_outliers</code> that removes outliers in a dataset. The user should be able to supply the dataset (<code>data</code>), the variable to remove outliers in (<code>what_var</code>), and a threshold on the number of SDs away from the mean used to define outliers (<code>sd_thresh</code>). Write your function so that it runs as follows: <code>remove_outliers(diamonds, what_var = carat, sd_thresh = 3)</code>.</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>remove_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(data, what_var, sd_thresh) {</span>
+<span id="cb70-2"><a href="#cb70-2"></a>  data <span class="sc">%&gt;%</span></span>
+<span id="cb70-3"><a href="#cb70-3"></a>    <span class="fu">mutate</span>(<span class="at">zscore =</span> ({{ what_var }} <span class="sc">-</span> <span class="fu">mean</span>({{ what_var }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="sc">/</span><span class="fu">sd</span>({{ what_var }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb70-4"><a href="#cb70-4"></a>    <span class="fu">filter</span>(<span class="fu">abs</span>(zscore) <span class="sc">&lt;=</span> sd_thresh)</span>
+<span id="cb70-5"><a href="#cb70-5"></a>}</span>
+<span id="cb70-6"><a href="#cb70-6"></a></span>
+<span id="cb70-7"><a href="#cb70-7"></a><span class="fu">remove_outliers</span>(diamonds, <span class="at">what_var =</span> carat, <span class="at">sd_thresh =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 53,501 × 11
+   carat cut       color clarity depth table price     x     y     z zscore
+   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43  -1.20
+ 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31  -1.24
+ 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31  -1.20
+ 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63  -1.07
+ 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75  -1.03
+ 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48  -1.18
+ 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47  -1.18
+ 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53  -1.13
+ 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49  -1.22
+10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39  -1.20
+# ℹ 53,491 more rows</code></pre>
+</div>
+</div>
 </section><section id="fit-model" class="level2"><h2 class="anchored" data-anchor-id="fit-model">✏️ Fit Model</h2>
 <p>Write a function called <code>fit_model</code> that implements the different settings for our <code>diamonds</code> analysis.</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, mod_formula, remove_outliers) {</span>
-<span id="cb64-2"><a href="#cb64-2"></a>    <span class="co"># remove_outliers is a TRUE/FALSE flag of whether or not to remove outliers</span></span>
-<span id="cb64-3"><a href="#cb64-3"></a>    <span class="co"># This function implements our specific use case: outliers are cases that are 3 SDs away from the mean for the carat variable</span></span>
-<span id="cb64-4"><a href="#cb64-4"></a></span>
-<span id="cb64-5"><a href="#cb64-5"></a>    <span class="co"># Use mod_formula as the first argument of lm()</span></span>
-<span id="cb64-6"><a href="#cb64-6"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, mod_formula, remove_outliers) {</span>
+<span id="cb72-2"><a href="#cb72-2"></a>    <span class="co"># remove_outliers is a TRUE/FALSE flag of whether or not to remove outliers</span></span>
+<span id="cb72-3"><a href="#cb72-3"></a>    <span class="co"># This function implements our specific use case: outliers are cases that are 3 SDs away from the mean for the carat variable</span></span>
+<span id="cb72-4"><a href="#cb72-4"></a>  <span class="cf">if</span> (remove_outliers) {</span>
+<span id="cb72-5"><a href="#cb72-5"></a>    cleaned_data <span class="ot">&lt;-</span> <span class="fu">remove_outliers</span>(data, <span class="at">what_var =</span> carat, <span class="at">sd_thresh =</span> <span class="dv">3</span>)</span>
+<span id="cb72-6"><a href="#cb72-6"></a>  } <span class="cf">else</span> {</span>
+<span id="cb72-7"><a href="#cb72-7"></a>    cleaned_data <span class="ot">&lt;-</span> data</span>
+<span id="cb72-8"><a href="#cb72-8"></a>  }</span>
+<span id="cb72-9"><a href="#cb72-9"></a>    <span class="co"># Use mod_formula as the first argument of lm()</span></span>
+<span id="cb72-10"><a href="#cb72-10"></a>  <span class="fu">lm</span>(mod_formula, <span class="at">data =</span> cleaned_data)</span>
+<span id="cb72-11"><a href="#cb72-11"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section><section id="store-models" class="level2"><h2 class="anchored" data-anchor-id="store-models">✏️ Store Models</h2>
@@ -1173,7 +1261,22 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 <li>
 <code>remove_outliers</code>: this column is a <strong>vector</strong> and you can extract the 1st element with <code>[1]</code>
 </li>
-</ul></section><section id="done" class="level2"><h2 class="anchored" data-anchor-id="done">Done!</h2>
+</ul>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>save_models <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"list"</span>, <span class="at">length =</span> <span class="fu">nrow</span>(df_arg_combos))</span>
+<span id="cb73-2"><a href="#cb73-2"></a></span>
+<span id="cb73-3"><a href="#cb73-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(save_models)) {</span>
+<span id="cb73-4"><a href="#cb73-4"></a>  mod_formula_extract <span class="ot">&lt;-</span> df_arg_combos<span class="sc">$</span>mod_formula[[i]]</span>
+<span id="cb73-5"><a href="#cb73-5"></a>  remove_outliers_extract <span class="ot">&lt;-</span> df_arg_combos<span class="sc">$</span>remove_outliers[i]</span>
+<span id="cb73-6"><a href="#cb73-6"></a>  save_models[[i]] <span class="ot">&lt;-</span> <span class="fu">fit_model</span>(</span>
+<span id="cb73-7"><a href="#cb73-7"></a>    <span class="at">data =</span> diamonds,</span>
+<span id="cb73-8"><a href="#cb73-8"></a>    <span class="at">mod_formula =</span> mod_formula_extract,</span>
+<span id="cb73-9"><a href="#cb73-9"></a>    <span class="at">remove_outliers =</span> remove_outliers_extract</span>
+<span id="cb73-10"><a href="#cb73-10"></a>  )</span>
+<span id="cb73-11"><a href="#cb73-11"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section><section id="done" class="level2"><h2 class="anchored" data-anchor-id="done">Done!</h2>
 <ul>
 <li>Check the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website</li>
 </ul>
@@ -1660,475 +1763,518 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb65" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb65-1"><a href="#cb65-1"></a><span class="co">---</span></span>
-<span id="cb65-2"><a href="#cb65-2"></a><span class="an">title:</span><span class="co"> "11 Loops+Iter I"</span></span>
-<span id="cb65-3"><a href="#cb65-3"></a><span class="co">---</span></span>
-<span id="cb65-4"><a href="#cb65-4"></a></span>
-<span id="cb65-5"><a href="#cb65-5"></a></span>
-<span id="cb65-6"><a href="#cb65-6"></a></span>
-<span id="cb65-7"><a href="#cb65-7"></a><span class="fu">## 🧩 Learning Goals</span></span>
-<span id="cb65-8"><a href="#cb65-8"></a></span>
-<span id="cb65-9"><a href="#cb65-9"></a>By the end of this lesson, you should be able to:</span>
-<span id="cb65-10"><a href="#cb65-10"></a></span>
-<span id="cb65-11"><a href="#cb65-11"></a><span class="ss">- </span>Write a <span class="in">`for`</span> loop in R to handle repeated tasks</span>
-<span id="cb65-12"><a href="#cb65-12"></a><span class="ss">    - </span>Use <span class="in">`seq_along()`</span> and <span class="in">`seq_len()`</span> to iterate over vectors or rows of a data frame</span>
-<span id="cb65-13"><a href="#cb65-13"></a><span class="ss">    - </span>Store output from a <span class="in">`for`</span> loop in a list or other storage container</span>
-<span id="cb65-14"><a href="#cb65-14"></a><span class="ss">- </span>Recognize that vectorized functions help us avoid <span class="in">`for`</span> loops in many situations</span>
-<span id="cb65-15"><a href="#cb65-15"></a><span class="ss">- </span>Use the <span class="in">`across()`</span> function to wrangle multiple variables simultaneously</span>
-<span id="cb65-16"><a href="#cb65-16"></a></span>
-<span id="cb65-17"><a href="#cb65-17"></a></span>
-<span id="cb65-18"><a href="#cb65-18"></a><span class="in">```{r doc_setup_11}</span></span>
-<span id="cb65-19"><a href="#cb65-19"></a><span class="co">#| message: false</span></span>
-<span id="cb65-20"><a href="#cb65-20"></a></span>
-<span id="cb65-21"><a href="#cb65-21"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb65-22"><a href="#cb65-22"></a><span class="in">```</span></span>
-<span id="cb65-23"><a href="#cb65-23"></a></span>
-<span id="cb65-24"><a href="#cb65-24"></a></span>
-<span id="cb65-25"><a href="#cb65-25"></a><span class="fu">## Iteration</span></span>
-<span id="cb65-26"><a href="#cb65-26"></a></span>
-<span id="cb65-27"><a href="#cb65-27"></a>When we want to reuse code, we can use:</span>
-<span id="cb65-28"><a href="#cb65-28"></a></span>
-<span id="cb65-29"><a href="#cb65-29"></a><span class="ss">- </span>functions to save the steps of the task</span>
-<span id="cb65-30"><a href="#cb65-30"></a><span class="ss">- </span>iteration to apply that function to new inputs</span>
-<span id="cb65-31"><a href="#cb65-31"></a></span>
-<span id="cb65-32"><a href="#cb65-32"></a>Let's talk about iteration in R.</span>
-<span id="cb65-33"><a href="#cb65-33"></a></span>
-<span id="cb65-34"><a href="#cb65-34"></a><span class="ss">- </span>Iterating using a <span class="in">`for`</span> loop &amp; how to do it appropriately in R (today)</span>
-<span id="cb65-35"><a href="#cb65-35"></a><span class="ss">- </span>Iterating <span class="in">`across`</span> data frame columns (today)</span>
-<span id="cb65-36"><a href="#cb65-36"></a><span class="ss">- </span>Iterating using <span class="in">`map`</span> and <span class="in">`walk`</span> for iteration, instead of a <span class="in">`for`</span> loop (next lesson)</span>
-<span id="cb65-37"><a href="#cb65-37"></a></span>
-<span id="cb65-38"><a href="#cb65-38"></a></span>
-<span id="cb65-39"><a href="#cb65-39"></a><span class="fu">### Purposes</span></span>
-<span id="cb65-40"><a href="#cb65-40"></a></span>
-<span id="cb65-41"><a href="#cb65-41"></a>**Creating or saving a new object**</span>
-<span id="cb65-42"><a href="#cb65-42"></a></span>
-<span id="cb65-43"><a href="#cb65-43"></a><span class="ss">- </span>Performing an action with a return output</span>
-<span id="cb65-44"><a href="#cb65-44"></a><span class="ss">- </span>Ex. creating new variables/datasets, fitting models, etc.</span>
-<span id="cb65-45"><a href="#cb65-45"></a><span class="ss">- </span>We'll need to consider storage (memory allocation).</span>
-<span id="cb65-46"><a href="#cb65-46"></a><span class="ss">- </span>Next class, we'll use <span class="in">`map()`</span> for this...</span>
-<span id="cb65-47"><a href="#cb65-47"></a></span>
-<span id="cb65-48"><a href="#cb65-48"></a>**Side effects**</span>
-<span id="cb65-49"><a href="#cb65-49"></a></span>
-<span id="cb65-50"><a href="#cb65-50"></a><span class="ss">- </span>Performing an action without a R return output</span>
-<span id="cb65-51"><a href="#cb65-51"></a><span class="ss">- </span>Ex: saving data using <span class="in">`write_csv()`</span> or saving a plot with <span class="in">`png()`</span></span>
-<span id="cb65-52"><a href="#cb65-52"></a><span class="ss">- </span>We don't need to worry about storage in R.</span>
-<span id="cb65-53"><a href="#cb65-53"></a><span class="ss">- </span>We could use <span class="in">`walk()`</span> for this...</span>
-<span id="cb65-54"><a href="#cb65-54"></a></span>
-<span id="cb65-55"><a href="#cb65-55"></a></span>
-<span id="cb65-56"><a href="#cb65-56"></a><span class="fu">## `for` Loops</span></span>
-<span id="cb65-57"><a href="#cb65-57"></a></span>
-<span id="cb65-58"><a href="#cb65-58"></a>In R, <span class="in">`for`</span> loops have the following general structure:</span>
-<span id="cb65-59"><a href="#cb65-59"></a></span>
-<span id="cb65-60"><a href="#cb65-60"></a><span class="in">```{r for_syntax}</span></span>
-<span id="cb65-61"><a href="#cb65-61"></a><span class="co">#| eval: false</span></span>
-<span id="cb65-62"><a href="#cb65-62"></a></span>
-<span id="cb65-63"><a href="#cb65-63"></a><span class="cf">for</span> (i <span class="cf">in</span> some_vector) {</span>
-<span id="cb65-64"><a href="#cb65-64"></a>    <span class="co"># Code to do stuff based on i</span></span>
-<span id="cb65-65"><a href="#cb65-65"></a>}</span>
-<span id="cb65-66"><a href="#cb65-66"></a><span class="in">```</span></span>
-<span id="cb65-67"><a href="#cb65-67"></a></span>
-<span id="cb65-68"><a href="#cb65-68"></a><span class="in">`some_vector`</span> can be **any** vector, including:</span>
-<span id="cb65-69"><a href="#cb65-69"></a></span>
-<span id="cb65-70"><a href="#cb65-70"></a><span class="ss">- </span>An **indexing** integer vector: <span class="in">`1:3`</span> <span class="co">[</span><span class="ot">Most common!</span><span class="co">]</span></span>
-<span id="cb65-71"><a href="#cb65-71"></a><span class="ss">- </span>A character vector: <span class="in">`c("group1", "group2", "group3")`</span></span>
-<span id="cb65-72"><a href="#cb65-72"></a><span class="ss">- </span>A vector of any other class</span>
-<span id="cb65-73"><a href="#cb65-73"></a></span>
-<span id="cb65-74"><a href="#cb65-74"></a><span class="in">```{r for_examples}</span></span>
-<span id="cb65-75"><a href="#cb65-75"></a>groups <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"group1"</span>, <span class="st">"group2"</span>, <span class="st">"group3"</span>) <span class="co"># a vector to iterate over</span></span>
-<span id="cb65-76"><a href="#cb65-76"></a></span>
-<span id="cb65-77"><a href="#cb65-77"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) { <span class="co"># i: index</span></span>
-<span id="cb65-78"><a href="#cb65-78"></a>    <span class="fu">print</span>(groups[i])</span>
-<span id="cb65-79"><a href="#cb65-79"></a>}</span>
-<span id="cb65-80"><a href="#cb65-80"></a></span>
-<span id="cb65-81"><a href="#cb65-81"></a><span class="cf">for</span> (g <span class="cf">in</span> groups) { <span class="co"># iterating over the vector</span></span>
-<span id="cb65-82"><a href="#cb65-82"></a>    <span class="fu">print</span>(g)</span>
-<span id="cb65-83"><a href="#cb65-83"></a>}</span>
-<span id="cb65-84"><a href="#cb65-84"></a><span class="in">```</span></span>
-<span id="cb65-85"><a href="#cb65-85"></a></span>
-<span id="cb65-86"><a href="#cb65-86"></a></span>
-<span id="cb65-87"><a href="#cb65-87"></a><span class="fu">### Indexing</span></span>
-<span id="cb65-88"><a href="#cb65-88"></a></span>
-<span id="cb65-89"><a href="#cb65-89"></a>To iterate over an **indexing** vector, it is useful to know about the following two functions:</span>
-<span id="cb65-90"><a href="#cb65-90"></a></span>
-<span id="cb65-91"><a href="#cb65-91"></a><span class="ss">- </span><span class="in">`seq_along(v)`</span>: generates an integer sequence from 1 to the length of the vector <span class="in">`v`</span> supplied</span>
-<span id="cb65-92"><a href="#cb65-92"></a><span class="ss">- </span><span class="in">`seq_len(n)`</span>:  generates an integer sequence from 1 to <span class="in">`n`</span></span>
-<span id="cb65-93"><a href="#cb65-93"></a></span>
-<span id="cb65-94"><a href="#cb65-94"></a><span class="in">```{r for_seq_along}</span></span>
-<span id="cb65-95"><a href="#cb65-95"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(groups)) {</span>
-<span id="cb65-96"><a href="#cb65-96"></a>    <span class="fu">print</span>(groups[i])</span>
-<span id="cb65-97"><a href="#cb65-97"></a>}</span>
-<span id="cb65-98"><a href="#cb65-98"></a></span>
-<span id="cb65-99"><a href="#cb65-99"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">length</span>(groups))) {</span>
-<span id="cb65-100"><a href="#cb65-100"></a>    <span class="fu">print</span>(groups[i])</span>
-<span id="cb65-101"><a href="#cb65-101"></a>}</span>
-<span id="cb65-102"><a href="#cb65-102"></a><span class="in">```</span></span>
-<span id="cb65-103"><a href="#cb65-103"></a></span>
-<span id="cb65-104"><a href="#cb65-104"></a>A nice feature of <span class="in">`seq_along()`</span> is that it generates an empty iteration vector if the vector you're iterating over itself has length 0.</span>
-<span id="cb65-105"><a href="#cb65-105"></a></span>
-<span id="cb65-108"><a href="#cb65-108"></a><span class="in">```{r}</span></span>
-<span id="cb65-109"><a href="#cb65-109"></a>no_groups <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb65-110"><a href="#cb65-110"></a><span class="fu">seq_along</span>(no_groups)</span>
-<span id="cb65-111"><a href="#cb65-111"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(no_groups)) {</span>
-<span id="cb65-112"><a href="#cb65-112"></a>    <span class="fu">print</span>(no_groups[i])</span>
-<span id="cb65-113"><a href="#cb65-113"></a>}</span>
-<span id="cb65-114"><a href="#cb65-114"></a><span class="in">```</span></span>
-<span id="cb65-115"><a href="#cb65-115"></a></span>
-<span id="cb65-116"><a href="#cb65-116"></a><span class="in">`seq_len()`</span> is useful for iterating over the rows of a data frame because <span class="in">`seq_along()`</span> would iterate over columns:</span>
-<span id="cb65-117"><a href="#cb65-117"></a></span>
-<span id="cb65-118"><a href="#cb65-118"></a><span class="in">```{r seq_len_df}</span></span>
-<span id="cb65-119"><a href="#cb65-119"></a>small_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">b =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">c =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>)</span>
-<span id="cb65-120"><a href="#cb65-120"></a></span>
-<span id="cb65-121"><a href="#cb65-121"></a><span class="cf">for</span> (col <span class="cf">in</span> small_data) { <span class="co"># each element is the column</span></span>
-<span id="cb65-122"><a href="#cb65-122"></a>    <span class="fu">print</span>(col)</span>
-<span id="cb65-123"><a href="#cb65-123"></a>}</span>
-<span id="cb65-124"><a href="#cb65-124"></a></span>
-<span id="cb65-125"><a href="#cb65-125"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(small_data))) {</span>
-<span id="cb65-126"><a href="#cb65-126"></a>    <span class="fu">print</span>(r)</span>
-<span id="cb65-127"><a href="#cb65-127"></a>}</span>
-<span id="cb65-128"><a href="#cb65-128"></a><span class="in">```</span></span>
-<span id="cb65-129"><a href="#cb65-129"></a></span>
-<span id="cb65-130"><a href="#cb65-130"></a></span>
-<span id="cb65-131"><a href="#cb65-131"></a><span class="fu">### Store Output</span></span>
-<span id="cb65-132"><a href="#cb65-132"></a></span>
-<span id="cb65-133"><a href="#cb65-133"></a>**Indexing** is particularly important when we want to create/save new objects as we need to store output created during a <span class="in">`for`</span> loop.</span>
-<span id="cb65-134"><a href="#cb65-134"></a></span>
-<span id="cb65-135"><a href="#cb65-135"></a>::: {.callout-tip appearance='simple' icon=false}</span>
-<span id="cb65-136"><a href="#cb65-136"></a>When using a for loop to create/save output, we should create storage containers ahead of time with the <span class="in">`vector()`</span> function. This allocates memory for the output and is a more efficient use of memory.</span>
-<span id="cb65-137"><a href="#cb65-137"></a>:::</span>
-<span id="cb65-138"><a href="#cb65-138"></a></span>
-<span id="cb65-139"><a href="#cb65-139"></a><span class="in">```{r store_results}</span></span>
-<span id="cb65-140"><a href="#cb65-140"></a>char_storage <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"character"</span>, <span class="at">length =</span> <span class="dv">3</span>)</span>
-<span id="cb65-141"><a href="#cb65-141"></a>num_storage <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"numeric"</span>, <span class="at">length =</span> <span class="dv">3</span>)</span>
-<span id="cb65-142"><a href="#cb65-142"></a>list_storage <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length =</span> <span class="dv">3</span>)</span>
-<span id="cb65-143"><a href="#cb65-143"></a></span>
-<span id="cb65-144"><a href="#cb65-144"></a>char_storage</span>
-<span id="cb65-145"><a href="#cb65-145"></a>num_storage</span>
-<span id="cb65-146"><a href="#cb65-146"></a>list_storage</span>
-<span id="cb65-147"><a href="#cb65-147"></a></span>
-<span id="cb65-148"><a href="#cb65-148"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="dv">3</span>)) {</span>
-<span id="cb65-149"><a href="#cb65-149"></a>    char_storage[i] <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"Number: "</span>, i)</span>
-<span id="cb65-150"><a href="#cb65-150"></a>    num_storage[i] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>i</span>
-<span id="cb65-151"><a href="#cb65-151"></a>    list_storage[[i]] <span class="ot">&lt;-</span> i <span class="co"># Note the [[ for subsetting here</span></span>
-<span id="cb65-152"><a href="#cb65-152"></a>}</span>
-<span id="cb65-153"><a href="#cb65-153"></a></span>
-<span id="cb65-154"><a href="#cb65-154"></a>char_storage</span>
-<span id="cb65-155"><a href="#cb65-155"></a>num_storage</span>
-<span id="cb65-156"><a href="#cb65-156"></a>list_storage</span>
-<span id="cb65-157"><a href="#cb65-157"></a><span class="in">```</span></span>
-<span id="cb65-158"><a href="#cb65-158"></a></span>
-<span id="cb65-159"><a href="#cb65-159"></a></span>
-<span id="cb65-160"><a href="#cb65-160"></a><span class="fu">### Memory Allocation</span></span>
-<span id="cb65-161"><a href="#cb65-161"></a></span>
-<span id="cb65-162"><a href="#cb65-162"></a>If you don't create a storage container ahead of time, you will regret it. Let's bench mark our code to see the difference!</span>
-<span id="cb65-163"><a href="#cb65-163"></a></span>
-<span id="cb65-166"><a href="#cb65-166"></a><span class="in">```{r}</span></span>
-<span id="cb65-167"><a href="#cb65-167"></a><span class="co"># Example 1: No storage container; append new value to existing vector</span></span>
-<span id="cb65-168"><a href="#cb65-168"></a>x <span class="ot">&lt;-</span> <span class="fu">integer</span>()</span>
-<span id="cb65-169"><a href="#cb65-169"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb65-170"><a href="#cb65-170"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fl">1e5</span>) {</span>
-<span id="cb65-171"><a href="#cb65-171"></a>    x <span class="ot">&lt;-</span> <span class="fu">c</span>(x, i)</span>
-<span id="cb65-172"><a href="#cb65-172"></a>  }</span>
-<span id="cb65-173"><a href="#cb65-173"></a>)</span>
-<span id="cb65-174"><a href="#cb65-174"></a></span>
-<span id="cb65-175"><a href="#cb65-175"></a><span class="co"># Example 2: Using a storage container!</span></span>
-<span id="cb65-176"><a href="#cb65-176"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
-<span id="cb65-177"><a href="#cb65-177"></a>x <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">'integer'</span>, <span class="at">length =</span> <span class="fl">1e5</span>)</span>
-<span id="cb65-178"><a href="#cb65-178"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb65-179"><a href="#cb65-179"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fl">1e5</span>) {</span>
-<span id="cb65-180"><a href="#cb65-180"></a>    x[i] <span class="ot">&lt;-</span> i</span>
-<span id="cb65-181"><a href="#cb65-181"></a>  }</span>
-<span id="cb65-182"><a href="#cb65-182"></a>)</span>
-<span id="cb65-183"><a href="#cb65-183"></a></span>
-<span id="cb65-184"><a href="#cb65-184"></a></span>
-<span id="cb65-185"><a href="#cb65-185"></a><span class="co"># Example 3: Vectorized function</span></span>
-<span id="cb65-186"><a href="#cb65-186"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
-<span id="cb65-187"><a href="#cb65-187"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb65-188"><a href="#cb65-188"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fl">1e5</span>, <span class="at">by =</span> <span class="dv">1</span>)</span>
-<span id="cb65-189"><a href="#cb65-189"></a>)</span>
-<span id="cb65-190"><a href="#cb65-190"></a></span>
-<span id="cb65-191"><a href="#cb65-191"></a><span class="in">```</span></span>
-<span id="cb65-192"><a href="#cb65-192"></a></span>
-<span id="cb65-193"><a href="#cb65-193"></a></span>
-<span id="cb65-194"><a href="#cb65-194"></a>::: {.callout-tip title="Pair Programming"}</span>
-<span id="cb65-195"><a href="#cb65-195"></a>Whoever has most recently eaten dessert (broadly interpreted) should be the driver first. Switch after Exercise 2.</span>
-<span id="cb65-196"><a href="#cb65-196"></a>:::</span>
-<span id="cb65-197"><a href="#cb65-197"></a></span>
-<span id="cb65-198"><a href="#cb65-198"></a>Write <span class="in">`for`</span>-loops that do each of the following:</span>
-<span id="cb65-199"><a href="#cb65-199"></a></span>
-<span id="cb65-200"><a href="#cb65-200"></a></span>
-<span id="cb65-201"><a href="#cb65-201"></a><span class="fu">## ✏️ Print Even Numbers</span></span>
-<span id="cb65-202"><a href="#cb65-202"></a></span>
-<span id="cb65-203"><a href="#cb65-203"></a>Prints the even numbers from 2:20. Then, produce the same output with the <span class="in">`seq()`</span> function.</span>
-<span id="cb65-204"><a href="#cb65-204"></a></span>
-<span id="cb65-207"><a href="#cb65-207"></a><span class="in">```{r}</span></span>
-<span id="cb65-208"><a href="#cb65-208"></a><span class="co"># for loop</span></span>
-<span id="cb65-209"><a href="#cb65-209"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="dv">10</span>)) {</span>
-<span id="cb65-210"><a href="#cb65-210"></a>  <span class="fu">print</span>(<span class="dv">2</span><span class="sc">*</span>i)</span>
-<span id="cb65-211"><a href="#cb65-211"></a>}</span>
-<span id="cb65-212"><a href="#cb65-212"></a></span>
-<span id="cb65-213"><a href="#cb65-213"></a><span class="co"># vectorized approach with `seq()`</span></span>
-<span id="cb65-214"><a href="#cb65-214"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">2</span>, <span class="at">to =</span> <span class="dv">20</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
-<span id="cb65-215"><a href="#cb65-215"></a></span>
-<span id="cb65-216"><a href="#cb65-216"></a><span class="in">```</span></span>
-<span id="cb65-217"><a href="#cb65-217"></a></span>
-<span id="cb65-218"><a href="#cb65-218"></a></span>
-<span id="cb65-219"><a href="#cb65-219"></a><span class="fu">## ✏️ Label Months</span></span>
-<span id="cb65-220"><a href="#cb65-220"></a></span>
-<span id="cb65-221"><a href="#cb65-221"></a>Iterates over the <span class="in">`month.name`</span> vector and stores a character vector of output containing strings like "Month 1: January", "Month 2: February". Then, produce the same output with <span class="in">`str_c()`</span> only.</span>
-<span id="cb65-222"><a href="#cb65-222"></a></span>
-<span id="cb65-225"><a href="#cb65-225"></a><span class="in">```{r}</span></span>
-<span id="cb65-226"><a href="#cb65-226"></a><span class="co"># for loop</span></span>
-<span id="cb65-227"><a href="#cb65-227"></a>months_str <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"character"</span>, <span class="at">length =</span> <span class="fu">length</span>(month.name))</span>
-<span id="cb65-228"><a href="#cb65-228"></a></span>
-<span id="cb65-229"><a href="#cb65-229"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(month.name)) {</span>
-<span id="cb65-230"><a href="#cb65-230"></a>  months_str[i] <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"Month "</span>, i, <span class="st">": "</span>, month.name[i])</span>
-<span id="cb65-231"><a href="#cb65-231"></a>}</span>
-<span id="cb65-232"><a href="#cb65-232"></a></span>
-<span id="cb65-233"><a href="#cb65-233"></a><span class="fu">print</span>(months_str)</span>
-<span id="cb65-234"><a href="#cb65-234"></a></span>
-<span id="cb65-235"><a href="#cb65-235"></a><span class="co"># vectorized approach with `str_c()`</span></span>
-<span id="cb65-236"><a href="#cb65-236"></a><span class="fu">str_c</span>(<span class="st">"Month "</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="st">": "</span>, month.name)</span>
-<span id="cb65-237"><a href="#cb65-237"></a></span>
-<span id="cb65-238"><a href="#cb65-238"></a><span class="in">```</span></span>
-<span id="cb65-239"><a href="#cb65-239"></a></span>
-<span id="cb65-240"><a href="#cb65-240"></a></span>
-<span id="cb65-241"><a href="#cb65-241"></a><span class="fu">## ✏️ Fit Stratified Models</span></span>
-<span id="cb65-242"><a href="#cb65-242"></a></span>
-<span id="cb65-243"><a href="#cb65-243"></a>On the <span class="in">`diamonds`</span> dataset, fit stratified models of price vs. carat, model separately estimated for each value of <span class="in">`cut`</span>, and store the fitted models in a list storage container.</span>
-<span id="cb65-244"><a href="#cb65-244"></a></span>
-<span id="cb65-247"><a href="#cb65-247"></a><span class="in">```{r}</span></span>
-<span id="cb65-248"><a href="#cb65-248"></a><span class="co"># for loop</span></span>
-<span id="cb65-249"><a href="#cb65-249"></a><span class="fu">data</span>(diamonds)</span>
-<span id="cb65-250"><a href="#cb65-250"></a>separate_cuts <span class="ot">&lt;-</span> diamonds <span class="sc">%&gt;%</span></span>
-<span id="cb65-251"><a href="#cb65-251"></a>  <span class="fu">pull</span>(cut) <span class="sc">%&gt;%</span></span>
-<span id="cb65-252"><a href="#cb65-252"></a>  <span class="fu">levels</span>()</span>
-<span id="cb65-253"><a href="#cb65-253"></a></span>
-<span id="cb65-254"><a href="#cb65-254"></a>strat_models <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"list"</span>, <span class="at">length =</span> <span class="fu">length</span>(separate_cuts))</span>
-<span id="cb65-255"><a href="#cb65-255"></a></span>
-<span id="cb65-256"><a href="#cb65-256"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(separate_cuts)) {</span>
-<span id="cb65-257"><a href="#cb65-257"></a>  individual_cut <span class="ot">&lt;-</span> separate_cuts[i]</span>
-<span id="cb65-258"><a href="#cb65-258"></a>  diamonds_sep <span class="ot">&lt;-</span> diamonds <span class="sc">%&gt;%</span></span>
-<span id="cb65-259"><a href="#cb65-259"></a>    <span class="fu">filter</span>(cut <span class="sc">==</span> individual_cut)</span>
-<span id="cb65-260"><a href="#cb65-260"></a>  strat_models[[i]] <span class="ot">&lt;-</span><span class="fu">lm</span>(price <span class="sc">~</span> carat, <span class="at">data =</span> diamonds_sep)</span>
-<span id="cb65-261"><a href="#cb65-261"></a>}</span>
-<span id="cb65-262"><a href="#cb65-262"></a></span>
-<span id="cb65-263"><a href="#cb65-263"></a>strat_models</span>
-<span id="cb65-264"><a href="#cb65-264"></a><span class="in">```</span></span>
-<span id="cb65-265"><a href="#cb65-265"></a></span>
-<span id="cb65-266"><a href="#cb65-266"></a></span>
-<span id="cb65-267"><a href="#cb65-267"></a><span class="fu">## Iteration `across` Data Frame Columns</span></span>
-<span id="cb65-268"><a href="#cb65-268"></a></span>
-<span id="cb65-269"><a href="#cb65-269"></a>Often we will have to perform the same data wrangling on many variables (e.g., rounding numbers)</span>
-<span id="cb65-270"><a href="#cb65-270"></a></span>
-<span id="cb65-271"><a href="#cb65-271"></a><span class="in">```{r no_across}</span></span>
-<span id="cb65-272"><a href="#cb65-272"></a>diamonds <span class="sc">|&gt;</span></span>
-<span id="cb65-273"><a href="#cb65-273"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb65-274"><a href="#cb65-274"></a>        <span class="at">carat =</span> <span class="fu">round</span>(carat, <span class="dv">1</span>),</span>
-<span id="cb65-275"><a href="#cb65-275"></a>        <span class="at">x =</span> <span class="fu">round</span>(x, <span class="dv">1</span>),</span>
-<span id="cb65-276"><a href="#cb65-276"></a>        <span class="at">y =</span> <span class="fu">round</span>(y, <span class="dv">1</span>),</span>
-<span id="cb65-277"><a href="#cb65-277"></a>        <span class="at">z =</span> <span class="fu">round</span>(z, <span class="dv">1</span>)</span>
-<span id="cb65-278"><a href="#cb65-278"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb65-279"><a href="#cb65-279"></a>    <span class="fu">head</span>()</span>
-<span id="cb65-280"><a href="#cb65-280"></a><span class="in">```</span></span>
-<span id="cb65-281"><a href="#cb65-281"></a></span>
-<span id="cb65-282"><a href="#cb65-282"></a><span class="in">`dplyr`</span> provides the <span class="in">`across()`</span> function for performing these repeated function calls:</span>
-<span id="cb65-283"><a href="#cb65-283"></a></span>
-<span id="cb65-284"><a href="#cb65-284"></a><span class="in">```{r with_across}</span></span>
-<span id="cb65-285"><a href="#cb65-285"></a><span class="co"># Option 1: Create our own named function</span></span>
-<span id="cb65-286"><a href="#cb65-286"></a>round_to_one <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb65-287"><a href="#cb65-287"></a>    <span class="fu">round</span>(x, <span class="at">digits =</span> <span class="dv">1</span>)</span>
-<span id="cb65-288"><a href="#cb65-288"></a>}</span>
-<span id="cb65-289"><a href="#cb65-289"></a>diamonds <span class="sc">|&gt;</span></span>
-<span id="cb65-290"><a href="#cb65-290"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(carat, x, y, z), <span class="at">.fns =</span> round_to_one)) <span class="sc">|&gt;</span></span>
-<span id="cb65-291"><a href="#cb65-291"></a>    <span class="fu">head</span>()</span>
-<span id="cb65-292"><a href="#cb65-292"></a><span class="in">```</span></span>
-<span id="cb65-293"><a href="#cb65-293"></a></span>
-<span id="cb65-296"><a href="#cb65-296"></a><span class="in">```{r}</span></span>
-<span id="cb65-297"><a href="#cb65-297"></a><span class="co"># Option 2: Use an "anonymous" or "lambda" function that isn't named/saved</span></span>
-<span id="cb65-298"><a href="#cb65-298"></a>diamonds <span class="sc">|&gt;</span></span>
-<span id="cb65-299"><a href="#cb65-299"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(carat, x, y, z), <span class="at">.fns =</span> <span class="cf">function</span>(x) {<span class="fu">round</span>(x, <span class="at">digits =</span> <span class="dv">1</span>)} )) <span class="sc">|&gt;</span></span>
-<span id="cb65-300"><a href="#cb65-300"></a>    <span class="fu">head</span>()</span>
-<span id="cb65-301"><a href="#cb65-301"></a></span>
-<span id="cb65-302"><a href="#cb65-302"></a></span>
-<span id="cb65-303"><a href="#cb65-303"></a><span class="co"># Anonymous functions can be written in a more concise way</span></span>
-<span id="cb65-304"><a href="#cb65-304"></a><span class="co"># function(x){ length(unique(x)) } OR ~ length(unique(.x))</span></span>
-<span id="cb65-305"><a href="#cb65-305"></a><span class="co"># function(x,y){ length(unique(x + y)) } OR ~ length(unique(.x + .y))</span></span>
-<span id="cb65-306"><a href="#cb65-306"></a><span class="in">```</span></span>
-<span id="cb65-307"><a href="#cb65-307"></a></span>
-<span id="cb65-308"><a href="#cb65-308"></a></span>
-<span id="cb65-309"><a href="#cb65-309"></a><span class="fu">### Select Columns</span></span>
-<span id="cb65-310"><a href="#cb65-310"></a></span>
-<span id="cb65-311"><a href="#cb65-311"></a>When we look at the <span class="co">[</span><span class="ot">documentation for `across()`</span><span class="co">](https://dplyr.tidyverse.org/reference/across.html)</span>, we see that the <span class="in">`.cols`</span> argument specifies which variables we want to transform, and it has a <span class="in">`&lt;tidy-select&gt;`</span> tag. This means that the syntax we use for <span class="in">`.cols`</span> follows certain rules.</span>
-<span id="cb65-312"><a href="#cb65-312"></a></span>
-<span id="cb65-313"><a href="#cb65-313"></a>Let's click <span class="co">[</span><span class="ot">this link</span><span class="co">](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)</span> to explore the possibilities for selecting variables.</span>
-<span id="cb65-314"><a href="#cb65-314"></a></span>
-<span id="cb65-315"><a href="#cb65-315"></a><span class="ss">- </span>Read through the "Overview of selection features" section to get an overall sense of the many ways to select variables.</span>
-<span id="cb65-316"><a href="#cb65-316"></a><span class="ss">- </span>Navigate back to the <span class="in">`across()`</span> documentation and read through the Examples section at the bottom. Click the "Run examples" link to view the output for all of the examples.</span>
-<span id="cb65-317"><a href="#cb65-317"></a></span>
-<span id="cb65-318"><a href="#cb65-318"></a></span>
-<span id="cb65-319"><a href="#cb65-319"></a><span class="fu">### Multiple Functions</span></span>
-<span id="cb65-320"><a href="#cb65-320"></a></span>
-<span id="cb65-321"><a href="#cb65-321"></a>What if we wanted to perform multiple transformations on each of many variables?</span>
-<span id="cb65-322"><a href="#cb65-322"></a></span>
-<span id="cb65-323"><a href="#cb65-323"></a>Within the different values of diamond <span class="in">`cut`</span>, let's summarize the mean, median, and standard deviation of the numeric variables. When we look at the <span class="in">`.fns`</span> argument in the <span class="in">`across()`</span> documentation, we see that we can provide a **list** of functions:</span>
-<span id="cb65-324"><a href="#cb65-324"></a></span>
-<span id="cb65-325"><a href="#cb65-325"></a><span class="in">```{r across_many_fns}</span></span>
-<span id="cb65-326"><a href="#cb65-326"></a>diamonds <span class="sc">|&gt;</span></span>
-<span id="cb65-327"><a href="#cb65-327"></a>    <span class="fu">group_by</span>(cut) <span class="sc">|&gt;</span></span>
-<span id="cb65-328"><a href="#cb65-328"></a>    <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">where</span>(is.numeric), <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">med =</span> median, <span class="at">sd =</span> sd)))</span>
-<span id="cb65-329"><a href="#cb65-329"></a><span class="in">```</span></span>
-<span id="cb65-330"><a href="#cb65-330"></a></span>
-<span id="cb65-331"><a href="#cb65-331"></a>What does the list of functions look like? What is the structure of this list object?</span>
-<span id="cb65-332"><a href="#cb65-332"></a></span>
-<span id="cb65-333"><a href="#cb65-333"></a><span class="in">```{r list_str}</span></span>
-<span id="cb65-334"><a href="#cb65-334"></a>list_of_fcts <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">med =</span> median, <span class="at">sd =</span> sd)</span>
-<span id="cb65-335"><a href="#cb65-335"></a>list_of_fcts</span>
-<span id="cb65-336"><a href="#cb65-336"></a><span class="fu">str</span>(list_of_fcts)</span>
-<span id="cb65-337"><a href="#cb65-337"></a><span class="in">```</span></span>
-<span id="cb65-338"><a href="#cb65-338"></a></span>
-<span id="cb65-339"><a href="#cb65-339"></a>Using the <span class="in">`diamonds`</span> dataset, complete the following exercises.</span>
-<span id="cb65-340"><a href="#cb65-340"></a></span>
-<span id="cb65-341"><a href="#cb65-341"></a></span>
-<span id="cb65-342"><a href="#cb65-342"></a><span class="fu">## ✏️ Add Units</span></span>
-<span id="cb65-343"><a href="#cb65-343"></a></span>
-<span id="cb65-344"><a href="#cb65-344"></a>Transform the <span class="in">`x`</span>, <span class="in">`y`</span>, and <span class="in">`z`</span> columns so that the units of millimeters are displayed (e.g., "4.0 mm").</span>
-<span id="cb65-345"><a href="#cb65-345"></a></span>
-<span id="cb65-348"><a href="#cb65-348"></a><span class="in">```{r}</span></span>
-<span id="cb65-349"><a href="#cb65-349"></a><span class="in">```</span></span>
-<span id="cb65-350"><a href="#cb65-350"></a></span>
-<span id="cb65-351"><a href="#cb65-351"></a></span>
-<span id="cb65-352"><a href="#cb65-352"></a><span class="fu">## ✏️ Convert to Character</span></span>
-<span id="cb65-353"><a href="#cb65-353"></a></span>
-<span id="cb65-354"><a href="#cb65-354"></a>Convert all numeric columns into character columns.</span>
-<span id="cb65-355"><a href="#cb65-355"></a></span>
-<span id="cb65-356"><a href="#cb65-356"></a><span class="ss">- </span>Hint: type <span class="in">`is.`</span> and hit Tab in the Console. Scroll through the function options. Do the same with <span class="in">`as.`</span></span>
-<span id="cb65-357"><a href="#cb65-357"></a></span>
-<span id="cb65-360"><a href="#cb65-360"></a><span class="in">```{r}</span></span>
-<span id="cb65-361"><a href="#cb65-361"></a><span class="in">```</span></span>
-<span id="cb65-362"><a href="#cb65-362"></a></span>
-<span id="cb65-363"><a href="#cb65-363"></a></span>
-<span id="cb65-364"><a href="#cb65-364"></a><span class="fu">## Case Study</span></span>
-<span id="cb65-365"><a href="#cb65-365"></a></span>
-<span id="cb65-366"><a href="#cb65-366"></a>One of my most common use cases for writing functions and iteration/looping is to perform some exploration or modeling repeatedly for several different "settings".</span>
-<span id="cb65-367"><a href="#cb65-367"></a></span>
-<span id="cb65-368"><a href="#cb65-368"></a>For example, our broad goal might be to fit a linear regression model to our data. However, there are often multiple choices that we have to make in practice:</span>
-<span id="cb65-369"><a href="#cb65-369"></a></span>
-<span id="cb65-370"><a href="#cb65-370"></a><span class="ss">- </span>Keep missing values or fill them in (imputation)?</span>
-<span id="cb65-371"><a href="#cb65-371"></a><span class="ss">- </span>Fit the model only on a certain group of cases?</span>
-<span id="cb65-372"><a href="#cb65-372"></a><span class="ss">- </span>Filter out outliers in one or more variables?</span>
-<span id="cb65-373"><a href="#cb65-373"></a><span class="ss">- </span>Transform certain variables? (e.g., log transformation)</span>
-<span id="cb65-374"><a href="#cb65-374"></a></span>
-<span id="cb65-375"><a href="#cb65-375"></a>We can map any number of these choices to **arguments** in a custom model-fitting function:</span>
-<span id="cb65-376"><a href="#cb65-376"></a></span>
-<span id="cb65-377"><a href="#cb65-377"></a><span class="ss">- </span><span class="in">`impute`</span>: TRUE or FALSE</span>
-<span id="cb65-378"><a href="#cb65-378"></a><span class="ss">- </span><span class="in">`filter_to`</span>: This could be a string description like "All cases", "Group 1", or "Groups 1 and 2"</span>
-<span id="cb65-379"><a href="#cb65-379"></a></span>
-<span id="cb65-380"><a href="#cb65-380"></a><span class="in">```{r fit_model_example}</span></span>
-<span id="cb65-381"><a href="#cb65-381"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, impute, filter_to) {</span>
-<span id="cb65-382"><a href="#cb65-382"></a>    <span class="cf">if</span> (impute) {</span>
-<span id="cb65-383"><a href="#cb65-383"></a>        data <span class="ot">&lt;-</span> <span class="fu">some_imputation_function</span>(data)</span>
-<span id="cb65-384"><a href="#cb65-384"></a>    }</span>
-<span id="cb65-385"><a href="#cb65-385"></a></span>
-<span id="cb65-386"><a href="#cb65-386"></a>    <span class="cf">if</span> (filter_to<span class="sc">==</span><span class="st">"Group 1"</span>) {</span>
-<span id="cb65-387"><a href="#cb65-387"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb65-388"><a href="#cb65-388"></a>            <span class="fu">filter</span>(group <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb65-389"><a href="#cb65-389"></a>    } <span class="cf">else</span> <span class="cf">if</span> (filter_to <span class="sc">==</span> <span class="st">"Groups 1 and 2"</span>) {</span>
-<span id="cb65-390"><a href="#cb65-390"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb65-391"><a href="#cb65-391"></a>            <span class="fu">filter</span>(group <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb65-392"><a href="#cb65-392"></a>    }</span>
-<span id="cb65-393"><a href="#cb65-393"></a></span>
-<span id="cb65-394"><a href="#cb65-394"></a>    <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> data)</span>
-<span id="cb65-395"><a href="#cb65-395"></a>}</span>
-<span id="cb65-396"><a href="#cb65-396"></a><span class="in">```</span></span>
-<span id="cb65-397"><a href="#cb65-397"></a></span>
-<span id="cb65-398"><a href="#cb65-398"></a>The <span class="in">`tidyr`</span> package has a useful function called <span class="in">`crossing()`</span> that is useful for generating argument combinations.</span>
-<span id="cb65-399"><a href="#cb65-399"></a></span>
-<span id="cb65-400"><a href="#cb65-400"></a>For each argument, we specify all possible values for that argument. <span class="in">`crossing()`</span> generates all combinations:</span>
-<span id="cb65-401"><a href="#cb65-401"></a></span>
-<span id="cb65-404"><a href="#cb65-404"></a><span class="in">```{r}</span></span>
-<span id="cb65-405"><a href="#cb65-405"></a>df_arg_combos <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
-<span id="cb65-406"><a href="#cb65-406"></a>    <span class="at">impute =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb65-407"><a href="#cb65-407"></a>    <span class="at">filter_to =</span> <span class="fu">c</span>(<span class="st">"All cases"</span>, <span class="st">"Group 1"</span>, <span class="st">"Groups 1 and 2"</span>)</span>
-<span id="cb65-408"><a href="#cb65-408"></a>)</span>
-<span id="cb65-409"><a href="#cb65-409"></a>df_arg_combos</span>
-<span id="cb65-410"><a href="#cb65-410"></a></span>
-<span id="cb65-411"><a href="#cb65-411"></a><span class="co"># Another example</span></span>
-<span id="cb65-412"><a href="#cb65-412"></a><span class="fu">crossing</span>(</span>
-<span id="cb65-413"><a href="#cb65-413"></a>    <span class="at">option1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb65-414"><a href="#cb65-414"></a>    <span class="at">option2 =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb65-415"><a href="#cb65-415"></a>    <span class="at">option3 =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>)</span>
-<span id="cb65-416"><a href="#cb65-416"></a>)</span>
-<span id="cb65-417"><a href="#cb65-417"></a><span class="in">```</span></span>
-<span id="cb65-418"><a href="#cb65-418"></a></span>
-<span id="cb65-419"><a href="#cb65-419"></a>With iteration in our toobox, we can iterate the <span class="in">`fit_model()`</span> function over the combinations in <span class="in">`df_arg_combos`</span>.</span>
-<span id="cb65-420"><a href="#cb65-420"></a></span>
-<span id="cb65-421"><a href="#cb65-421"></a></span>
-<span id="cb65-422"><a href="#cb65-422"></a><span class="fu">### Goal</span></span>
-<span id="cb65-423"><a href="#cb65-423"></a></span>
-<span id="cb65-424"><a href="#cb65-424"></a>In the <span class="in">`diamonds`</span> dataset, we want to understand the relationship between <span class="in">`price`</span> and size (<span class="in">`carat`</span>). We want to explore variation along two choices:</span>
-<span id="cb65-425"><a href="#cb65-425"></a></span>
-<span id="cb65-426"><a href="#cb65-426"></a><span class="ss">- </span>The variables included in the model. We'll explore 3 sets of variables:</span>
-<span id="cb65-427"><a href="#cb65-427"></a><span class="ss">    - </span>No further variables (just <span class="in">`price`</span> and <span class="in">`carat`</span>)</span>
-<span id="cb65-428"><a href="#cb65-428"></a><span class="ss">    - </span>Adjusting for <span class="in">`cut`</span></span>
-<span id="cb65-429"><a href="#cb65-429"></a><span class="ss">    - </span>Adjusting for <span class="in">`cut`</span> and <span class="in">`clarity`</span></span>
-<span id="cb65-430"><a href="#cb65-430"></a><span class="ss">    - </span>Adjusting for <span class="in">`cut`</span>, <span class="in">`clarity`</span>, and <span class="in">`color`</span></span>
-<span id="cb65-431"><a href="#cb65-431"></a><span class="ss">- </span>Whether or not to remove outliers in the <span class="in">`carat`</span> variable. We'll define outliers as cases whose <span class="in">`carat`</span> is over 3 SDs away from the mean.</span>
-<span id="cb65-432"><a href="#cb65-432"></a></span>
-<span id="cb65-433"><a href="#cb65-433"></a>Work with your partner on the following exercises. As you work, make note of what is challenging and any helpful thought processes/strategies that arise from the collaboration.</span>
-<span id="cb65-434"><a href="#cb65-434"></a></span>
-<span id="cb65-435"><a href="#cb65-435"></a></span>
-<span id="cb65-436"><a href="#cb65-436"></a><span class="fu">## ✏️ Build Argument Combos</span></span>
-<span id="cb65-437"><a href="#cb65-437"></a></span>
-<span id="cb65-438"><a href="#cb65-438"></a>Use <span class="in">`crossing()`</span> to create the data frame of argument combinations for our analyses. Call it <span class="in">`df_arg_combos`</span>. Note that you can create a list of **formula** objects in R with <span class="in">`c(y ~ x1, y ~ x1 + x2)`</span>. (Something like this will be the right hand side of an argument to <span class="in">`crossing()`</span>.)</span>
-<span id="cb65-439"><a href="#cb65-439"></a></span>
-<span id="cb65-442"><a href="#cb65-442"></a><span class="in">```{r}</span></span>
-<span id="cb65-443"><a href="#cb65-443"></a><span class="in">```</span></span>
-<span id="cb65-444"><a href="#cb65-444"></a></span>
-<span id="cb65-445"><a href="#cb65-445"></a></span>
-<span id="cb65-446"><a href="#cb65-446"></a><span class="fu">## ✏️ Remove Outliers</span></span>
-<span id="cb65-447"><a href="#cb65-447"></a></span>
-<span id="cb65-448"><a href="#cb65-448"></a>Write a function called <span class="in">`remove_outliers`</span> that removes outliers in a dataset. The user should be able to supply the dataset (<span class="in">`data`</span>), the variable to remove outliers in (<span class="in">`what_var`</span>), and a threshold on the number of SDs away from the mean used to define outliers (<span class="in">`sd_thresh`</span>). Write your function so that it runs as follows: <span class="in">`remove_outliers(diamonds, what_var = carat, sd_thresh = 3)`</span>.</span>
-<span id="cb65-449"><a href="#cb65-449"></a></span>
-<span id="cb65-452"><a href="#cb65-452"></a><span class="in">```{r}</span></span>
-<span id="cb65-453"><a href="#cb65-453"></a><span class="in">```</span></span>
-<span id="cb65-454"><a href="#cb65-454"></a></span>
-<span id="cb65-455"><a href="#cb65-455"></a></span>
-<span id="cb65-456"><a href="#cb65-456"></a><span class="fu">## ✏️ Fit Model</span></span>
-<span id="cb65-457"><a href="#cb65-457"></a></span>
-<span id="cb65-458"><a href="#cb65-458"></a>Write a function called <span class="in">`fit_model`</span> that implements the different settings for our <span class="in">`diamonds`</span> analysis.</span>
-<span id="cb65-459"><a href="#cb65-459"></a></span>
-<span id="cb65-462"><a href="#cb65-462"></a><span class="in">```{r}</span></span>
-<span id="cb65-463"><a href="#cb65-463"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, mod_formula, remove_outliers) {</span>
-<span id="cb65-464"><a href="#cb65-464"></a>    <span class="co"># remove_outliers is a TRUE/FALSE flag of whether or not to remove outliers</span></span>
-<span id="cb65-465"><a href="#cb65-465"></a>    <span class="co"># This function implements our specific use case: outliers are cases that are 3 SDs away from the mean for the carat variable</span></span>
-<span id="cb65-466"><a href="#cb65-466"></a></span>
-<span id="cb65-467"><a href="#cb65-467"></a>    <span class="co"># Use mod_formula as the first argument of lm()</span></span>
-<span id="cb65-468"><a href="#cb65-468"></a>}</span>
-<span id="cb65-469"><a href="#cb65-469"></a><span class="in">```</span></span>
-<span id="cb65-470"><a href="#cb65-470"></a></span>
-<span id="cb65-471"><a href="#cb65-471"></a></span>
-<span id="cb65-472"><a href="#cb65-472"></a><span class="fu">## ✏️ Store Models</span></span>
-<span id="cb65-473"><a href="#cb65-473"></a></span>
-<span id="cb65-474"><a href="#cb65-474"></a>Write a <span class="in">`for`</span> loop that stores the fitted linear models from all versions of the analysis.</span>
-<span id="cb65-475"><a href="#cb65-475"></a></span>
-<span id="cb65-476"><a href="#cb65-476"></a>Recall that you can pull out the contents of a single data frame column in many ways. For a data frame <span class="in">`df`</span> with a variable named <span class="in">`x`</span>:</span>
-<span id="cb65-477"><a href="#cb65-477"></a></span>
-<span id="cb65-478"><a href="#cb65-478"></a><span class="ss">- </span><span class="in">`df$x`</span></span>
-<span id="cb65-479"><a href="#cb65-479"></a><span class="ss">- </span><span class="in">`df |&gt; pull(x)`</span></span>
-<span id="cb65-480"><a href="#cb65-480"></a><span class="ss">- </span><span class="in">`df[["x"]]`</span></span>
-<span id="cb65-481"><a href="#cb65-481"></a></span>
-<span id="cb65-482"><a href="#cb65-482"></a>Note that in <span class="in">`df_arg_combos`</span>:</span>
-<span id="cb65-483"><a href="#cb65-483"></a></span>
-<span id="cb65-484"><a href="#cb65-484"></a><span class="ss">- </span><span class="in">`mod_formula`</span>: this column is a **list** and you can extract the 1st element with <span class="in">`[[1]]`</span></span>
-<span id="cb65-485"><a href="#cb65-485"></a><span class="ss">- </span><span class="in">`remove_outliers`</span>: this column is a **vector** and you can extract the 1st element with <span class="in">`[1]`</span></span>
-<span id="cb65-486"><a href="#cb65-486"></a></span>
-<span id="cb65-489"><a href="#cb65-489"></a><span class="in">```{r}</span></span>
-<span id="cb65-490"><a href="#cb65-490"></a><span class="in">```</span></span>
-<span id="cb65-491"><a href="#cb65-491"></a></span>
-<span id="cb65-492"><a href="#cb65-492"></a></span>
-<span id="cb65-493"><a href="#cb65-493"></a><span class="fu">## Done!</span></span>
-<span id="cb65-494"><a href="#cb65-494"></a></span>
-<span id="cb65-495"><a href="#cb65-495"></a><span class="ss">- </span>Check the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb74" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb74-1"><a href="#cb74-1"></a><span class="co">---</span></span>
+<span id="cb74-2"><a href="#cb74-2"></a><span class="an">title:</span><span class="co"> "11 Loops+Iter I"</span></span>
+<span id="cb74-3"><a href="#cb74-3"></a><span class="co">---</span></span>
+<span id="cb74-4"><a href="#cb74-4"></a></span>
+<span id="cb74-5"><a href="#cb74-5"></a></span>
+<span id="cb74-6"><a href="#cb74-6"></a></span>
+<span id="cb74-7"><a href="#cb74-7"></a><span class="fu">## 🧩 Learning Goals</span></span>
+<span id="cb74-8"><a href="#cb74-8"></a></span>
+<span id="cb74-9"><a href="#cb74-9"></a>By the end of this lesson, you should be able to:</span>
+<span id="cb74-10"><a href="#cb74-10"></a></span>
+<span id="cb74-11"><a href="#cb74-11"></a><span class="ss">- </span>Write a <span class="in">`for`</span> loop in R to handle repeated tasks</span>
+<span id="cb74-12"><a href="#cb74-12"></a><span class="ss">    - </span>Use <span class="in">`seq_along()`</span> and <span class="in">`seq_len()`</span> to iterate over vectors or rows of a data frame</span>
+<span id="cb74-13"><a href="#cb74-13"></a><span class="ss">    - </span>Store output from a <span class="in">`for`</span> loop in a list or other storage container</span>
+<span id="cb74-14"><a href="#cb74-14"></a><span class="ss">- </span>Recognize that vectorized functions help us avoid <span class="in">`for`</span> loops in many situations</span>
+<span id="cb74-15"><a href="#cb74-15"></a><span class="ss">- </span>Use the <span class="in">`across()`</span> function to wrangle multiple variables simultaneously</span>
+<span id="cb74-16"><a href="#cb74-16"></a></span>
+<span id="cb74-17"><a href="#cb74-17"></a></span>
+<span id="cb74-18"><a href="#cb74-18"></a><span class="in">```{r doc_setup_11}</span></span>
+<span id="cb74-19"><a href="#cb74-19"></a><span class="co">#| message: false</span></span>
+<span id="cb74-20"><a href="#cb74-20"></a></span>
+<span id="cb74-21"><a href="#cb74-21"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb74-22"><a href="#cb74-22"></a><span class="in">```</span></span>
+<span id="cb74-23"><a href="#cb74-23"></a></span>
+<span id="cb74-24"><a href="#cb74-24"></a></span>
+<span id="cb74-25"><a href="#cb74-25"></a><span class="fu">## Iteration</span></span>
+<span id="cb74-26"><a href="#cb74-26"></a></span>
+<span id="cb74-27"><a href="#cb74-27"></a>When we want to reuse code, we can use:</span>
+<span id="cb74-28"><a href="#cb74-28"></a></span>
+<span id="cb74-29"><a href="#cb74-29"></a><span class="ss">- </span>functions to save the steps of the task</span>
+<span id="cb74-30"><a href="#cb74-30"></a><span class="ss">- </span>iteration to apply that function to new inputs</span>
+<span id="cb74-31"><a href="#cb74-31"></a></span>
+<span id="cb74-32"><a href="#cb74-32"></a>Let's talk about iteration in R.</span>
+<span id="cb74-33"><a href="#cb74-33"></a></span>
+<span id="cb74-34"><a href="#cb74-34"></a><span class="ss">- </span>Iterating using a <span class="in">`for`</span> loop &amp; how to do it appropriately in R (today)</span>
+<span id="cb74-35"><a href="#cb74-35"></a><span class="ss">- </span>Iterating <span class="in">`across`</span> data frame columns (today)</span>
+<span id="cb74-36"><a href="#cb74-36"></a><span class="ss">- </span>Iterating using <span class="in">`map`</span> and <span class="in">`walk`</span> for iteration, instead of a <span class="in">`for`</span> loop (next lesson)</span>
+<span id="cb74-37"><a href="#cb74-37"></a></span>
+<span id="cb74-38"><a href="#cb74-38"></a></span>
+<span id="cb74-39"><a href="#cb74-39"></a><span class="fu">### Purposes</span></span>
+<span id="cb74-40"><a href="#cb74-40"></a></span>
+<span id="cb74-41"><a href="#cb74-41"></a>**Creating or saving a new object**</span>
+<span id="cb74-42"><a href="#cb74-42"></a></span>
+<span id="cb74-43"><a href="#cb74-43"></a><span class="ss">- </span>Performing an action with a return output</span>
+<span id="cb74-44"><a href="#cb74-44"></a><span class="ss">- </span>Ex. creating new variables/datasets, fitting models, etc.</span>
+<span id="cb74-45"><a href="#cb74-45"></a><span class="ss">- </span>We'll need to consider storage (memory allocation).</span>
+<span id="cb74-46"><a href="#cb74-46"></a><span class="ss">- </span>Next class, we'll use <span class="in">`map()`</span> for this...</span>
+<span id="cb74-47"><a href="#cb74-47"></a></span>
+<span id="cb74-48"><a href="#cb74-48"></a>**Side effects**</span>
+<span id="cb74-49"><a href="#cb74-49"></a></span>
+<span id="cb74-50"><a href="#cb74-50"></a><span class="ss">- </span>Performing an action without a R return output</span>
+<span id="cb74-51"><a href="#cb74-51"></a><span class="ss">- </span>Ex: saving data using <span class="in">`write_csv()`</span> or saving a plot with <span class="in">`png()`</span></span>
+<span id="cb74-52"><a href="#cb74-52"></a><span class="ss">- </span>We don't need to worry about storage in R.</span>
+<span id="cb74-53"><a href="#cb74-53"></a><span class="ss">- </span>We could use <span class="in">`walk()`</span> for this...</span>
+<span id="cb74-54"><a href="#cb74-54"></a></span>
+<span id="cb74-55"><a href="#cb74-55"></a></span>
+<span id="cb74-56"><a href="#cb74-56"></a><span class="fu">## `for` Loops</span></span>
+<span id="cb74-57"><a href="#cb74-57"></a></span>
+<span id="cb74-58"><a href="#cb74-58"></a>In R, <span class="in">`for`</span> loops have the following general structure:</span>
+<span id="cb74-59"><a href="#cb74-59"></a></span>
+<span id="cb74-60"><a href="#cb74-60"></a><span class="in">```{r for_syntax}</span></span>
+<span id="cb74-61"><a href="#cb74-61"></a><span class="co">#| eval: false</span></span>
+<span id="cb74-62"><a href="#cb74-62"></a></span>
+<span id="cb74-63"><a href="#cb74-63"></a><span class="cf">for</span> (i <span class="cf">in</span> some_vector) {</span>
+<span id="cb74-64"><a href="#cb74-64"></a>    <span class="co"># Code to do stuff based on i</span></span>
+<span id="cb74-65"><a href="#cb74-65"></a>}</span>
+<span id="cb74-66"><a href="#cb74-66"></a><span class="in">```</span></span>
+<span id="cb74-67"><a href="#cb74-67"></a></span>
+<span id="cb74-68"><a href="#cb74-68"></a><span class="in">`some_vector`</span> can be **any** vector, including:</span>
+<span id="cb74-69"><a href="#cb74-69"></a></span>
+<span id="cb74-70"><a href="#cb74-70"></a><span class="ss">- </span>An **indexing** integer vector: <span class="in">`1:3`</span> <span class="co">[</span><span class="ot">Most common!</span><span class="co">]</span></span>
+<span id="cb74-71"><a href="#cb74-71"></a><span class="ss">- </span>A character vector: <span class="in">`c("group1", "group2", "group3")`</span></span>
+<span id="cb74-72"><a href="#cb74-72"></a><span class="ss">- </span>A vector of any other class</span>
+<span id="cb74-73"><a href="#cb74-73"></a></span>
+<span id="cb74-74"><a href="#cb74-74"></a><span class="in">```{r for_examples}</span></span>
+<span id="cb74-75"><a href="#cb74-75"></a>groups <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"group1"</span>, <span class="st">"group2"</span>, <span class="st">"group3"</span>) <span class="co"># a vector to iterate over</span></span>
+<span id="cb74-76"><a href="#cb74-76"></a></span>
+<span id="cb74-77"><a href="#cb74-77"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) { <span class="co"># i: index</span></span>
+<span id="cb74-78"><a href="#cb74-78"></a>    <span class="fu">print</span>(groups[i])</span>
+<span id="cb74-79"><a href="#cb74-79"></a>}</span>
+<span id="cb74-80"><a href="#cb74-80"></a></span>
+<span id="cb74-81"><a href="#cb74-81"></a><span class="cf">for</span> (g <span class="cf">in</span> groups) { <span class="co"># iterating over the vector</span></span>
+<span id="cb74-82"><a href="#cb74-82"></a>    <span class="fu">print</span>(g)</span>
+<span id="cb74-83"><a href="#cb74-83"></a>}</span>
+<span id="cb74-84"><a href="#cb74-84"></a><span class="in">```</span></span>
+<span id="cb74-85"><a href="#cb74-85"></a></span>
+<span id="cb74-86"><a href="#cb74-86"></a></span>
+<span id="cb74-87"><a href="#cb74-87"></a><span class="fu">### Indexing</span></span>
+<span id="cb74-88"><a href="#cb74-88"></a></span>
+<span id="cb74-89"><a href="#cb74-89"></a>To iterate over an **indexing** vector, it is useful to know about the following two functions:</span>
+<span id="cb74-90"><a href="#cb74-90"></a></span>
+<span id="cb74-91"><a href="#cb74-91"></a><span class="ss">- </span><span class="in">`seq_along(v)`</span>: generates an integer sequence from 1 to the length of the vector <span class="in">`v`</span> supplied</span>
+<span id="cb74-92"><a href="#cb74-92"></a><span class="ss">- </span><span class="in">`seq_len(n)`</span>:  generates an integer sequence from 1 to <span class="in">`n`</span></span>
+<span id="cb74-93"><a href="#cb74-93"></a></span>
+<span id="cb74-94"><a href="#cb74-94"></a><span class="in">```{r for_seq_along}</span></span>
+<span id="cb74-95"><a href="#cb74-95"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(groups)) {</span>
+<span id="cb74-96"><a href="#cb74-96"></a>    <span class="fu">print</span>(groups[i])</span>
+<span id="cb74-97"><a href="#cb74-97"></a>}</span>
+<span id="cb74-98"><a href="#cb74-98"></a></span>
+<span id="cb74-99"><a href="#cb74-99"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">length</span>(groups))) {</span>
+<span id="cb74-100"><a href="#cb74-100"></a>    <span class="fu">print</span>(groups[i])</span>
+<span id="cb74-101"><a href="#cb74-101"></a>}</span>
+<span id="cb74-102"><a href="#cb74-102"></a><span class="in">```</span></span>
+<span id="cb74-103"><a href="#cb74-103"></a></span>
+<span id="cb74-104"><a href="#cb74-104"></a>A nice feature of <span class="in">`seq_along()`</span> is that it generates an empty iteration vector if the vector you're iterating over itself has length 0.</span>
+<span id="cb74-105"><a href="#cb74-105"></a></span>
+<span id="cb74-108"><a href="#cb74-108"></a><span class="in">```{r}</span></span>
+<span id="cb74-109"><a href="#cb74-109"></a>no_groups <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb74-110"><a href="#cb74-110"></a><span class="fu">seq_along</span>(no_groups)</span>
+<span id="cb74-111"><a href="#cb74-111"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(no_groups)) {</span>
+<span id="cb74-112"><a href="#cb74-112"></a>    <span class="fu">print</span>(no_groups[i])</span>
+<span id="cb74-113"><a href="#cb74-113"></a>}</span>
+<span id="cb74-114"><a href="#cb74-114"></a><span class="in">```</span></span>
+<span id="cb74-115"><a href="#cb74-115"></a></span>
+<span id="cb74-116"><a href="#cb74-116"></a><span class="in">`seq_len()`</span> is useful for iterating over the rows of a data frame because <span class="in">`seq_along()`</span> would iterate over columns:</span>
+<span id="cb74-117"><a href="#cb74-117"></a></span>
+<span id="cb74-118"><a href="#cb74-118"></a><span class="in">```{r seq_len_df}</span></span>
+<span id="cb74-119"><a href="#cb74-119"></a>small_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">b =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">c =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb74-120"><a href="#cb74-120"></a></span>
+<span id="cb74-121"><a href="#cb74-121"></a><span class="cf">for</span> (col <span class="cf">in</span> small_data) { <span class="co"># each element is the column</span></span>
+<span id="cb74-122"><a href="#cb74-122"></a>    <span class="fu">print</span>(col)</span>
+<span id="cb74-123"><a href="#cb74-123"></a>}</span>
+<span id="cb74-124"><a href="#cb74-124"></a></span>
+<span id="cb74-125"><a href="#cb74-125"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(small_data))) {</span>
+<span id="cb74-126"><a href="#cb74-126"></a>    <span class="fu">print</span>(r)</span>
+<span id="cb74-127"><a href="#cb74-127"></a>}</span>
+<span id="cb74-128"><a href="#cb74-128"></a><span class="in">```</span></span>
+<span id="cb74-129"><a href="#cb74-129"></a></span>
+<span id="cb74-130"><a href="#cb74-130"></a></span>
+<span id="cb74-131"><a href="#cb74-131"></a><span class="fu">### Store Output</span></span>
+<span id="cb74-132"><a href="#cb74-132"></a></span>
+<span id="cb74-133"><a href="#cb74-133"></a>**Indexing** is particularly important when we want to create/save new objects as we need to store output created during a <span class="in">`for`</span> loop.</span>
+<span id="cb74-134"><a href="#cb74-134"></a></span>
+<span id="cb74-135"><a href="#cb74-135"></a>::: {.callout-tip appearance='simple' icon=false}</span>
+<span id="cb74-136"><a href="#cb74-136"></a>When using a for loop to create/save output, we should create storage containers ahead of time with the <span class="in">`vector()`</span> function. This allocates memory for the output and is a more efficient use of memory.</span>
+<span id="cb74-137"><a href="#cb74-137"></a>:::</span>
+<span id="cb74-138"><a href="#cb74-138"></a></span>
+<span id="cb74-139"><a href="#cb74-139"></a><span class="in">```{r store_results}</span></span>
+<span id="cb74-140"><a href="#cb74-140"></a>char_storage <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"character"</span>, <span class="at">length =</span> <span class="dv">3</span>)</span>
+<span id="cb74-141"><a href="#cb74-141"></a>num_storage <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"numeric"</span>, <span class="at">length =</span> <span class="dv">3</span>)</span>
+<span id="cb74-142"><a href="#cb74-142"></a>list_storage <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length =</span> <span class="dv">3</span>)</span>
+<span id="cb74-143"><a href="#cb74-143"></a></span>
+<span id="cb74-144"><a href="#cb74-144"></a>char_storage</span>
+<span id="cb74-145"><a href="#cb74-145"></a>num_storage</span>
+<span id="cb74-146"><a href="#cb74-146"></a>list_storage</span>
+<span id="cb74-147"><a href="#cb74-147"></a></span>
+<span id="cb74-148"><a href="#cb74-148"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="dv">3</span>)) {</span>
+<span id="cb74-149"><a href="#cb74-149"></a>    char_storage[i] <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"Number: "</span>, i)</span>
+<span id="cb74-150"><a href="#cb74-150"></a>    num_storage[i] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>i</span>
+<span id="cb74-151"><a href="#cb74-151"></a>    list_storage[[i]] <span class="ot">&lt;-</span> i <span class="co"># Note the [[ for subsetting here</span></span>
+<span id="cb74-152"><a href="#cb74-152"></a>}</span>
+<span id="cb74-153"><a href="#cb74-153"></a></span>
+<span id="cb74-154"><a href="#cb74-154"></a>char_storage</span>
+<span id="cb74-155"><a href="#cb74-155"></a>num_storage</span>
+<span id="cb74-156"><a href="#cb74-156"></a>list_storage</span>
+<span id="cb74-157"><a href="#cb74-157"></a><span class="in">```</span></span>
+<span id="cb74-158"><a href="#cb74-158"></a></span>
+<span id="cb74-159"><a href="#cb74-159"></a></span>
+<span id="cb74-160"><a href="#cb74-160"></a><span class="fu">### Memory Allocation</span></span>
+<span id="cb74-161"><a href="#cb74-161"></a></span>
+<span id="cb74-162"><a href="#cb74-162"></a>If you don't create a storage container ahead of time, you will regret it. Let's bench mark our code to see the difference!</span>
+<span id="cb74-163"><a href="#cb74-163"></a></span>
+<span id="cb74-166"><a href="#cb74-166"></a><span class="in">```{r}</span></span>
+<span id="cb74-167"><a href="#cb74-167"></a><span class="co"># Example 1: No storage container; append new value to existing vector</span></span>
+<span id="cb74-168"><a href="#cb74-168"></a>x <span class="ot">&lt;-</span> <span class="fu">integer</span>()</span>
+<span id="cb74-169"><a href="#cb74-169"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb74-170"><a href="#cb74-170"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fl">1e5</span>) {</span>
+<span id="cb74-171"><a href="#cb74-171"></a>    x <span class="ot">&lt;-</span> <span class="fu">c</span>(x, i)</span>
+<span id="cb74-172"><a href="#cb74-172"></a>  }</span>
+<span id="cb74-173"><a href="#cb74-173"></a>)</span>
+<span id="cb74-174"><a href="#cb74-174"></a></span>
+<span id="cb74-175"><a href="#cb74-175"></a><span class="co"># Example 2: Using a storage container!</span></span>
+<span id="cb74-176"><a href="#cb74-176"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
+<span id="cb74-177"><a href="#cb74-177"></a>x <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">'integer'</span>, <span class="at">length =</span> <span class="fl">1e5</span>)</span>
+<span id="cb74-178"><a href="#cb74-178"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb74-179"><a href="#cb74-179"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fl">1e5</span>) {</span>
+<span id="cb74-180"><a href="#cb74-180"></a>    x[i] <span class="ot">&lt;-</span> i</span>
+<span id="cb74-181"><a href="#cb74-181"></a>  }</span>
+<span id="cb74-182"><a href="#cb74-182"></a>)</span>
+<span id="cb74-183"><a href="#cb74-183"></a></span>
+<span id="cb74-184"><a href="#cb74-184"></a></span>
+<span id="cb74-185"><a href="#cb74-185"></a><span class="co"># Example 3: Vectorized function</span></span>
+<span id="cb74-186"><a href="#cb74-186"></a><span class="co">#Notice median (time to run), mem_alloc (how much memory you are using), and gc (garbage collection)</span></span>
+<span id="cb74-187"><a href="#cb74-187"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb74-188"><a href="#cb74-188"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fl">1e5</span>, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb74-189"><a href="#cb74-189"></a>)</span>
+<span id="cb74-190"><a href="#cb74-190"></a></span>
+<span id="cb74-191"><a href="#cb74-191"></a><span class="in">```</span></span>
+<span id="cb74-192"><a href="#cb74-192"></a></span>
+<span id="cb74-193"><a href="#cb74-193"></a></span>
+<span id="cb74-194"><a href="#cb74-194"></a>::: {.callout-tip title="Pair Programming"}</span>
+<span id="cb74-195"><a href="#cb74-195"></a>Whoever has most recently eaten dessert (broadly interpreted) should be the driver first. Switch after Exercise 2.</span>
+<span id="cb74-196"><a href="#cb74-196"></a>:::</span>
+<span id="cb74-197"><a href="#cb74-197"></a></span>
+<span id="cb74-198"><a href="#cb74-198"></a>Write <span class="in">`for`</span>-loops that do each of the following:</span>
+<span id="cb74-199"><a href="#cb74-199"></a></span>
+<span id="cb74-200"><a href="#cb74-200"></a></span>
+<span id="cb74-201"><a href="#cb74-201"></a><span class="fu">## ✏️ Print Even Numbers</span></span>
+<span id="cb74-202"><a href="#cb74-202"></a></span>
+<span id="cb74-203"><a href="#cb74-203"></a>Prints the even numbers from 2:20. Then, produce the same output with the <span class="in">`seq()`</span> function.</span>
+<span id="cb74-204"><a href="#cb74-204"></a></span>
+<span id="cb74-207"><a href="#cb74-207"></a><span class="in">```{r}</span></span>
+<span id="cb74-208"><a href="#cb74-208"></a><span class="co"># for loop</span></span>
+<span id="cb74-209"><a href="#cb74-209"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="dv">10</span>)) {</span>
+<span id="cb74-210"><a href="#cb74-210"></a>  <span class="fu">print</span>(<span class="dv">2</span><span class="sc">*</span>i)</span>
+<span id="cb74-211"><a href="#cb74-211"></a>}</span>
+<span id="cb74-212"><a href="#cb74-212"></a></span>
+<span id="cb74-213"><a href="#cb74-213"></a><span class="co"># vectorized approach with `seq()`</span></span>
+<span id="cb74-214"><a href="#cb74-214"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">2</span>, <span class="at">to =</span> <span class="dv">20</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb74-215"><a href="#cb74-215"></a></span>
+<span id="cb74-216"><a href="#cb74-216"></a><span class="in">```</span></span>
+<span id="cb74-217"><a href="#cb74-217"></a></span>
+<span id="cb74-218"><a href="#cb74-218"></a></span>
+<span id="cb74-219"><a href="#cb74-219"></a><span class="fu">## ✏️ Label Months</span></span>
+<span id="cb74-220"><a href="#cb74-220"></a></span>
+<span id="cb74-221"><a href="#cb74-221"></a>Iterates over the <span class="in">`month.name`</span> vector and stores a character vector of output containing strings like "Month 1: January", "Month 2: February". Then, produce the same output with <span class="in">`str_c()`</span> only.</span>
+<span id="cb74-222"><a href="#cb74-222"></a></span>
+<span id="cb74-225"><a href="#cb74-225"></a><span class="in">```{r}</span></span>
+<span id="cb74-226"><a href="#cb74-226"></a><span class="co"># for loop</span></span>
+<span id="cb74-227"><a href="#cb74-227"></a>months_str <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"character"</span>, <span class="at">length =</span> <span class="fu">length</span>(month.name))</span>
+<span id="cb74-228"><a href="#cb74-228"></a></span>
+<span id="cb74-229"><a href="#cb74-229"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(month.name)) {</span>
+<span id="cb74-230"><a href="#cb74-230"></a>  months_str[i] <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"Month "</span>, i, <span class="st">": "</span>, month.name[i])</span>
+<span id="cb74-231"><a href="#cb74-231"></a>}</span>
+<span id="cb74-232"><a href="#cb74-232"></a></span>
+<span id="cb74-233"><a href="#cb74-233"></a><span class="fu">print</span>(months_str)</span>
+<span id="cb74-234"><a href="#cb74-234"></a></span>
+<span id="cb74-235"><a href="#cb74-235"></a><span class="co"># vectorized approach with `str_c()`</span></span>
+<span id="cb74-236"><a href="#cb74-236"></a><span class="fu">str_c</span>(<span class="st">"Month "</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="st">": "</span>, month.name)</span>
+<span id="cb74-237"><a href="#cb74-237"></a></span>
+<span id="cb74-238"><a href="#cb74-238"></a><span class="in">```</span></span>
+<span id="cb74-239"><a href="#cb74-239"></a></span>
+<span id="cb74-240"><a href="#cb74-240"></a></span>
+<span id="cb74-241"><a href="#cb74-241"></a><span class="fu">## ✏️ Fit Stratified Models</span></span>
+<span id="cb74-242"><a href="#cb74-242"></a></span>
+<span id="cb74-243"><a href="#cb74-243"></a>On the <span class="in">`diamonds`</span> dataset, fit stratified models of price vs. carat, model separately estimated for each value of <span class="in">`cut`</span>, and store the fitted models in a list storage container.</span>
+<span id="cb74-244"><a href="#cb74-244"></a></span>
+<span id="cb74-247"><a href="#cb74-247"></a><span class="in">```{r}</span></span>
+<span id="cb74-248"><a href="#cb74-248"></a><span class="co"># for loop</span></span>
+<span id="cb74-249"><a href="#cb74-249"></a><span class="fu">data</span>(diamonds)</span>
+<span id="cb74-250"><a href="#cb74-250"></a>separate_cuts <span class="ot">&lt;-</span> diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb74-251"><a href="#cb74-251"></a>  <span class="fu">pull</span>(cut) <span class="sc">%&gt;%</span></span>
+<span id="cb74-252"><a href="#cb74-252"></a>  <span class="fu">levels</span>()</span>
+<span id="cb74-253"><a href="#cb74-253"></a></span>
+<span id="cb74-254"><a href="#cb74-254"></a>strat_models <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"list"</span>, <span class="at">length =</span> <span class="fu">length</span>(separate_cuts))</span>
+<span id="cb74-255"><a href="#cb74-255"></a></span>
+<span id="cb74-256"><a href="#cb74-256"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(separate_cuts)) {</span>
+<span id="cb74-257"><a href="#cb74-257"></a>  individual_cut <span class="ot">&lt;-</span> separate_cuts[i]</span>
+<span id="cb74-258"><a href="#cb74-258"></a>  diamonds_sep <span class="ot">&lt;-</span> diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb74-259"><a href="#cb74-259"></a>    <span class="fu">filter</span>(cut <span class="sc">==</span> individual_cut)</span>
+<span id="cb74-260"><a href="#cb74-260"></a>  strat_models[[i]] <span class="ot">&lt;-</span><span class="fu">lm</span>(price <span class="sc">~</span> carat, <span class="at">data =</span> diamonds_sep)</span>
+<span id="cb74-261"><a href="#cb74-261"></a>}</span>
+<span id="cb74-262"><a href="#cb74-262"></a></span>
+<span id="cb74-263"><a href="#cb74-263"></a>strat_models</span>
+<span id="cb74-264"><a href="#cb74-264"></a><span class="in">```</span></span>
+<span id="cb74-265"><a href="#cb74-265"></a></span>
+<span id="cb74-266"><a href="#cb74-266"></a></span>
+<span id="cb74-267"><a href="#cb74-267"></a><span class="fu">## Iteration `across` Data Frame Columns</span></span>
+<span id="cb74-268"><a href="#cb74-268"></a></span>
+<span id="cb74-269"><a href="#cb74-269"></a>Often we will have to perform the same data wrangling on many variables (e.g., rounding numbers)</span>
+<span id="cb74-270"><a href="#cb74-270"></a></span>
+<span id="cb74-271"><a href="#cb74-271"></a><span class="in">```{r no_across}</span></span>
+<span id="cb74-272"><a href="#cb74-272"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb74-273"><a href="#cb74-273"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb74-274"><a href="#cb74-274"></a>        <span class="at">carat =</span> <span class="fu">round</span>(carat, <span class="dv">1</span>),</span>
+<span id="cb74-275"><a href="#cb74-275"></a>        <span class="at">x =</span> <span class="fu">round</span>(x, <span class="dv">1</span>),</span>
+<span id="cb74-276"><a href="#cb74-276"></a>        <span class="at">y =</span> <span class="fu">round</span>(y, <span class="dv">1</span>),</span>
+<span id="cb74-277"><a href="#cb74-277"></a>        <span class="at">z =</span> <span class="fu">round</span>(z, <span class="dv">1</span>)</span>
+<span id="cb74-278"><a href="#cb74-278"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb74-279"><a href="#cb74-279"></a>    <span class="fu">head</span>()</span>
+<span id="cb74-280"><a href="#cb74-280"></a><span class="in">```</span></span>
+<span id="cb74-281"><a href="#cb74-281"></a></span>
+<span id="cb74-282"><a href="#cb74-282"></a><span class="in">`dplyr`</span> provides the <span class="in">`across()`</span> function for performing these repeated function calls:</span>
+<span id="cb74-283"><a href="#cb74-283"></a></span>
+<span id="cb74-284"><a href="#cb74-284"></a><span class="in">```{r with_across}</span></span>
+<span id="cb74-285"><a href="#cb74-285"></a><span class="co"># Option 1: Create our own named function</span></span>
+<span id="cb74-286"><a href="#cb74-286"></a>round_to_one <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb74-287"><a href="#cb74-287"></a>    <span class="fu">round</span>(x, <span class="at">digits =</span> <span class="dv">1</span>)</span>
+<span id="cb74-288"><a href="#cb74-288"></a>}</span>
+<span id="cb74-289"><a href="#cb74-289"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb74-290"><a href="#cb74-290"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(carat, x, y, z), <span class="at">.fns =</span> round_to_one)) <span class="sc">|&gt;</span></span>
+<span id="cb74-291"><a href="#cb74-291"></a>    <span class="fu">head</span>()</span>
+<span id="cb74-292"><a href="#cb74-292"></a><span class="in">```</span></span>
+<span id="cb74-293"><a href="#cb74-293"></a></span>
+<span id="cb74-296"><a href="#cb74-296"></a><span class="in">```{r}</span></span>
+<span id="cb74-297"><a href="#cb74-297"></a><span class="co"># Option 2: Use an "anonymous" or "lambda" function that isn't named/saved</span></span>
+<span id="cb74-298"><a href="#cb74-298"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb74-299"><a href="#cb74-299"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(carat, x, y, z), <span class="at">.fns =</span> <span class="cf">function</span>(x) {<span class="fu">round</span>(x, <span class="at">digits =</span> <span class="dv">1</span>)} )) <span class="sc">|&gt;</span></span>
+<span id="cb74-300"><a href="#cb74-300"></a>    <span class="fu">head</span>()</span>
+<span id="cb74-301"><a href="#cb74-301"></a></span>
+<span id="cb74-302"><a href="#cb74-302"></a></span>
+<span id="cb74-303"><a href="#cb74-303"></a><span class="co"># Anonymous functions can be written in a more concise way</span></span>
+<span id="cb74-304"><a href="#cb74-304"></a><span class="co"># function(x){ length(unique(x)) } OR ~ length(unique(.x))</span></span>
+<span id="cb74-305"><a href="#cb74-305"></a><span class="co"># function(x,y){ length(unique(x + y)) } OR ~ length(unique(.x + .y))</span></span>
+<span id="cb74-306"><a href="#cb74-306"></a><span class="in">```</span></span>
+<span id="cb74-307"><a href="#cb74-307"></a></span>
+<span id="cb74-308"><a href="#cb74-308"></a></span>
+<span id="cb74-309"><a href="#cb74-309"></a><span class="fu">### Select Columns</span></span>
+<span id="cb74-310"><a href="#cb74-310"></a></span>
+<span id="cb74-311"><a href="#cb74-311"></a>When we look at the <span class="co">[</span><span class="ot">documentation for `across()`</span><span class="co">](https://dplyr.tidyverse.org/reference/across.html)</span>, we see that the <span class="in">`.cols`</span> argument specifies which variables we want to transform, and it has a <span class="in">`&lt;tidy-select&gt;`</span> tag. This means that the syntax we use for <span class="in">`.cols`</span> follows certain rules.</span>
+<span id="cb74-312"><a href="#cb74-312"></a></span>
+<span id="cb74-313"><a href="#cb74-313"></a>Let's click <span class="co">[</span><span class="ot">this link</span><span class="co">](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)</span> to explore the possibilities for selecting variables.</span>
+<span id="cb74-314"><a href="#cb74-314"></a></span>
+<span id="cb74-315"><a href="#cb74-315"></a><span class="ss">- </span>Read through the "Overview of selection features" section to get an overall sense of the many ways to select variables.</span>
+<span id="cb74-316"><a href="#cb74-316"></a><span class="ss">- </span>Navigate back to the <span class="in">`across()`</span> documentation and read through the Examples section at the bottom. Click the "Run examples" link to view the output for all of the examples.</span>
+<span id="cb74-317"><a href="#cb74-317"></a></span>
+<span id="cb74-318"><a href="#cb74-318"></a></span>
+<span id="cb74-319"><a href="#cb74-319"></a><span class="fu">### Multiple Functions</span></span>
+<span id="cb74-320"><a href="#cb74-320"></a></span>
+<span id="cb74-321"><a href="#cb74-321"></a>What if we wanted to perform multiple transformations on each of many variables?</span>
+<span id="cb74-322"><a href="#cb74-322"></a></span>
+<span id="cb74-323"><a href="#cb74-323"></a>Within the different values of diamond <span class="in">`cut`</span>, let's summarize the mean, median, and standard deviation of the numeric variables. When we look at the <span class="in">`.fns`</span> argument in the <span class="in">`across()`</span> documentation, we see that we can provide a **list** of functions:</span>
+<span id="cb74-324"><a href="#cb74-324"></a></span>
+<span id="cb74-325"><a href="#cb74-325"></a><span class="in">```{r across_many_fns}</span></span>
+<span id="cb74-326"><a href="#cb74-326"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb74-327"><a href="#cb74-327"></a>    <span class="fu">group_by</span>(cut) <span class="sc">|&gt;</span></span>
+<span id="cb74-328"><a href="#cb74-328"></a>    <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">where</span>(is.numeric), <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">med =</span> median, <span class="at">sd =</span> sd)))</span>
+<span id="cb74-329"><a href="#cb74-329"></a><span class="in">```</span></span>
+<span id="cb74-330"><a href="#cb74-330"></a></span>
+<span id="cb74-331"><a href="#cb74-331"></a>What does the list of functions look like? What is the structure of this list object?</span>
+<span id="cb74-332"><a href="#cb74-332"></a></span>
+<span id="cb74-333"><a href="#cb74-333"></a><span class="in">```{r list_str}</span></span>
+<span id="cb74-334"><a href="#cb74-334"></a>list_of_fcts <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">med =</span> median, <span class="at">sd =</span> sd)</span>
+<span id="cb74-335"><a href="#cb74-335"></a>list_of_fcts</span>
+<span id="cb74-336"><a href="#cb74-336"></a><span class="fu">str</span>(list_of_fcts)</span>
+<span id="cb74-337"><a href="#cb74-337"></a><span class="in">```</span></span>
+<span id="cb74-338"><a href="#cb74-338"></a></span>
+<span id="cb74-339"><a href="#cb74-339"></a>Using the <span class="in">`diamonds`</span> dataset, complete the following exercises.</span>
+<span id="cb74-340"><a href="#cb74-340"></a></span>
+<span id="cb74-341"><a href="#cb74-341"></a></span>
+<span id="cb74-342"><a href="#cb74-342"></a><span class="fu">## ✏️ Add Units</span></span>
+<span id="cb74-343"><a href="#cb74-343"></a></span>
+<span id="cb74-344"><a href="#cb74-344"></a>Transform the <span class="in">`x`</span>, <span class="in">`y`</span>, and <span class="in">`z`</span> columns so that the units of millimeters are displayed (e.g., "4.0 mm").</span>
+<span id="cb74-345"><a href="#cb74-345"></a></span>
+<span id="cb74-348"><a href="#cb74-348"></a><span class="in">```{r}</span></span>
+<span id="cb74-349"><a href="#cb74-349"></a>mm_display <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb74-350"><a href="#cb74-350"></a>    <span class="fu">str_c</span>(x, <span class="st">" mm"</span>)</span>
+<span id="cb74-351"><a href="#cb74-351"></a>}</span>
+<span id="cb74-352"><a href="#cb74-352"></a></span>
+<span id="cb74-353"><a href="#cb74-353"></a>diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb74-354"><a href="#cb74-354"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(x, y, z), <span class="at">.fns =</span> mm_display)) <span class="sc">%&gt;%</span></span>
+<span id="cb74-355"><a href="#cb74-355"></a>    <span class="fu">head</span>()</span>
+<span id="cb74-356"><a href="#cb74-356"></a></span>
+<span id="cb74-357"><a href="#cb74-357"></a><span class="in">```</span></span>
+<span id="cb74-358"><a href="#cb74-358"></a></span>
+<span id="cb74-359"><a href="#cb74-359"></a></span>
+<span id="cb74-360"><a href="#cb74-360"></a><span class="fu">## ✏️ Convert to Character</span></span>
+<span id="cb74-361"><a href="#cb74-361"></a></span>
+<span id="cb74-362"><a href="#cb74-362"></a>Convert all numeric columns into character columns.</span>
+<span id="cb74-363"><a href="#cb74-363"></a></span>
+<span id="cb74-364"><a href="#cb74-364"></a><span class="ss">- </span>Hint: type <span class="in">`is.`</span> and hit Tab in the Console. Scroll through the function options. Do the same with <span class="in">`as.`</span></span>
+<span id="cb74-365"><a href="#cb74-365"></a></span>
+<span id="cb74-368"><a href="#cb74-368"></a><span class="in">```{r}</span></span>
+<span id="cb74-369"><a href="#cb74-369"></a>diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb74-370"><a href="#cb74-370"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">where</span>(is.numeric), <span class="at">.fns =</span> as.character)) <span class="sc">%&gt;%</span></span>
+<span id="cb74-371"><a href="#cb74-371"></a>    <span class="fu">head</span>()</span>
+<span id="cb74-372"><a href="#cb74-372"></a></span>
+<span id="cb74-373"><a href="#cb74-373"></a><span class="in">```</span></span>
+<span id="cb74-374"><a href="#cb74-374"></a></span>
+<span id="cb74-375"><a href="#cb74-375"></a></span>
+<span id="cb74-376"><a href="#cb74-376"></a><span class="fu">## Case Study</span></span>
+<span id="cb74-377"><a href="#cb74-377"></a></span>
+<span id="cb74-378"><a href="#cb74-378"></a>One of my most common use cases for writing functions and iteration/looping is to perform some exploration or modeling repeatedly for several different "settings".</span>
+<span id="cb74-379"><a href="#cb74-379"></a></span>
+<span id="cb74-380"><a href="#cb74-380"></a>For example, our broad goal might be to fit a linear regression model to our data. However, there are often multiple choices that we have to make in practice:</span>
+<span id="cb74-381"><a href="#cb74-381"></a></span>
+<span id="cb74-382"><a href="#cb74-382"></a><span class="ss">- </span>Keep missing values or fill them in (imputation)?</span>
+<span id="cb74-383"><a href="#cb74-383"></a><span class="ss">- </span>Fit the model only on a certain group of cases?</span>
+<span id="cb74-384"><a href="#cb74-384"></a><span class="ss">- </span>Filter out outliers in one or more variables?</span>
+<span id="cb74-385"><a href="#cb74-385"></a><span class="ss">- </span>Transform certain variables? (e.g., log transformation)</span>
+<span id="cb74-386"><a href="#cb74-386"></a></span>
+<span id="cb74-387"><a href="#cb74-387"></a>We can map any number of these choices to **arguments** in a custom model-fitting function:</span>
+<span id="cb74-388"><a href="#cb74-388"></a></span>
+<span id="cb74-389"><a href="#cb74-389"></a><span class="ss">- </span><span class="in">`impute`</span>: TRUE or FALSE</span>
+<span id="cb74-390"><a href="#cb74-390"></a><span class="ss">- </span><span class="in">`filter_to`</span>: This could be a string description like "All cases", "Group 1", or "Groups 1 and 2"</span>
+<span id="cb74-391"><a href="#cb74-391"></a></span>
+<span id="cb74-392"><a href="#cb74-392"></a><span class="in">```{r fit_model_example}</span></span>
+<span id="cb74-393"><a href="#cb74-393"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, impute, filter_to) {</span>
+<span id="cb74-394"><a href="#cb74-394"></a>    <span class="cf">if</span> (impute) {</span>
+<span id="cb74-395"><a href="#cb74-395"></a>        data <span class="ot">&lt;-</span> <span class="fu">some_imputation_function</span>(data)</span>
+<span id="cb74-396"><a href="#cb74-396"></a>    }</span>
+<span id="cb74-397"><a href="#cb74-397"></a></span>
+<span id="cb74-398"><a href="#cb74-398"></a>    <span class="cf">if</span> (filter_to<span class="sc">==</span><span class="st">"Group 1"</span>) {</span>
+<span id="cb74-399"><a href="#cb74-399"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb74-400"><a href="#cb74-400"></a>            <span class="fu">filter</span>(group <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb74-401"><a href="#cb74-401"></a>    } <span class="cf">else</span> <span class="cf">if</span> (filter_to <span class="sc">==</span> <span class="st">"Groups 1 and 2"</span>) {</span>
+<span id="cb74-402"><a href="#cb74-402"></a>        data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb74-403"><a href="#cb74-403"></a>            <span class="fu">filter</span>(group <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb74-404"><a href="#cb74-404"></a>    }</span>
+<span id="cb74-405"><a href="#cb74-405"></a></span>
+<span id="cb74-406"><a href="#cb74-406"></a>    <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> data)</span>
+<span id="cb74-407"><a href="#cb74-407"></a>}</span>
+<span id="cb74-408"><a href="#cb74-408"></a><span class="in">```</span></span>
+<span id="cb74-409"><a href="#cb74-409"></a></span>
+<span id="cb74-410"><a href="#cb74-410"></a>The <span class="in">`tidyr`</span> package has a useful function called <span class="in">`crossing()`</span> that is useful for generating argument combinations.</span>
+<span id="cb74-411"><a href="#cb74-411"></a></span>
+<span id="cb74-412"><a href="#cb74-412"></a>For each argument, we specify all possible values for that argument. <span class="in">`crossing()`</span> generates all combinations:</span>
+<span id="cb74-413"><a href="#cb74-413"></a></span>
+<span id="cb74-416"><a href="#cb74-416"></a><span class="in">```{r}</span></span>
+<span id="cb74-417"><a href="#cb74-417"></a>df_arg_combos <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
+<span id="cb74-418"><a href="#cb74-418"></a>    <span class="at">impute =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb74-419"><a href="#cb74-419"></a>    <span class="at">filter_to =</span> <span class="fu">c</span>(<span class="st">"All cases"</span>, <span class="st">"Group 1"</span>, <span class="st">"Groups 1 and 2"</span>)</span>
+<span id="cb74-420"><a href="#cb74-420"></a>)</span>
+<span id="cb74-421"><a href="#cb74-421"></a>df_arg_combos</span>
+<span id="cb74-422"><a href="#cb74-422"></a></span>
+<span id="cb74-423"><a href="#cb74-423"></a><span class="co"># Another example</span></span>
+<span id="cb74-424"><a href="#cb74-424"></a><span class="fu">crossing</span>(</span>
+<span id="cb74-425"><a href="#cb74-425"></a>    <span class="at">option1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb74-426"><a href="#cb74-426"></a>    <span class="at">option2 =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb74-427"><a href="#cb74-427"></a>    <span class="at">option3 =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>)</span>
+<span id="cb74-428"><a href="#cb74-428"></a>)</span>
+<span id="cb74-429"><a href="#cb74-429"></a><span class="in">```</span></span>
+<span id="cb74-430"><a href="#cb74-430"></a></span>
+<span id="cb74-431"><a href="#cb74-431"></a>With iteration in our toobox, we can iterate the <span class="in">`fit_model()`</span> function over the combinations in <span class="in">`df_arg_combos`</span>.</span>
+<span id="cb74-432"><a href="#cb74-432"></a></span>
+<span id="cb74-433"><a href="#cb74-433"></a></span>
+<span id="cb74-434"><a href="#cb74-434"></a><span class="fu">### Goal</span></span>
+<span id="cb74-435"><a href="#cb74-435"></a></span>
+<span id="cb74-436"><a href="#cb74-436"></a>In the <span class="in">`diamonds`</span> dataset, we want to understand the relationship between <span class="in">`price`</span> and size (<span class="in">`carat`</span>). We want to explore variation along two choices:</span>
+<span id="cb74-437"><a href="#cb74-437"></a></span>
+<span id="cb74-438"><a href="#cb74-438"></a><span class="ss">- </span>The variables included in the model. We'll explore 3 sets of variables:</span>
+<span id="cb74-439"><a href="#cb74-439"></a><span class="ss">    - </span>No further variables (just <span class="in">`price`</span> and <span class="in">`carat`</span>)</span>
+<span id="cb74-440"><a href="#cb74-440"></a><span class="ss">    - </span>Adjusting for <span class="in">`cut`</span></span>
+<span id="cb74-441"><a href="#cb74-441"></a><span class="ss">    - </span>Adjusting for <span class="in">`cut`</span> and <span class="in">`clarity`</span></span>
+<span id="cb74-442"><a href="#cb74-442"></a><span class="ss">    - </span>Adjusting for <span class="in">`cut`</span>, <span class="in">`clarity`</span>, and <span class="in">`color`</span></span>
+<span id="cb74-443"><a href="#cb74-443"></a><span class="ss">- </span>Whether or not to remove outliers in the <span class="in">`carat`</span> variable. We'll define outliers as cases whose <span class="in">`carat`</span> is over 3 SDs away from the mean.</span>
+<span id="cb74-444"><a href="#cb74-444"></a></span>
+<span id="cb74-445"><a href="#cb74-445"></a>Work with your partner on the following exercises. As you work, make note of what is challenging and any helpful thought processes/strategies that arise from the collaboration.</span>
+<span id="cb74-446"><a href="#cb74-446"></a></span>
+<span id="cb74-447"><a href="#cb74-447"></a></span>
+<span id="cb74-448"><a href="#cb74-448"></a><span class="fu">## ✏️ Build Argument Combos</span></span>
+<span id="cb74-449"><a href="#cb74-449"></a></span>
+<span id="cb74-450"><a href="#cb74-450"></a>Use <span class="in">`crossing()`</span> to create the data frame of argument combinations for our analyses. Call it <span class="in">`df_arg_combos`</span>. Note that you can create a list of **formula** objects in R with <span class="in">`c(y ~ x1, y ~ x1 + x2)`</span>. (Something like this will be the right hand side of an argument to <span class="in">`crossing()`</span>.)</span>
+<span id="cb74-451"><a href="#cb74-451"></a></span>
+<span id="cb74-454"><a href="#cb74-454"></a><span class="in">```{r}</span></span>
+<span id="cb74-455"><a href="#cb74-455"></a>df_arg_combos <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
+<span id="cb74-456"><a href="#cb74-456"></a>  <span class="at">mod_formula =</span> <span class="fu">c</span>(price <span class="sc">~</span> carat, price <span class="sc">~</span> carat <span class="sc">+</span> cut, price <span class="sc">~</span> carat <span class="sc">+</span> cut <span class="sc">+</span> clarity, price <span class="sc">~</span> carat <span class="sc">+</span> cut <span class="sc">+</span> clarity <span class="sc">+</span> color),</span>
+<span id="cb74-457"><a href="#cb74-457"></a>  <span class="at">remove_outliers =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb74-458"><a href="#cb74-458"></a>)</span>
+<span id="cb74-459"><a href="#cb74-459"></a></span>
+<span id="cb74-460"><a href="#cb74-460"></a>df_arg_combos</span>
+<span id="cb74-461"><a href="#cb74-461"></a></span>
+<span id="cb74-462"><a href="#cb74-462"></a><span class="in">```</span></span>
+<span id="cb74-463"><a href="#cb74-463"></a></span>
+<span id="cb74-464"><a href="#cb74-464"></a></span>
+<span id="cb74-465"><a href="#cb74-465"></a><span class="fu">## ✏️ Remove Outliers</span></span>
+<span id="cb74-466"><a href="#cb74-466"></a></span>
+<span id="cb74-467"><a href="#cb74-467"></a>Write a function called <span class="in">`remove_outliers`</span> that removes outliers in a dataset. The user should be able to supply the dataset (<span class="in">`data`</span>), the variable to remove outliers in (<span class="in">`what_var`</span>), and a threshold on the number of SDs away from the mean used to define outliers (<span class="in">`sd_thresh`</span>). Write your function so that it runs as follows: <span class="in">`remove_outliers(diamonds, what_var = carat, sd_thresh = 3)`</span>.</span>
+<span id="cb74-468"><a href="#cb74-468"></a></span>
+<span id="cb74-471"><a href="#cb74-471"></a><span class="in">```{r}</span></span>
+<span id="cb74-472"><a href="#cb74-472"></a>remove_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(data, what_var, sd_thresh) {</span>
+<span id="cb74-473"><a href="#cb74-473"></a>  data <span class="sc">%&gt;%</span></span>
+<span id="cb74-474"><a href="#cb74-474"></a>    <span class="fu">mutate</span>(<span class="at">zscore =</span> ({{ what_var }} <span class="sc">-</span> <span class="fu">mean</span>({{ what_var }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="sc">/</span><span class="fu">sd</span>({{ what_var }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb74-475"><a href="#cb74-475"></a>    <span class="fu">filter</span>(<span class="fu">abs</span>(zscore) <span class="sc">&lt;=</span> sd_thresh)</span>
+<span id="cb74-476"><a href="#cb74-476"></a>}</span>
+<span id="cb74-477"><a href="#cb74-477"></a></span>
+<span id="cb74-478"><a href="#cb74-478"></a><span class="fu">remove_outliers</span>(diamonds, <span class="at">what_var =</span> carat, <span class="at">sd_thresh =</span> <span class="dv">3</span>)</span>
+<span id="cb74-479"><a href="#cb74-479"></a><span class="in">```</span></span>
+<span id="cb74-480"><a href="#cb74-480"></a></span>
+<span id="cb74-481"><a href="#cb74-481"></a></span>
+<span id="cb74-482"><a href="#cb74-482"></a><span class="fu">## ✏️ Fit Model</span></span>
+<span id="cb74-483"><a href="#cb74-483"></a></span>
+<span id="cb74-484"><a href="#cb74-484"></a>Write a function called <span class="in">`fit_model`</span> that implements the different settings for our <span class="in">`diamonds`</span> analysis.</span>
+<span id="cb74-485"><a href="#cb74-485"></a></span>
+<span id="cb74-488"><a href="#cb74-488"></a><span class="in">```{r}</span></span>
+<span id="cb74-489"><a href="#cb74-489"></a>fit_model <span class="ot">&lt;-</span> <span class="cf">function</span>(data, mod_formula, remove_outliers) {</span>
+<span id="cb74-490"><a href="#cb74-490"></a>    <span class="co"># remove_outliers is a TRUE/FALSE flag of whether or not to remove outliers</span></span>
+<span id="cb74-491"><a href="#cb74-491"></a>    <span class="co"># This function implements our specific use case: outliers are cases that are 3 SDs away from the mean for the carat variable</span></span>
+<span id="cb74-492"><a href="#cb74-492"></a>  <span class="cf">if</span> (remove_outliers) {</span>
+<span id="cb74-493"><a href="#cb74-493"></a>    cleaned_data <span class="ot">&lt;-</span> <span class="fu">remove_outliers</span>(data, <span class="at">what_var =</span> carat, <span class="at">sd_thresh =</span> <span class="dv">3</span>)</span>
+<span id="cb74-494"><a href="#cb74-494"></a>  } <span class="cf">else</span> {</span>
+<span id="cb74-495"><a href="#cb74-495"></a>    cleaned_data <span class="ot">&lt;-</span> data</span>
+<span id="cb74-496"><a href="#cb74-496"></a>  }</span>
+<span id="cb74-497"><a href="#cb74-497"></a>    <span class="co"># Use mod_formula as the first argument of lm()</span></span>
+<span id="cb74-498"><a href="#cb74-498"></a>  <span class="fu">lm</span>(mod_formula, <span class="at">data =</span> cleaned_data)</span>
+<span id="cb74-499"><a href="#cb74-499"></a>}</span>
+<span id="cb74-500"><a href="#cb74-500"></a><span class="in">```</span></span>
+<span id="cb74-501"><a href="#cb74-501"></a></span>
+<span id="cb74-502"><a href="#cb74-502"></a></span>
+<span id="cb74-503"><a href="#cb74-503"></a><span class="fu">## ✏️ Store Models</span></span>
+<span id="cb74-504"><a href="#cb74-504"></a></span>
+<span id="cb74-505"><a href="#cb74-505"></a>Write a <span class="in">`for`</span> loop that stores the fitted linear models from all versions of the analysis.</span>
+<span id="cb74-506"><a href="#cb74-506"></a></span>
+<span id="cb74-507"><a href="#cb74-507"></a>Recall that you can pull out the contents of a single data frame column in many ways. For a data frame <span class="in">`df`</span> with a variable named <span class="in">`x`</span>:</span>
+<span id="cb74-508"><a href="#cb74-508"></a></span>
+<span id="cb74-509"><a href="#cb74-509"></a><span class="ss">- </span><span class="in">`df$x`</span></span>
+<span id="cb74-510"><a href="#cb74-510"></a><span class="ss">- </span><span class="in">`df |&gt; pull(x)`</span></span>
+<span id="cb74-511"><a href="#cb74-511"></a><span class="ss">- </span><span class="in">`df[["x"]]`</span></span>
+<span id="cb74-512"><a href="#cb74-512"></a></span>
+<span id="cb74-513"><a href="#cb74-513"></a>Note that in <span class="in">`df_arg_combos`</span>:</span>
+<span id="cb74-514"><a href="#cb74-514"></a></span>
+<span id="cb74-515"><a href="#cb74-515"></a><span class="ss">- </span><span class="in">`mod_formula`</span>: this column is a **list** and you can extract the 1st element with <span class="in">`[[1]]`</span></span>
+<span id="cb74-516"><a href="#cb74-516"></a><span class="ss">- </span><span class="in">`remove_outliers`</span>: this column is a **vector** and you can extract the 1st element with <span class="in">`[1]`</span></span>
+<span id="cb74-517"><a href="#cb74-517"></a></span>
+<span id="cb74-520"><a href="#cb74-520"></a><span class="in">```{r}</span></span>
+<span id="cb74-521"><a href="#cb74-521"></a>save_models <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"list"</span>, <span class="at">length =</span> <span class="fu">nrow</span>(df_arg_combos))</span>
+<span id="cb74-522"><a href="#cb74-522"></a></span>
+<span id="cb74-523"><a href="#cb74-523"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(save_models)) {</span>
+<span id="cb74-524"><a href="#cb74-524"></a>  mod_formula_extract <span class="ot">&lt;-</span> df_arg_combos<span class="sc">$</span>mod_formula[[i]]</span>
+<span id="cb74-525"><a href="#cb74-525"></a>  remove_outliers_extract <span class="ot">&lt;-</span> df_arg_combos<span class="sc">$</span>remove_outliers[i]</span>
+<span id="cb74-526"><a href="#cb74-526"></a>  save_models[[i]] <span class="ot">&lt;-</span> <span class="fu">fit_model</span>(</span>
+<span id="cb74-527"><a href="#cb74-527"></a>    <span class="at">data =</span> diamonds,</span>
+<span id="cb74-528"><a href="#cb74-528"></a>    <span class="at">mod_formula =</span> mod_formula_extract,</span>
+<span id="cb74-529"><a href="#cb74-529"></a>    <span class="at">remove_outliers =</span> remove_outliers_extract</span>
+<span id="cb74-530"><a href="#cb74-530"></a>  )</span>
+<span id="cb74-531"><a href="#cb74-531"></a>}</span>
+<span id="cb74-532"><a href="#cb74-532"></a></span>
+<span id="cb74-533"><a href="#cb74-533"></a><span class="in">```</span></span>
+<span id="cb74-534"><a href="#cb74-534"></a></span>
+<span id="cb74-535"><a href="#cb74-535"></a></span>
+<span id="cb74-536"><a href="#cb74-536"></a><span class="fu">## Done!</span></span>
+<span id="cb74-537"><a href="#cb74-537"></a></span>
+<span id="cb74-538"><a href="#cb74-538"></a><span class="ss">- </span>Check the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

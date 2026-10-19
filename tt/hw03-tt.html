@@ -609,9 +609,9 @@ cookieconsent.run({
 <span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">geom_text</span>(</span>
 <span id="cb4-8"><a href="#cb4-8"></a>    <span class="fu">aes</span>(</span>
 <span id="cb4-9"><a href="#cb4-9"></a>      <span class="at">x =</span> green_2025,</span>
-<span id="cb4-10"><a href="#cb4-10"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%+.1f pp"</span>, change)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%+.1f%%"</span>, change)</span>
 <span id="cb4-11"><a href="#cb4-11"></a>    ),</span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="at">hjust =</span> <span class="fu">ifelse</span>(focus_cities<span class="sc">$</span>change <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="sc">-</span><span class="fl">0.35</span>, <span class="fl">1.35</span>),</span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="at">hjust =</span> <span class="fu">ifelse</span>(focus_cities<span class="sc">$</span>change <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="sc">-</span><span class="fl">0.15</span>, <span class="fl">1.15</span>),</span>
 <span id="cb4-13"><a href="#cb4-13"></a>    <span class="at">size =</span> <span class="fl">3.5</span>,</span>
 <span id="cb4-14"><a href="#cb4-14"></a>    <span class="at">fontface =</span> <span class="st">"bold"</span>,</span>
 <span id="cb4-15"><a href="#cb4-15"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
@@ -627,34 +627,37 @@ cookieconsent.run({
 <span id="cb4-25"><a href="#cb4-25"></a>  <span class="fu">scale_x_continuous</span>(</span>
 <span id="cb4-26"><a href="#cb4-26"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">80</span>),</span>
 <span id="cb4-27"><a href="#cb4-27"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">20</span>),</span>
-<span id="cb4-28"><a href="#cb4-28"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>)),</span>
-<span id="cb4-29"><a href="#cb4-29"></a>    <span class="at">sec.axis =</span> <span class="fu">dup_axis</span>(<span class="at">name =</span> <span class="cn">NULL</span>)</span>
-<span id="cb4-30"><a href="#cb4-30"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-32"><a href="#cb4-32"></a>    <span class="at">title =</span> <span class="st">"The largest changes in urban green-area share from 1990–2025"</span>,</span>
-<span id="cb4-33"><a href="#cb4-33"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, decreases were much larger: </span><span class="sc">\n</span><span class="st">Bissau fell 63.4 points while León rose 14.7 points"</span>,</span>
-<span id="cb4-34"><a href="#cb4-34"></a>    <span class="at">x =</span> <span class="st">"Share of urban area that is green (%)"</span>,</span>
-<span id="cb4-35"><a href="#cb4-35"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb4-36"><a href="#cb4-36"></a>    <span class="at">caption =</span> <span class="st">"Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-38"><a href="#cb4-38"></a>  theme_green <span class="sc">+</span></span>
-<span id="cb4-39"><a href="#cb4-39"></a>  <span class="fu">theme</span>(</span>
-<span id="cb4-40"><a href="#cb4-40"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb4-41"><a href="#cb4-41"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb4-42"><a href="#cb4-42"></a>    <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb4-43"><a href="#cb4-43"></a>    <span class="at">strip.placement =</span> <span class="st">"outside"</span>,</span>
-<span id="cb4-44"><a href="#cb4-44"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
-<span id="cb4-45"><a href="#cb4-45"></a>    <span class="at">plot.caption.position =</span> <span class="st">"plot"</span>,</span>
-<span id="cb4-46"><a href="#cb4-46"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
-<span id="cb4-47"><a href="#cb4-47"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
-<span id="cb4-48"><a href="#cb4-48"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
-<span id="cb4-49"><a href="#cb4-49"></a>      <span class="at">lineheight =</span> <span class="fl">1.1</span>,</span>
-<span id="cb4-50"><a href="#cb4-50"></a>      <span class="at">hjust =</span> <span class="dv">0</span>,</span>
-<span id="cb4-51"><a href="#cb4-51"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)</span>
-<span id="cb4-52"><a href="#cb4-52"></a>    )</span>
-<span id="cb4-53"><a href="#cb4-53"></a>  )</span>
-<span id="cb4-54"><a href="#cb4-54"></a></span>
-<span id="cb4-55"><a href="#cb4-55"></a>plot3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-28"><a href="#cb4-28"></a>    <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">suffix =</span> <span class="st">"%"</span>),</span>
+<span id="cb4-29"><a href="#cb4-29"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>)),</span>
+<span id="cb4-30"><a href="#cb4-30"></a>    <span class="at">sec.axis =</span> <span class="fu">dup_axis</span>(<span class="at">name =</span> <span class="cn">NULL</span>)</span>
+<span id="cb4-31"><a href="#cb4-31"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-33"><a href="#cb4-33"></a>    <span class="at">title =</span> <span class="st">"The largest changes in urban green-area share from 1990–2025"</span>,</span>
+<span id="cb4-34"><a href="#cb4-34"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, decreases were much larger: Bissau fell 63.4 percentage points, </span><span class="sc">\n</span><span class="st">while León rose 14.7 points"</span>,</span>
+<span id="cb4-35"><a href="#cb4-35"></a>    <span class="at">x =</span> <span class="st">"Share of urban area that is green (%)"</span>,</span>
+<span id="cb4-36"><a href="#cb4-36"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb4-37"><a href="#cb4-37"></a>    <span class="at">caption =</span> <span class="st">"Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a>  theme_green <span class="sc">+</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-41"><a href="#cb4-41"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-42"><a href="#cb4-42"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-43"><a href="#cb4-43"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb4-44"><a href="#cb4-44"></a>    <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-45"><a href="#cb4-45"></a>    <span class="at">strip.placement =</span> <span class="st">"outside"</span>,</span>
+<span id="cb4-46"><a href="#cb4-46"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb4-47"><a href="#cb4-47"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb4-48"><a href="#cb4-48"></a>    <span class="at">plot.caption.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb4-49"><a href="#cb4-49"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
+<span id="cb4-50"><a href="#cb4-50"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
+<span id="cb4-51"><a href="#cb4-51"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
+<span id="cb4-52"><a href="#cb4-52"></a>      <span class="at">lineheight =</span> <span class="fl">1.1</span>,</span>
+<span id="cb4-53"><a href="#cb4-53"></a>      <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb4-54"><a href="#cb4-54"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)</span>
+<span id="cb4-55"><a href="#cb4-55"></a>    )</span>
+<span id="cb4-56"><a href="#cb4-56"></a>  )</span>
+<span id="cb4-57"><a href="#cb4-57"></a></span>
+<span id="cb4-58"><a href="#cb4-58"></a>plot3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="hw03-tt_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="Arrow chart showing the four cities with the largest increases and four cities with the largest decreases in green-area share between 1990 and 2025. Decreases are substantially larger than increases, with Bissau declining 63.4 percentage points and León increasing 14.7 percentage points." width="864"></p>
@@ -1275,9 +1278,9 @@ cookieconsent.run({
 <span id="cb5-129"><a href="#cb5-129"></a>  <span class="fu">geom_text</span>(</span>
 <span id="cb5-130"><a href="#cb5-130"></a>    <span class="fu">aes</span>(</span>
 <span id="cb5-131"><a href="#cb5-131"></a>      <span class="at">x =</span> green_2025,</span>
-<span id="cb5-132"><a href="#cb5-132"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%+.1f pp"</span>, change)</span>
+<span id="cb5-132"><a href="#cb5-132"></a>      <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%+.1f%%"</span>, change)</span>
 <span id="cb5-133"><a href="#cb5-133"></a>    ),</span>
-<span id="cb5-134"><a href="#cb5-134"></a>    <span class="at">hjust =</span> <span class="fu">ifelse</span>(focus_cities<span class="sc">$</span>change <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="sc">-</span><span class="fl">0.35</span>, <span class="fl">1.35</span>),</span>
+<span id="cb5-134"><a href="#cb5-134"></a>    <span class="at">hjust =</span> <span class="fu">ifelse</span>(focus_cities<span class="sc">$</span>change <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="sc">-</span><span class="fl">0.15</span>, <span class="fl">1.15</span>),</span>
 <span id="cb5-135"><a href="#cb5-135"></a>    <span class="at">size =</span> <span class="fl">3.5</span>,</span>
 <span id="cb5-136"><a href="#cb5-136"></a>    <span class="at">fontface =</span> <span class="st">"bold"</span>,</span>
 <span id="cb5-137"><a href="#cb5-137"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
@@ -1293,43 +1296,46 @@ cookieconsent.run({
 <span id="cb5-147"><a href="#cb5-147"></a>  <span class="fu">scale_x_continuous</span>(</span>
 <span id="cb5-148"><a href="#cb5-148"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">80</span>),</span>
 <span id="cb5-149"><a href="#cb5-149"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">20</span>),</span>
-<span id="cb5-150"><a href="#cb5-150"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>)),</span>
-<span id="cb5-151"><a href="#cb5-151"></a>    <span class="at">sec.axis =</span> <span class="fu">dup_axis</span>(<span class="at">name =</span> <span class="cn">NULL</span>)</span>
-<span id="cb5-152"><a href="#cb5-152"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-153"><a href="#cb5-153"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-154"><a href="#cb5-154"></a>    <span class="at">title =</span> <span class="st">"The largest changes in urban green-area share from 1990–2025"</span>,</span>
-<span id="cb5-155"><a href="#cb5-155"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, decreases were much larger: </span><span class="sc">\n</span><span class="st">Bissau fell 63.4 points while León rose 14.7 points"</span>,</span>
-<span id="cb5-156"><a href="#cb5-156"></a>    <span class="at">x =</span> <span class="st">"Share of urban area that is green (%)"</span>,</span>
-<span id="cb5-157"><a href="#cb5-157"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb5-158"><a href="#cb5-158"></a>    <span class="at">caption =</span> <span class="st">"Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
-<span id="cb5-159"><a href="#cb5-159"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-160"><a href="#cb5-160"></a>  theme_green <span class="sc">+</span></span>
-<span id="cb5-161"><a href="#cb5-161"></a>  <span class="fu">theme</span>(</span>
-<span id="cb5-162"><a href="#cb5-162"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb5-163"><a href="#cb5-163"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb5-164"><a href="#cb5-164"></a>    <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb5-165"><a href="#cb5-165"></a>    <span class="at">strip.placement =</span> <span class="st">"outside"</span>,</span>
-<span id="cb5-166"><a href="#cb5-166"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
-<span id="cb5-167"><a href="#cb5-167"></a>    <span class="at">plot.caption.position =</span> <span class="st">"plot"</span>,</span>
-<span id="cb5-168"><a href="#cb5-168"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
-<span id="cb5-169"><a href="#cb5-169"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
-<span id="cb5-170"><a href="#cb5-170"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
-<span id="cb5-171"><a href="#cb5-171"></a>      <span class="at">lineheight =</span> <span class="fl">1.1</span>,</span>
-<span id="cb5-172"><a href="#cb5-172"></a>      <span class="at">hjust =</span> <span class="dv">0</span>,</span>
-<span id="cb5-173"><a href="#cb5-173"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)</span>
-<span id="cb5-174"><a href="#cb5-174"></a>    )</span>
-<span id="cb5-175"><a href="#cb5-175"></a>  )</span>
-<span id="cb5-176"><a href="#cb5-176"></a></span>
-<span id="cb5-177"><a href="#cb5-177"></a>plot3</span>
-<span id="cb5-178"><a href="#cb5-178"></a><span class="in">```</span></span>
+<span id="cb5-150"><a href="#cb5-150"></a>    <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">suffix =</span> <span class="st">"%"</span>),</span>
+<span id="cb5-151"><a href="#cb5-151"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>)),</span>
+<span id="cb5-152"><a href="#cb5-152"></a>    <span class="at">sec.axis =</span> <span class="fu">dup_axis</span>(<span class="at">name =</span> <span class="cn">NULL</span>)</span>
+<span id="cb5-153"><a href="#cb5-153"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-154"><a href="#cb5-154"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-155"><a href="#cb5-155"></a>    <span class="at">title =</span> <span class="st">"The largest changes in urban green-area share from 1990–2025"</span>,</span>
+<span id="cb5-156"><a href="#cb5-156"></a>    <span class="at">subtitle =</span> <span class="st">"Among the four largest changes in each direction, decreases were much larger: Bissau fell 63.4 percentage points, </span><span class="sc">\n</span><span class="st">while León rose 14.7 points"</span>,</span>
+<span id="cb5-157"><a href="#cb5-157"></a>    <span class="at">x =</span> <span class="st">"Share of urban area that is green (%)"</span>,</span>
+<span id="cb5-158"><a href="#cb5-158"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb5-159"><a href="#cb5-159"></a>    <span class="at">caption =</span> <span class="st">"Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."</span></span>
+<span id="cb5-160"><a href="#cb5-160"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-161"><a href="#cb5-161"></a>  theme_green <span class="sc">+</span></span>
+<span id="cb5-162"><a href="#cb5-162"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-163"><a href="#cb5-163"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-164"><a href="#cb5-164"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-165"><a href="#cb5-165"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb5-166"><a href="#cb5-166"></a>    <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-167"><a href="#cb5-167"></a>    <span class="at">strip.placement =</span> <span class="st">"outside"</span>,</span>
+<span id="cb5-168"><a href="#cb5-168"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb5-169"><a href="#cb5-169"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb5-170"><a href="#cb5-170"></a>    <span class="at">plot.caption.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb5-171"><a href="#cb5-171"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(</span>
+<span id="cb5-172"><a href="#cb5-172"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
+<span id="cb5-173"><a href="#cb5-173"></a>      <span class="at">color =</span> <span class="st">"gray50"</span>,</span>
+<span id="cb5-174"><a href="#cb5-174"></a>      <span class="at">lineheight =</span> <span class="fl">1.1</span>,</span>
+<span id="cb5-175"><a href="#cb5-175"></a>      <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb5-176"><a href="#cb5-176"></a>      <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)</span>
+<span id="cb5-177"><a href="#cb5-177"></a>    )</span>
+<span id="cb5-178"><a href="#cb5-178"></a>  )</span>
 <span id="cb5-179"><a href="#cb5-179"></a></span>
-<span id="cb5-180"><a href="#cb5-180"></a>Across these cases, we see that the largest decreases are greater than the largest increases. Bissau has declined by 63.4 percentage points, with the other cities decreasing by roughly 38-41 percentage points. The four largest increases, however, range from roughly 12-15 percentage points.</span>
-<span id="cb5-181"><a href="#cb5-181"></a></span>
-<span id="cb5-182"><a href="#cb5-182"></a><span class="fu">### Final takeaways</span></span>
-<span id="cb5-183"><a href="#cb5-183"></a></span>
-<span id="cb5-184"><a href="#cb5-184"></a><span class="ss">- </span>Urban green-area shares generally shifted downward between 1990 and 2025. The median and the upper end decreased over time, and also consistently in the intervening periods.</span>
-<span id="cb5-185"><a href="#cb5-185"></a><span class="ss">- </span>Several individual cities also showed lower shares in 2025 than in 1990, showing that the observation stands on multiple levels.</span>
-<span id="cb5-186"><a href="#cb5-186"></a><span class="ss">- </span>The largest decreases were significantly bigger than the largest increases, at 63.4 percentage points (for Bissau) and 14.7 percentage points (for León), respectively.</span>
+<span id="cb5-180"><a href="#cb5-180"></a>plot3</span>
+<span id="cb5-181"><a href="#cb5-181"></a><span class="in">```</span></span>
+<span id="cb5-182"><a href="#cb5-182"></a></span>
+<span id="cb5-183"><a href="#cb5-183"></a>Across these cases, we see that the largest decreases are greater than the largest increases. Bissau has declined by 63.4 percentage points, with the other cities decreasing by roughly 38-41 percentage points. The four largest increases, however, range from roughly 12-15 percentage points.</span>
+<span id="cb5-184"><a href="#cb5-184"></a></span>
+<span id="cb5-185"><a href="#cb5-185"></a><span class="fu">### Final takeaways</span></span>
+<span id="cb5-186"><a href="#cb5-186"></a></span>
+<span id="cb5-187"><a href="#cb5-187"></a><span class="ss">- </span>Urban green-area shares generally shifted downward between 1990 and 2025. The median and the upper end decreased over time, and also consistently in the intervening periods.</span>
+<span id="cb5-188"><a href="#cb5-188"></a><span class="ss">- </span>Several individual cities also showed lower shares in 2025 than in 1990, showing that the observation stands on multiple levels.</span>
+<span id="cb5-189"><a href="#cb5-189"></a><span class="ss">- </span>The largest decreases were significantly bigger than the largest increases, at 63.4 percentage points (for Bissau) and 14.7 percentage points (for León), respectively.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
