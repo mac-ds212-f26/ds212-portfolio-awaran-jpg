@@ -60,9 +60,9 @@ In R, `for` loops have the following general structure:
 ```{r for_syntax}
 #| eval: false
 
-for (i in some_vector) {
+ # for (i in some_vector) {
     # Code to do stuff based on i
-}
+ # }
 ```
 
 `some_vector` can be **any** vector, including:
@@ -433,7 +433,7 @@ Use `crossing()` to create the data frame of argument combinations for our analy
 
 ```{r}
 df_arg_combos <- crossing(
-  formula_obj = c(price ~ carat, price ~ carat + cut, price ~ carat + cut + clarity, price ~ carat + cut + clarity + color),
+  mod_formula = c(price ~ carat, price ~ carat + cut, price ~ carat + cut + clarity, price ~ carat + cut + clarity + color),
   remove_outliers = c(TRUE, FALSE)
 )
 
@@ -450,7 +450,7 @@ Write a function called `remove_outliers` that removes outliers in a dataset. Th
 remove_outliers <- function(data, what_var, sd_thresh) {
   data %>%
     mutate(zscore = ({{ what_var }} - mean({{ what_var }}, na.rm = TRUE))/sd({{ what_var }}, na.rm = TRUE)) %>%
-    filter(zscore <= sd_thresh)
+    filter(abs(zscore) <= sd_thresh)
 }
 
 remove_outliers(diamonds, what_var = carat, sd_thresh = 3)
@@ -471,7 +471,7 @@ fit_model <- function(data, mod_formula, remove_outliers) {
     cleaned_data <- data
   }
     # Use mod_formula as the first argument of lm()
-  lm(mod_formula, data = data_clean)
+  lm(mod_formula, data = cleaned_data)
 }
 ```
 
@@ -497,8 +497,10 @@ save_models <- vector(mode = "list", length = nrow(df_arg_combos))
 for (i in seq_along(save_models)) {
   mod_formula_extract <- df_arg_combos$mod_formula[[i]]
   remove_outliers_extract <- df_arg_combos$remove_outliers[i]
-  save_models[[i]] <- fit_models(
-    
+  save_models[[i]] <- fit_model(
+    data = diamonds,
+    mod_formula = mod_formula_extract,
+    remove_outliers = remove_outliers_extract
   )
 }
 

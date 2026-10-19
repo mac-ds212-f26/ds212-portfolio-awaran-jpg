@@ -121,9 +121,9 @@ plot3 <- ggplot(focus_cities, aes(y = city_label)) +
   geom_text(
     aes(
       x = green_2025,
-      label = sprintf("%+.1f pp", change)
+      label = sprintf("%+.1f%%", change)
     ),
-    hjust = ifelse(focus_cities$change > 0, -0.35, 1.35),
+    hjust = ifelse(focus_cities$change > 0, -0.15, 1.15),
     size = 3.5,
     fontface = "bold",
     color = "black"
@@ -139,12 +139,13 @@ plot3 <- ggplot(focus_cities, aes(y = city_label)) +
   scale_x_continuous(
     limits = c(0, 80),
     breaks = seq(0, 80, 20),
+    labels = scales::label_number(suffix = "%"),
     expand = expansion(mult = c(0, 0.05)),
     sec.axis = dup_axis(name = NULL)
   ) +
   labs(
     title = "The largest changes in urban green-area share from 1990–2025",
-    subtitle = "Among the four largest changes in each direction, decreases were much larger: \nBissau fell 63.4 points while León rose 14.7 points",
+    subtitle = "Among the four largest changes in each direction, decreases were much larger: Bissau fell 63.4 percentage points, \nwhile León rose 14.7 points",
     x = "Share of urban area that is green (%)",
     y = NULL,
     caption = "Data from UN-Habitat Urban Indicators Database via TidyTuesday (9/22/2026). By: Arun Waran."
@@ -152,10 +153,12 @@ plot3 <- ggplot(focus_cities, aes(y = city_label)) +
   theme_green +
   theme(
     panel.grid.major.y = element_blank(),
+    axis.ticks.y = element_blank(),
     strip.text = element_text(face = "bold", hjust = 0),
     strip.background = element_blank(),
     strip.placement = "outside",
     plot.title.position = "plot",
+    plot.title = element_text(face = "bold"),
     plot.caption.position = "plot",
     plot.caption = element_text(
       size = 8,
