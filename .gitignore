@@ -70,3 +70,8 @@ _freeze/
 *.log
 *.aux
 *.toc
+ica/census_api_key.txt
+ica/nyt_api_key.txt
+01_observed.png
+02_overlap.png
+03_both.png
