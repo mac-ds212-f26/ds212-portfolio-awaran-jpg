@@ -381,7 +381,7 @@ We can use the `httr2` package to build up a full URL from its parts:
 ```{r httr2_nyt}
 #| eval: false
 
-req <- request("http://api.nytimes.com") |>
+req <- request("https://api.nytimes.com") |>
     req_url_path_append("svc") |>
     req_url_path_append("search") |>
     req_url_path_append("v2") |>
