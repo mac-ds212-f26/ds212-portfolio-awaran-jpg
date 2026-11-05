@@ -364,6 +364,11 @@ cookieconsent.run({
   <a href="../tt/hw03-tt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Homework 03</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tt/hw06-tt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Homework 06</span></a>
+  </div>
+</li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -681,8 +686,8 @@ cookieconsent.run({
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">str_view</span>(string1, <span class="at">html =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="str_view html-widget html-fill-item" id="htmlwidget-592de2b2654136e86e6b" style="width:960px;height:100%;"></div>
-<script type="application/json" data-for="htmlwidget-592de2b2654136e86e6b">{"x":{"html":"<ul>\n  <li><pre>Record temp:<span class='special'>\t<\/span>102<\/pre><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div class="str_view html-widget html-fill-item" id="htmlwidget-d6622ad5d0fabd7f726c" style="width:960px;height:100%;"></div>
+<script type="application/json" data-for="htmlwidget-d6622ad5d0fabd7f726c">{"x":{"html":"<ul>\n  <li><pre>Record temp:<span class='special'>\t<\/span>102<\/pre><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section id="combine" class="level3"><h3 class="anchored" data-anchor-id="combine">Combine</h3>
@@ -859,32 +864,32 @@ cookieconsent.run({
 <span id="cb60-2"><a href="#cb60-2"></a><span class="fu">data</span>(fruit)</span>
 <span id="cb60-3"><a href="#cb60-3"></a><span class="fu">sample</span>(fruit, <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code> [1] "grape"        "cloudberry"   "cucumber"     "elderberry"   "blueberry"   
- [6] "blood orange" "pineapple"    "loquat"       "plum"         "avocado"     </code></pre>
+<pre><code> [1] "blackcurrant" "olive"        "kiwi fruit"   "chili pepper" "grapefruit"  
+ [6] "ugli fruit"   "blood orange" "star fruit"   "pineapple"    "gooseberry"  </code></pre>
 </div>
 </div>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="fu">data</span>(words)</span>
 <span id="cb62-2"><a href="#cb62-2"></a><span class="fu">sample</span>(words, <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code> [1] "have"    "pass"    "when"    "always"  "stand"   "perfect" "visit"  
- [8] "tuesday" "black"   "office" </code></pre>
+<pre><code> [1] "either"    "ground"    "like"      "advertise" "tea"       "short"    
+ [7] "agent"     "cold"      "instead"   "achieve"  </code></pre>
 </div>
 </div>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="fu">data</span>(sentences)</span>
 <span id="cb64-2"><a href="#cb64-2"></a><span class="fu">sample</span>(sentences, <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code> [1] "Pitch the straw through the door of the stable."
- [2] "The gloss on top made it unfit to read."        
- [3] "Watch the log float in the wide river."         
- [4] "Hold the hammer near the end to drive the nail."
- [5] "Write a fond note to the friend you cherish."   
- [6] "Bathe and relax in the cool green grass."       
- [7] "A gem in the rough needs work to polish."       
- [8] "Clothes and lodging are free to new men."       
- [9] "Crack the walnut with your sharp side teeth."   
-[10] "The soft cushion broke the man's fall."         </code></pre>
+<pre><code> [1] "The couch cover and hall drapes were blue."        
+ [2] "The lake sparkled in the red hot sun."             
+ [3] "These pills do less good than others."             
+ [4] "They floated on the raft to sun their white backs."
+ [5] "A blue crane is a tall wading bird."               
+ [6] "The pleasant hours fly by much too soon."          
+ [7] "The lamp shone with a steady green flame."         
+ [8] "He carved a head from the round block of marble."  
+ [9] "Oak is strong and also gives shade."               
+[10] "Read verse out loud for pleasure."                 </code></pre>
 </div>
 </div>
 <p>We can use <code>str_view()</code> with the <code>pattern</code> argument to see what parts of a string match the regex supplied in the <code>pattern</code> argument. (Matches are enclosed in <code>&lt;&gt;</code>.)</p>
@@ -1087,7 +1092,7 @@ cookieconsent.run({
   ..   letterId = col_double(),
   ..   question_only = col_character()
   .. )
- - attr(*, "problems")=&lt;pointer: 0x748f643f0&gt; </code></pre>
+ - attr(*, "problems")=&lt;pointer: 0xc82ce72b0&gt; </code></pre>
 </div>
 </div>
 <p>Take a couple minutes to scroll through the <a href="https://pudding.cool/2018/11/dearabby/">30 Years of American Anxieties</a> article to get ideas for themes that you might want to search for using regular expressions.</p>
