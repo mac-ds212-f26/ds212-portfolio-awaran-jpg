@@ -1,0 +1,238 @@
+---
+title: "Homework 06"
+author: "Arun Waran"
+---
+
+### Background
+
+The TidyTuesday data I will investigate contains 178 Swedish geographic locations whose names match IKEA sofa or armchair names, alongside 15,393 furniture listings from 50 international markets. The listings include product names, article numbers, and prices converted into US dollars.
+
+These datasets allow for observation of both the Sweden-specific geography associated with furniture names, and differences in international availability and pricing.
+
+### Research question
+
+What kinds of Swedish places share names with IKEA furniture, and how do the availability and prices of that furniture vary across countries?
+
+### Analysis
+
+```{r}
+library(tidyverse)
+
+ikea_places <- read_csv(
+  "https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-10-27/ikea_places.csv"
+)
+
+ikea_seating <- read_csv(
+  "https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-10-27/ikea_seating.csv",
+  col_types = cols(item_no = col_character())
+)
+
+# Group less common geographic feature types
+place_types <- ikea_places %>%
+  count(place_type, sort = TRUE) %>%
+  mutate(type = if_else(
+    row_number() <= 7,
+    str_to_sentence(str_replace_all(place_type, "_", " ")),
+    "Other"
+  )) %>%
+  group_by(type) %>%
+  summarise(n = sum(n), .groups = "drop") %>%
+  mutate(type = fct_reorder(type, n))
+
+# Number of countries carrying each furniture name
+name_reach <- ikea_seating %>%
+  drop_na(name) %>%
+  distinct(name, country) %>%
+  count(name, name = "markets")
+
+# Keep one observation per country and article; exclude conflicting prices
+prices <- ikea_seating %>%
+  distinct(country, item_no, price_usd) %>%
+  group_by(country, item_no) %>%
+  filter(n() == 1) %>%
+  ungroup()
+
+sweden_prices <- prices %>%
+  filter(country == "se") %>%
+  select(item_no, sweden_price = price_usd)
+
+price_comparison <- prices %>%
+  inner_join(sweden_prices, by = "item_no") %>%
+  filter(country != "se") %>%
+  mutate(ratio = price_usd / sweden_price) %>%
+  group_by(country) %>%
+  summarise(
+    n = n(),
+    median_ratio = median(ratio),
+    q1 = quantile(ratio, 0.25),
+    q3 = quantile(ratio, 0.75),
+    .groups = "drop"
+  )
+
+focus_prices <- bind_rows(
+  price_comparison %>% slice_min(median_ratio, n = 4, with_ties = FALSE),
+  price_comparison %>% slice_max(median_ratio, n = 4, with_ties = FALSE)
+) %>%
+  mutate(
+    country = recode(
+      country,
+      th = "Thailand", jp = "Japan", ph = "Philippines", kr = "South Korea",
+      us = "United States", il = "Israel", ma = "Morocco", mx = "Mexico"
+    ),
+    country_label = paste0(country, " (n = ", n, ")"),
+    country_label = fct_reorder(country_label, median_ratio),
+    direction = if_else(median_ratio < 1, "Below Sweden", "Above Sweden")
+  )
+
+theme_ikea <- theme_bw(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.caption = element_text(
+      size = 8,
+      color = "gray50",
+      lineheight = 1.1,
+      margin = margin(t = 15)
+    )
+  )
+
+```
+
+First, we will examine the Swedish geographic locations which share names with the IKEA furniture.
+
+```{r}
+
+#| fig-alt: "Horizontal bar chart of Swedish geographic locations matching IKEA furniture names. Hamlets account for 84 records, isolated dwellings for 37, and villages for 13."
+
+plot1 <- ggplot(place_types, aes(x = n, y = type)) +
+  geom_col(fill = "#0072B2", width = 0.65) +
+  geom_text(aes(label = n), hjust = -0.15, size = 3.8) +
+  scale_x_continuous(
+    limits = c(0, 100), breaks = seq(0, 100, 20),
+    expand = expansion(mult = c(0, 0))
+  ) +
+  labs(
+    title = "Most IKEA furniture namesakes are small settlements",
+    subtitle = "Hamlets, isolated dwellings, and villages account for most of the locations",
+    x = "Number of geographic locations",
+    y = NULL,
+    caption = "Data from IKEA Swedish Places via TidyTuesday (10/27/2026). By: Arun Waran."
+  ) +
+  theme_ikea +
+  theme(
+    panel.grid.major.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank()
+  )
+
+plot1
+
+```
+
+Hamlets are the largest category and account for 84 of the 178 locations. 37 are isolated dwellings and 13 are villages. Together they represent three-quarters of the matches.
+
+Of course, this furniture is sold around the world. However, the number of countries carrying each type varies quite a bit. We can next investigate how widely each furniture name is distributed across the countries in the dataset.
+
+```{r}
+#| fig-alt: "Histogram of the number of countries carrying each of 109 IKEA furniture names. Thirty-one names appear in 1 to 5 markets, and 47 appear in 46 to 50 markets."
+
+plot2 <- ggplot(name_reach, aes(x = markets)) +
+  geom_histogram(
+    binwidth = 5, boundary = 0, closed = "right",
+    fill = "#0072B2", color = "white", linewidth = 0.5
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, 50, 10),
+    expand = expansion(mult = c(0, 0.01))
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 50, 10),
+    expand = expansion(mult = c(0, 0.06))
+  ) +
+  labs(
+    title = "IKEA furniture names have very different international reach",
+    subtitle = "31 names appear in 1–5 countries, while 47 appear in 46–50",
+    x = "Number of countries carrying a furniture name",
+    y = "Number of furniture names",
+    caption = "Data from IKEA Seating via TidyTuesday (10/27/2026). By: Arun Waran"
+  ) +
+  theme_ikea +
+  theme(panel.grid.major.x = element_blank())
+
+plot2
+
+```
+
+The distribution here is concentrated near the extremes. Of the 109 furniture names, 31 are found in five or fewer countries, whereas 47 appear in at least 46. So, IKEA has a set of products that are quite widely distributed, and others with much more limited availability.
+
+International availability does not mean the prices will be similar. We can match identical article numbers sold both in Sweden and abroad to investigate this. The following plot shows the four countries with the lowest median price ratios and the four with the highest, relative to Sweden.
+
+```{r}
+#| fig-alt: "Horizontal interval-and-dot plot of the four lowest and four highest median prices for identical IKEA articles relative to Sweden. Thailand, Japan, the Philippines, and South Korea have medians between 73 and 82 percent of Swedish prices. The United States, Israel, Morocco, and Mexico have medians between 136 and 164 percent. Intervals show the middle 50 percent of article-level ratios."
+
+plot3 <- ggplot(focus_prices, aes(y = country_label)) +
+  geom_vline(
+    xintercept = 1, linetype = "dashed",
+    color = "gray45", linewidth = 0.8
+  ) +
+  geom_segment(
+    aes(x = q1, xend = q3, yend = country_label),
+    color = "gray75", linewidth = 4, lineend = "round"
+  ) +
+  geom_point(
+    aes(x = median_ratio, color = direction), size = 4
+  ) +
+  geom_text(
+    aes(
+      x = if_else(median_ratio < 1, q1 - 0.04, q3 + 0.04),
+      label = scales::percent(median_ratio, accuracy = 1),
+      hjust = if_else(median_ratio < 1, 1, 0)
+    ),
+    size = 3.7, fontface = "bold"
+  ) +
+  scale_color_manual(
+    values = c("Below Sweden" = "#0072B2", "Above Sweden" = "#D55E00"),
+    guide = "none"
+  ) +
+  scale_x_continuous(
+    limits = c(0.45, 2.2),
+    breaks = seq(0.5, 2, 0.25),
+    labels = scales::label_percent(accuracy = 1),
+    expand = expansion(mult = c(0, 0))
+  ) +
+  labs(
+    title = "Matching IKEA articles show large international price gaps",
+    subtitle = "Median prices range from 73% of Swedish prices in Thailand to 164% in Mexico",
+    x = "Price relative to Sweden",
+    y = NULL,
+    caption = paste(
+      "Sweden = 100%. n indicates the number of matched articles in each country.",
+      "Dots show the medians, and gray bars show the IQR of the ratios.",
+      "Data from IKEA Seating via TidyTuesday (10/27/2026). By: Arun Waran.",
+      sep = "\n"
+    )
+  ) +
+  
+  theme_ikea +
+  theme(
+    panel.grid.major.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank(),
+    plot.title = element_text(face = "bold"),
+    plot.title.position = "plot",
+    plot.caption.position = "plot"
+  )
+
+
+plot3
+
+```
+
+We see substantial differences in prices for identical articles. Thailand has the lowest median price ratio, with 73% of those in Sweden, while Mexico has the highest at 164%. We also see considerable variation across individual products within countries. These differences could reflect taxes, shipping costs, or local market conditions.
+
+# Final takeaways
+
+> Most of the Swedish locations for IKEA furniture names are small settlements, as they account for about three quarters of those recorded.
+
+> International availability varies substantially across furniture. Of the 109 names, 31 appear in five or fewer countries, while 47 appear in at least 46 countries.
+
+> Prices differ considerably across international markets, even for identical articles. Thailand has the lowest median price ratio when compared to Sweden at 73%, compared to Mexico at 164%.
