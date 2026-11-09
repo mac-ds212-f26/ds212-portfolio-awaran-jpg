@@ -69,6 +69,7 @@ price_comparison <- prices %>%
     .groups = "drop"
   )
 
+
 focus_prices <- bind_rows(
   price_comparison %>% slice_min(median_ratio, n = 4, with_ties = FALSE),
   price_comparison %>% slice_max(median_ratio, n = 4, with_ties = FALSE)
@@ -79,10 +80,10 @@ focus_prices <- bind_rows(
       th = "Thailand", jp = "Japan", ph = "Philippines", kr = "South Korea",
       us = "United States", il = "Israel", ma = "Morocco", mx = "Mexico"
     ),
-    country_label = paste0(country, " (n = ", n, ")"),
-    country_label = fct_reorder(country_label, median_ratio),
+    country_label = fct_reorder(country, median_ratio),
     direction = if_else(median_ratio < 1, "Below Sweden", "Above Sweden")
   )
+
 
 theme_ikea <- theme_bw(base_size = 12) +
   theme(
@@ -167,6 +168,8 @@ The distribution here is concentrated near the extremes. Of the 109 furniture na
 International availability does not mean the prices will be similar. We can match identical article numbers sold both in Sweden and abroad to investigate this. The following plot shows the four countries with the lowest median price ratios and the four with the highest, relative to Sweden.
 
 ```{r}
+#| fig-width: 9
+#| fig-height: 7
 #| fig-alt: "Horizontal interval-and-dot plot of the four lowest and four highest median prices for identical IKEA articles relative to Sweden. Thailand, Japan, the Philippines, and South Korea have medians between 73 and 82 percent of Swedish prices. The United States, Israel, Morocco, and Mexico have medians between 136 and 164 percent. Intervals show the middle 50 percent of article-level ratios."
 
 plot3 <- ggplot(focus_prices, aes(y = country_label)) +
@@ -183,14 +186,39 @@ plot3 <- ggplot(focus_prices, aes(y = country_label)) +
   ) +
   geom_text(
     aes(
-      x = if_else(median_ratio < 1, q1 - 0.04, q3 + 0.04),
-      label = scales::percent(median_ratio, accuracy = 1),
-      hjust = if_else(median_ratio < 1, 1, 0)
+      x = median_ratio,
+      label = round(median_ratio * 100),
+      color = direction
     ),
-    size = 3.7, fontface = "bold"
+    nudge_y = 0.14,
+    vjust = 0,
+    size = 3.7,
+    fontface = "bold",
+    show.legend = FALSE
+  ) +
+  geom_text(
+    aes(
+      x = q1,
+      label = round(q1 * 100)
+    ),
+    hjust = 1.45,
+    size = 2.8,
+    color = "gray30"
+  ) +
+  geom_text(
+    aes(
+      x = q3,
+      label = round(q3 * 100)
+    ),
+    hjust = -0.45,
+    size = 2.8,
+    color = "gray30"
   ) +
   scale_color_manual(
-    values = c("Below Sweden" = "#0072B2", "Above Sweden" = "#D55E00"),
+    values = c(
+      "Below Sweden" = "#0072B2",
+      "Above Sweden" = "#D55E00"
+    ),
     guide = "none"
   ) +
   scale_x_continuous(
@@ -201,17 +229,15 @@ plot3 <- ggplot(focus_prices, aes(y = country_label)) +
   ) +
   labs(
     title = "Matching IKEA articles show large international price gaps",
-    subtitle = "Median prices range from 73% of Swedish prices in Thailand to 164% in Mexico",
+    subtitle = "Dot-and-range plot of the four lowest and four highest median price ratios",
     x = "Price relative to Sweden",
     y = NULL,
     caption = paste(
-      "Sweden = 100%. n indicates the number of matched articles in each country.",
-      "Dots show the medians, and gray bars show the IQR of the ratios.",
-      "Data from IKEA Seating via TidyTuesday (10/27/2026). By: Arun Waran.",
+      "Gray bars show the middle 50% of price ratios; Sweden = 100%.",
+      "Source: IKEA Seating via TidyTuesday (10/27/2026). By: Arun Waran.",
       sep = "\n"
     )
   ) +
-  
   theme_ikea +
   theme(
     panel.grid.major.y = element_blank(),
@@ -219,11 +245,12 @@ plot3 <- ggplot(focus_prices, aes(y = country_label)) +
     panel.border = element_blank(),
     plot.title = element_text(face = "bold"),
     plot.title.position = "plot",
-    plot.caption.position = "plot"
+    plot.caption.position = "plot",
+    plot.caption = element_text(hjust = 0)
   )
 
-
 plot3
+
 
 ```
 

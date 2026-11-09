@@ -13,7 +13,6 @@ By the end of this lesson, you should be able to:
 
 
 ```{r setup_15}
-#| message: false
 
 library(tidyverse)
 library(rvest)
@@ -136,16 +135,12 @@ Repeat the process above to find the correct selectors for the following fields.
 Now that we have identified CSS selectors for the information we need, let's fetch the data using the `rvest` package.
 
 ```{r read_html}
-
-nih <- read_html("https://www.nih.gov/news-events/news-releases")
+nih <- read_html("nihsource.html")
 ```
 
 Once the webpage is loaded, we can retrieve data using the CSS selectors we specified earlier. The following code retrieves the article titles:
 
 ```{r html_elements_text}
-#| eval: false
-
-
 # Retrieve and inspect article titles
 article_titles <- nih |>
     html_elements(".thumbnail-teaser__heading") |>
@@ -182,8 +177,61 @@ Notes:
 - If the website has `Crawl-delay: x` in its `robots.txt`, include `Sys.sleep(x)` in your function to respect that.
 - Recall that `bind_rows()` from `dplyr` and `list_rbind()` from `purrr` takes a list of data frames and stacks them on top of each other.
 
-```{r}
 
+```{r}
+scrape_page <- function(url) {
+  Sys.sleep(1)
+
+  page <- read_html(url)
+  articles <- page |> html_elements(".thumbnail-teaser")
+
+  if (length(articles) == 0) {
+    stop("No news releases found at: ", url)
+  }
+
+  titles <- articles |>
+    html_element(".thumbnail-teaser__heading") |>
+    html_text2() |>
+    str_squish()
+
+  text <- articles |>
+    html_text2() |>
+    str_squish()
+
+  date_pattern <- paste0(
+    "(January|February|March|April|May|June|July|",
+    "August|September|October|November|December)",
+    " [0-9]{1,2}, [0-9]{4}"
+  )
+
+  dates <- str_extract(text, date_pattern)
+
+  abstracts <- text |>
+    str_remove(fixed(titles)) |>
+    str_remove(date_pattern) |>
+    str_remove("^\\s*[—–-]\\s*") |>
+    str_squish()
+
+  tibble(
+    title = titles,
+    date = dates,
+    abstract = abstracts
+  )
+}
+
+# Code is not working and so has been commented out
+
+# base_url <- "https://www.nih.gov/news-events/news-releases"
+# 
+# pages <- map(0:4, function(i) {
+#   url <- if (i == 0) base_url else str_c(base_url, "?page=", i)
+#   scrape_page(url)
+# })
+# 
+# df_articles <- bind_rows(pages)
+# 
+# head(df_articles)
+# nrow(df_articles)
 ```
 
 

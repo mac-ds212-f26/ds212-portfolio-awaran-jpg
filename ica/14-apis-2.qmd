@@ -313,13 +313,14 @@ resp |> xml_find_all("item/name") |> xml_attr("type")
 Get the board game name (e.g., "Murder Mystery..." and  "Robinson Crusoe")
 
 ```{r}
-req <- request("https://boardgamegeek.com/xmlapi2") %>%
-    req_url_path_append("search") |>
-    req_url_query(query = I("mystery+curse"), type = I("boardgame,boardgameaccessory,boardgameexpansion"))
+# Unable to get API key when doing the assignment
+# req <- request("https://boardgamegeek.com/xmlapi2") %>%
+    # req_url_path_append("search") |>
+    # req_url_query(query = I("mystery+curse"), type = I("boardgame,boardgameaccessory,boardgameexpansion"))
 
-resp <- req_perform(req)  %>% resp_body_xml()
+# resp <- req_perform(req)  %>% resp_body_xml()
 
-resp |> xml_find_all("item/name") %>% xml_attr("value")
+# resp |> xml_find_all("item/name") %>% xml_attr("value")
 ```
 
 
@@ -328,6 +329,7 @@ resp |> xml_find_all("item/name") %>% xml_attr("value")
 Get the board game ID number (e.g., 63495, 40175)
 
 ```{r}
+#| eval: false
 resp %>% xml_find_all("item") %>% xml_attr("id")
 ```
 
@@ -423,7 +425,7 @@ We can use `req_perform()` to send out the request and `resp_body_json()` to par
 ```{r nyt_responses}
 #| eval: false
 
-resp_pt <- req_pt |> req_perform() |> resp_body_json(simplifyVector = TRUE)
+# resp_pt <- req_pt |> req_perform() |> resp_body_json(simplifyVector = TRUE)
 ```
 
 
@@ -488,6 +490,7 @@ In the `resp_pt` object, retrieve the data associated with:
 - the abstracts and leading paragraphs of the articles found in the search
 
 ```{r}
+#| eval: false
 resp_pt$copyright
 resp_pt$response$meta$hits
 
