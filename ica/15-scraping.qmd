@@ -165,6 +165,7 @@ Consult with your peers and compare plans.
 Write a few observations about your comfort/confidence in this planning exercise. As you proceed through the implementation of this plan in the next steps, make notes about any places you struggled, were uncertain, or benefited from peer input.
 :::
 
+> Learning about sys.sleep was good, I think it will have uses in the upcoming HW/project milestones possibly. I am unsure about the use of regex to pull stuff.
 
 ## ✏️ Scrape Pages
 
