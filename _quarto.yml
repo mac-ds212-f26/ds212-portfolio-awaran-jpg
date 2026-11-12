@@ -91,6 +91,7 @@ book:
       - ica/14-apis-2.qmd
       - ica/15-scraping.qmd
       - ica/16-databases.qmd
+      - ica/18-interactive-viz.qmd
 
     - part: "Extras"
       chapters:
