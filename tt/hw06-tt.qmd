@@ -234,7 +234,7 @@ plot3 <- ggplot(focus_prices, aes(y = country_label)) +
     y = NULL,
     caption = paste(
       "Gray bars show the middle 50% of price ratios; Sweden = 100%.",
-      "Source: IKEA Seating via TidyTuesday (10/27/2026). By: Arun Waran.",
+      "Data from IKEA Seating via TidyTuesday (10/27/2026). By: Arun Waran.",
       sep = "\n"
     )
   ) +
