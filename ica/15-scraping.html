@@ -367,6 +367,11 @@ cookieconsent.run({
   <a href="../tt/hw06-tt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Homework 06</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tt/hw07-tt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Homework 07</span></a>
+  </div>
+</li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -702,6 +707,9 @@ cookieconsent.run({
 <p>Write a few observations about your comfort/confidence in this planning exercise. As you proceed through the implementation of this plan in the next steps, make notes about any places you struggled, were uncertain, or benefited from peer input.</p>
 </div>
 </div>
+<blockquote class="blockquote">
+<p>Learning about sys.sleep was good, I think it will have uses in the upcoming HW/project milestones possibly. I am unsure about the use of regex to pull stuff.</p>
+</blockquote>
 </section><section id="scrape-pages" class="level2"><h2 class="anchored" data-anchor-id="scrape-pages">✏️ Scrape Pages</h2>
 <p>Carry out your plan to get the article title, publication date, and abstract text for the first 5 pages of news releases in a single data frame. You will need to write at least one function, and you will need iteration–Start with an appropriate <code>map()</code> function from <code>purrr</code>. If you have time, also try to use a <code>for</code> loop instead.</p>
 <p>Notes:</p>
@@ -1434,94 +1442,95 @@ cookieconsent.run({
 <span id="cb7-165"><a href="#cb7-165"></a>Write a few observations about your comfort/confidence in this planning exercise. As you proceed through the implementation of this plan in the next steps, make notes about any places you struggled, were uncertain, or benefited from peer input.</span>
 <span id="cb7-166"><a href="#cb7-166"></a>:::</span>
 <span id="cb7-167"><a href="#cb7-167"></a></span>
-<span id="cb7-168"><a href="#cb7-168"></a></span>
-<span id="cb7-169"><a href="#cb7-169"></a><span class="fu">## ✏️ Scrape Pages</span></span>
-<span id="cb7-170"><a href="#cb7-170"></a></span>
-<span id="cb7-171"><a href="#cb7-171"></a>Carry out your plan to get the article title, publication date, and abstract text for the first 5 pages of news releases in a single data frame. You will need to write at least one function, and you will need iteration--Start with an appropriate <span class="in">`map()`</span> function from <span class="in">`purrr`</span>. If you have time, also try to use a <span class="in">`for`</span> loop instead.</span>
-<span id="cb7-172"><a href="#cb7-172"></a></span>
-<span id="cb7-173"><a href="#cb7-173"></a>Notes:</span>
-<span id="cb7-174"><a href="#cb7-174"></a></span>
-<span id="cb7-175"><a href="#cb7-175"></a><span class="ss">- </span>Mouse over the page buttons at the very bottom of the news home page to see what the URLs look like.</span>
-<span id="cb7-176"><a href="#cb7-176"></a><span class="ss">- </span>The abstract should not have the publication date--use <span class="in">`stringr`</span> and regular expressions to remove the publication date.</span>
-<span id="cb7-177"><a href="#cb7-177"></a><span class="ss">- </span>If the website has <span class="in">`Crawl-delay: x`</span> in its <span class="in">`robots.txt`</span>, include <span class="in">`Sys.sleep(x)`</span> in your function to respect that.</span>
-<span id="cb7-178"><a href="#cb7-178"></a><span class="ss">- </span>Recall that <span class="in">`bind_rows()`</span> from <span class="in">`dplyr`</span> and <span class="in">`list_rbind()`</span> from <span class="in">`purrr`</span> takes a list of data frames and stacks them on top of each other.</span>
-<span id="cb7-179"><a href="#cb7-179"></a></span>
+<span id="cb7-168"><a href="#cb7-168"></a><span class="at">&gt; Learning about sys.sleep was good, I think it will have uses in the upcoming HW/project milestones possibly. I am unsure about the use of regex to pull stuff.</span></span>
+<span id="cb7-169"><a href="#cb7-169"></a></span>
+<span id="cb7-170"><a href="#cb7-170"></a><span class="fu">## ✏️ Scrape Pages</span></span>
+<span id="cb7-171"><a href="#cb7-171"></a></span>
+<span id="cb7-172"><a href="#cb7-172"></a>Carry out your plan to get the article title, publication date, and abstract text for the first 5 pages of news releases in a single data frame. You will need to write at least one function, and you will need iteration--Start with an appropriate <span class="in">`map()`</span> function from <span class="in">`purrr`</span>. If you have time, also try to use a <span class="in">`for`</span> loop instead.</span>
+<span id="cb7-173"><a href="#cb7-173"></a></span>
+<span id="cb7-174"><a href="#cb7-174"></a>Notes:</span>
+<span id="cb7-175"><a href="#cb7-175"></a></span>
+<span id="cb7-176"><a href="#cb7-176"></a><span class="ss">- </span>Mouse over the page buttons at the very bottom of the news home page to see what the URLs look like.</span>
+<span id="cb7-177"><a href="#cb7-177"></a><span class="ss">- </span>The abstract should not have the publication date--use <span class="in">`stringr`</span> and regular expressions to remove the publication date.</span>
+<span id="cb7-178"><a href="#cb7-178"></a><span class="ss">- </span>If the website has <span class="in">`Crawl-delay: x`</span> in its <span class="in">`robots.txt`</span>, include <span class="in">`Sys.sleep(x)`</span> in your function to respect that.</span>
+<span id="cb7-179"><a href="#cb7-179"></a><span class="ss">- </span>Recall that <span class="in">`bind_rows()`</span> from <span class="in">`dplyr`</span> and <span class="in">`list_rbind()`</span> from <span class="in">`purrr`</span> takes a list of data frames and stacks them on top of each other.</span>
 <span id="cb7-180"><a href="#cb7-180"></a></span>
-<span id="cb7-183"><a href="#cb7-183"></a><span class="in">```{r}</span></span>
-<span id="cb7-184"><a href="#cb7-184"></a>scrape_page <span class="ot">&lt;-</span> <span class="cf">function</span>(url) {</span>
-<span id="cb7-185"><a href="#cb7-185"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb7-186"><a href="#cb7-186"></a></span>
-<span id="cb7-187"><a href="#cb7-187"></a>  page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
-<span id="cb7-188"><a href="#cb7-188"></a>  articles <span class="ot">&lt;-</span> page <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">".thumbnail-teaser"</span>)</span>
-<span id="cb7-189"><a href="#cb7-189"></a></span>
-<span id="cb7-190"><a href="#cb7-190"></a>  <span class="cf">if</span> (<span class="fu">length</span>(articles) <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb7-191"><a href="#cb7-191"></a>    <span class="fu">stop</span>(<span class="st">"No news releases found at: "</span>, url)</span>
-<span id="cb7-192"><a href="#cb7-192"></a>  }</span>
-<span id="cb7-193"><a href="#cb7-193"></a></span>
-<span id="cb7-194"><a href="#cb7-194"></a>  titles <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span></span>
-<span id="cb7-195"><a href="#cb7-195"></a>    <span class="fu">html_element</span>(<span class="st">".thumbnail-teaser__heading"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-196"><a href="#cb7-196"></a>    <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-197"><a href="#cb7-197"></a>    <span class="fu">str_squish</span>()</span>
-<span id="cb7-198"><a href="#cb7-198"></a></span>
-<span id="cb7-199"><a href="#cb7-199"></a>  text <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span></span>
-<span id="cb7-200"><a href="#cb7-200"></a>    <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-201"><a href="#cb7-201"></a>    <span class="fu">str_squish</span>()</span>
-<span id="cb7-202"><a href="#cb7-202"></a></span>
-<span id="cb7-203"><a href="#cb7-203"></a>  date_pattern <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
-<span id="cb7-204"><a href="#cb7-204"></a>    <span class="st">"(January|February|March|April|May|June|July|"</span>,</span>
-<span id="cb7-205"><a href="#cb7-205"></a>    <span class="st">"August|September|October|November|December)"</span>,</span>
-<span id="cb7-206"><a href="#cb7-206"></a>    <span class="st">" [0-9]{1,2}, [0-9]{4}"</span></span>
-<span id="cb7-207"><a href="#cb7-207"></a>  )</span>
-<span id="cb7-208"><a href="#cb7-208"></a></span>
-<span id="cb7-209"><a href="#cb7-209"></a>  dates <span class="ot">&lt;-</span> <span class="fu">str_extract</span>(text, date_pattern)</span>
-<span id="cb7-210"><a href="#cb7-210"></a></span>
-<span id="cb7-211"><a href="#cb7-211"></a>  abstracts <span class="ot">&lt;-</span> text <span class="sc">|&gt;</span></span>
-<span id="cb7-212"><a href="#cb7-212"></a>    <span class="fu">str_remove</span>(<span class="fu">fixed</span>(titles)) <span class="sc">|&gt;</span></span>
-<span id="cb7-213"><a href="#cb7-213"></a>    <span class="fu">str_remove</span>(date_pattern) <span class="sc">|&gt;</span></span>
-<span id="cb7-214"><a href="#cb7-214"></a>    <span class="fu">str_remove</span>(<span class="st">"^</span><span class="sc">\\</span><span class="st">s*[—–-]</span><span class="sc">\\</span><span class="st">s*"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-215"><a href="#cb7-215"></a>    <span class="fu">str_squish</span>()</span>
-<span id="cb7-216"><a href="#cb7-216"></a></span>
-<span id="cb7-217"><a href="#cb7-217"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb7-218"><a href="#cb7-218"></a>    <span class="at">title =</span> titles,</span>
-<span id="cb7-219"><a href="#cb7-219"></a>    <span class="at">date =</span> dates,</span>
-<span id="cb7-220"><a href="#cb7-220"></a>    <span class="at">abstract =</span> abstracts</span>
-<span id="cb7-221"><a href="#cb7-221"></a>  )</span>
-<span id="cb7-222"><a href="#cb7-222"></a>}</span>
-<span id="cb7-223"><a href="#cb7-223"></a></span>
-<span id="cb7-224"><a href="#cb7-224"></a><span class="co"># Code is not working and so has been commented out</span></span>
-<span id="cb7-225"><a href="#cb7-225"></a></span>
-<span id="cb7-226"><a href="#cb7-226"></a><span class="co"># base_url &lt;- "https://www.nih.gov/news-events/news-releases"</span></span>
-<span id="cb7-227"><a href="#cb7-227"></a><span class="co"># </span></span>
-<span id="cb7-228"><a href="#cb7-228"></a><span class="co"># pages &lt;- map(0:4, function(i) {</span></span>
-<span id="cb7-229"><a href="#cb7-229"></a><span class="co">#   url &lt;- if (i == 0) base_url else str_c(base_url, "?page=", i)</span></span>
-<span id="cb7-230"><a href="#cb7-230"></a><span class="co">#   scrape_page(url)</span></span>
-<span id="cb7-231"><a href="#cb7-231"></a><span class="co"># })</span></span>
-<span id="cb7-232"><a href="#cb7-232"></a><span class="co"># </span></span>
-<span id="cb7-233"><a href="#cb7-233"></a><span class="co"># df_articles &lt;- bind_rows(pages)</span></span>
-<span id="cb7-234"><a href="#cb7-234"></a><span class="co"># </span></span>
-<span id="cb7-235"><a href="#cb7-235"></a><span class="co"># head(df_articles)</span></span>
-<span id="cb7-236"><a href="#cb7-236"></a><span class="co"># nrow(df_articles)</span></span>
-<span id="cb7-237"><a href="#cb7-237"></a><span class="in">```</span></span>
-<span id="cb7-238"><a href="#cb7-238"></a></span>
+<span id="cb7-181"><a href="#cb7-181"></a></span>
+<span id="cb7-184"><a href="#cb7-184"></a><span class="in">```{r}</span></span>
+<span id="cb7-185"><a href="#cb7-185"></a>scrape_page <span class="ot">&lt;-</span> <span class="cf">function</span>(url) {</span>
+<span id="cb7-186"><a href="#cb7-186"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb7-187"><a href="#cb7-187"></a></span>
+<span id="cb7-188"><a href="#cb7-188"></a>  page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb7-189"><a href="#cb7-189"></a>  articles <span class="ot">&lt;-</span> page <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">".thumbnail-teaser"</span>)</span>
+<span id="cb7-190"><a href="#cb7-190"></a></span>
+<span id="cb7-191"><a href="#cb7-191"></a>  <span class="cf">if</span> (<span class="fu">length</span>(articles) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb7-192"><a href="#cb7-192"></a>    <span class="fu">stop</span>(<span class="st">"No news releases found at: "</span>, url)</span>
+<span id="cb7-193"><a href="#cb7-193"></a>  }</span>
+<span id="cb7-194"><a href="#cb7-194"></a></span>
+<span id="cb7-195"><a href="#cb7-195"></a>  titles <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span></span>
+<span id="cb7-196"><a href="#cb7-196"></a>    <span class="fu">html_element</span>(<span class="st">".thumbnail-teaser__heading"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-197"><a href="#cb7-197"></a>    <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-198"><a href="#cb7-198"></a>    <span class="fu">str_squish</span>()</span>
+<span id="cb7-199"><a href="#cb7-199"></a></span>
+<span id="cb7-200"><a href="#cb7-200"></a>  text <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span></span>
+<span id="cb7-201"><a href="#cb7-201"></a>    <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-202"><a href="#cb7-202"></a>    <span class="fu">str_squish</span>()</span>
+<span id="cb7-203"><a href="#cb7-203"></a></span>
+<span id="cb7-204"><a href="#cb7-204"></a>  date_pattern <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb7-205"><a href="#cb7-205"></a>    <span class="st">"(January|February|March|April|May|June|July|"</span>,</span>
+<span id="cb7-206"><a href="#cb7-206"></a>    <span class="st">"August|September|October|November|December)"</span>,</span>
+<span id="cb7-207"><a href="#cb7-207"></a>    <span class="st">" [0-9]{1,2}, [0-9]{4}"</span></span>
+<span id="cb7-208"><a href="#cb7-208"></a>  )</span>
+<span id="cb7-209"><a href="#cb7-209"></a></span>
+<span id="cb7-210"><a href="#cb7-210"></a>  dates <span class="ot">&lt;-</span> <span class="fu">str_extract</span>(text, date_pattern)</span>
+<span id="cb7-211"><a href="#cb7-211"></a></span>
+<span id="cb7-212"><a href="#cb7-212"></a>  abstracts <span class="ot">&lt;-</span> text <span class="sc">|&gt;</span></span>
+<span id="cb7-213"><a href="#cb7-213"></a>    <span class="fu">str_remove</span>(<span class="fu">fixed</span>(titles)) <span class="sc">|&gt;</span></span>
+<span id="cb7-214"><a href="#cb7-214"></a>    <span class="fu">str_remove</span>(date_pattern) <span class="sc">|&gt;</span></span>
+<span id="cb7-215"><a href="#cb7-215"></a>    <span class="fu">str_remove</span>(<span class="st">"^</span><span class="sc">\\</span><span class="st">s*[—–-]</span><span class="sc">\\</span><span class="st">s*"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-216"><a href="#cb7-216"></a>    <span class="fu">str_squish</span>()</span>
+<span id="cb7-217"><a href="#cb7-217"></a></span>
+<span id="cb7-218"><a href="#cb7-218"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb7-219"><a href="#cb7-219"></a>    <span class="at">title =</span> titles,</span>
+<span id="cb7-220"><a href="#cb7-220"></a>    <span class="at">date =</span> dates,</span>
+<span id="cb7-221"><a href="#cb7-221"></a>    <span class="at">abstract =</span> abstracts</span>
+<span id="cb7-222"><a href="#cb7-222"></a>  )</span>
+<span id="cb7-223"><a href="#cb7-223"></a>}</span>
+<span id="cb7-224"><a href="#cb7-224"></a></span>
+<span id="cb7-225"><a href="#cb7-225"></a><span class="co"># Code is not working and so has been commented out</span></span>
+<span id="cb7-226"><a href="#cb7-226"></a></span>
+<span id="cb7-227"><a href="#cb7-227"></a><span class="co"># base_url &lt;- "https://www.nih.gov/news-events/news-releases"</span></span>
+<span id="cb7-228"><a href="#cb7-228"></a><span class="co"># </span></span>
+<span id="cb7-229"><a href="#cb7-229"></a><span class="co"># pages &lt;- map(0:4, function(i) {</span></span>
+<span id="cb7-230"><a href="#cb7-230"></a><span class="co">#   url &lt;- if (i == 0) base_url else str_c(base_url, "?page=", i)</span></span>
+<span id="cb7-231"><a href="#cb7-231"></a><span class="co">#   scrape_page(url)</span></span>
+<span id="cb7-232"><a href="#cb7-232"></a><span class="co"># })</span></span>
+<span id="cb7-233"><a href="#cb7-233"></a><span class="co"># </span></span>
+<span id="cb7-234"><a href="#cb7-234"></a><span class="co"># df_articles &lt;- bind_rows(pages)</span></span>
+<span id="cb7-235"><a href="#cb7-235"></a><span class="co"># </span></span>
+<span id="cb7-236"><a href="#cb7-236"></a><span class="co"># head(df_articles)</span></span>
+<span id="cb7-237"><a href="#cb7-237"></a><span class="co"># nrow(df_articles)</span></span>
+<span id="cb7-238"><a href="#cb7-238"></a><span class="in">```</span></span>
 <span id="cb7-239"><a href="#cb7-239"></a></span>
-<span id="cb7-240"><a href="#cb7-240"></a><span class="fu">## NIH STEM Teaching Resources</span></span>
-<span id="cb7-241"><a href="#cb7-241"></a></span>
-<span id="cb7-242"><a href="#cb7-242"></a>Let's look at a more complex example with the <span class="co">[</span><span class="ot">NIH STEM Teaching Resources webpage</span><span class="co">](https://science.education.nih.gov/)</span>.</span>
-<span id="cb7-243"><a href="#cb7-243"></a></span>
-<span id="cb7-244"><a href="#cb7-244"></a><span class="ss">-  </span>Using Selector Gadget to select the resource titles can be tricky if we can only get one resource title at a time.</span>
-<span id="cb7-245"><a href="#cb7-245"></a><span class="ss">- </span>In Chrome, you can right click part of a web page and click "Inspect". This opens up Chrome's Developer Tools. Mousing over the HTML in the top right panel highlights the corresponding part of the web page.</span>
-<span id="cb7-246"><a href="#cb7-246"></a><span class="ss">    - </span>For non-Chrome browsers, use the Help menu to search for Developer Tools.</span>
-<span id="cb7-247"><a href="#cb7-247"></a></span>
-<span id="cb7-248"><a href="#cb7-248"></a>The underlying HTML used to create a web page is also called the page **source code** or **page source**.</span>
-<span id="cb7-249"><a href="#cb7-249"></a></span>
-<span id="cb7-250"><a href="#cb7-250"></a>We learn from this that the resource titles are <span class="in">`&lt;h4&gt;`</span> headings that have the class <span class="in">`resource-title`</span>.</span>
-<span id="cb7-251"><a href="#cb7-251"></a></span>
-<span id="cb7-252"><a href="#cb7-252"></a>We can infer from this that <span class="in">`.resource-title`</span> would be the CSS selector for the resource titles.</span>
-<span id="cb7-253"><a href="#cb7-253"></a></span>
+<span id="cb7-240"><a href="#cb7-240"></a></span>
+<span id="cb7-241"><a href="#cb7-241"></a><span class="fu">## NIH STEM Teaching Resources</span></span>
+<span id="cb7-242"><a href="#cb7-242"></a></span>
+<span id="cb7-243"><a href="#cb7-243"></a>Let's look at a more complex example with the <span class="co">[</span><span class="ot">NIH STEM Teaching Resources webpage</span><span class="co">](https://science.education.nih.gov/)</span>.</span>
+<span id="cb7-244"><a href="#cb7-244"></a></span>
+<span id="cb7-245"><a href="#cb7-245"></a><span class="ss">-  </span>Using Selector Gadget to select the resource titles can be tricky if we can only get one resource title at a time.</span>
+<span id="cb7-246"><a href="#cb7-246"></a><span class="ss">- </span>In Chrome, you can right click part of a web page and click "Inspect". This opens up Chrome's Developer Tools. Mousing over the HTML in the top right panel highlights the corresponding part of the web page.</span>
+<span id="cb7-247"><a href="#cb7-247"></a><span class="ss">    - </span>For non-Chrome browsers, use the Help menu to search for Developer Tools.</span>
+<span id="cb7-248"><a href="#cb7-248"></a></span>
+<span id="cb7-249"><a href="#cb7-249"></a>The underlying HTML used to create a web page is also called the page **source code** or **page source**.</span>
+<span id="cb7-250"><a href="#cb7-250"></a></span>
+<span id="cb7-251"><a href="#cb7-251"></a>We learn from this that the resource titles are <span class="in">`&lt;h4&gt;`</span> headings that have the class <span class="in">`resource-title`</span>.</span>
+<span id="cb7-252"><a href="#cb7-252"></a></span>
+<span id="cb7-253"><a href="#cb7-253"></a>We can infer from this that <span class="in">`.resource-title`</span> would be the CSS selector for the resource titles.</span>
 <span id="cb7-254"><a href="#cb7-254"></a></span>
-<span id="cb7-255"><a href="#cb7-255"></a><span class="fu">## Done!</span></span>
-<span id="cb7-256"><a href="#cb7-256"></a></span>
-<span id="cb7-257"><a href="#cb7-257"></a><span class="ss">- </span>Check the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website</span>
+<span id="cb7-255"><a href="#cb7-255"></a></span>
+<span id="cb7-256"><a href="#cb7-256"></a><span class="fu">## Done!</span></span>
+<span id="cb7-257"><a href="#cb7-257"></a></span>
+<span id="cb7-258"><a href="#cb7-258"></a><span class="ss">- </span>Check the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
