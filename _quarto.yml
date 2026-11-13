@@ -69,6 +69,7 @@ book:
       - tt/hw01-tt.qmd
       - tt/hw03-tt.qmd
       - tt/hw06-tt.qmd
+      - tt/hw07-tt.qmd
 
     - part: "Pre-Class Learnings"
       chapters:
@@ -91,7 +92,6 @@ book:
       - ica/14-apis-2.qmd
       - ica/15-scraping.qmd
       - ica/16-databases.qmd
-      - ica/18-interactive-viz.qmd
 
     - part: "Extras"
       chapters:
