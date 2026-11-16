@@ -2,4 +2,345 @@
 title: "Personal Visualization Journey"
 ---
 
-Add content here
+## Setup and data import
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+scrobbles <- read_csv(
+  "scrobbles-ramenez-le-1793670467.csv",
+  show_col_types = FALSE
+) %>%
+  mutate(
+    listened_at = with_tz(as_datetime(uts), "America/Chicago"),
+    date = as.Date(listened_at, tz = "America/Chicago"),
+    month = floor_date(date, "month"),
+    hour = hour(listened_at),
+    weekday = wday(listened_at, label = TRUE, week_start = 1)
+  
+  )
+dim(scrobbles)
+```
+
+## Prepare the monthly listening data
+
+```{r}
+# Exclude incomplete boundary months
+months <- seq.Date(
+  as.Date("2025-09-01"),
+  as.Date("2026-10-01"),
+  by = "month"
+)
+
+listening <- scrobbles %>%
+  filter(month %in% months)
+
+# Identify the 12 most-played artists
+top_artists <- listening %>%
+  count(artist, sort = TRUE) %>%
+  slice_head(n = 12) %>%
+  pull(artist)
+
+# Calculate monthly artist shares
+heatmap <- crossing(month = months, artist = top_artists) %>%
+  left_join(
+    listening %>%
+      count(month, artist, name = "artist_plays"),
+    by = c("month", "artist")
+  ) %>%
+  left_join(
+    listening %>%
+      count(month, name = "monthly_plays"),
+    by = "month"
+  ) %>%
+  mutate(
+    share = if_else(
+      is.na(monthly_plays),
+      NA_real_,
+      replace_na(artist_plays, 0L) / monthly_plays
+    ),
+    artist = factor(artist, levels = rev(top_artists)),
+    month_id = factor(
+      format(month, "%Y-%m"),
+      levels = format(months, "%Y-%m")
+    )
+  )
+
+# Month labels, with years where appropriate
+month_labels <- if_else(
+  seq_along(months) == 1 | month(months) == 1,
+  format(months, "%b\n%Y"),
+  format(months, "%b")
+)
+
+# Identify exceptional monthly listening shares
+peaks <- heatmap %>%
+  filter(!is.na(share), share >= 0.09)
+
+# Identify the missing month
+missing_x <- which(
+  levels(heatmap$month_id) == "2026-08"
+)
+```
+
+## Version 1 visualization
+
+```{r}
+#| fig-width: 14
+#| fig-height: 9
+#| fig-alt: "Heatmap of the 12 most-played artists from September 2025 to October 2026. Darker teal indicates higher monthly listening shares, with four peaks highlighted in orange. August 2026 has no records."
+
+paper <- "#FBFAF6"
+
+plot1 <- ggplot(heatmap, aes(month_id, artist)) +
+  geom_tile(aes(fill = share), width = 0.94, height = 0.86) +
+
+  # Missing month
+  annotate(
+    "rect",
+    xmin = missing_x - 0.47, xmax = missing_x + 0.47,
+    ymin = 0.57, ymax = length(top_artists) + 0.43,
+    fill = "#DCD8CE"
+  ) +
+  annotate(
+    "text",
+    x = missing_x, y = (length(top_artists) + 1) / 2,
+    label = "NO RECORDS", angle = 90,
+    color = "#596970", fontface = "bold", size = 3
+  ) +
+
+  # Highlight monthly shares of at least 9%
+  geom_tile(
+    data = peaks, fill = NA, color = "#DF784F",
+    linewidth = 0.8, width = 0.94, height = 0.86
+  ) +
+  geom_text(
+    data = peaks,
+    aes(label = scales::percent(share, accuracy = 0.1)),
+    color = "white", fontface = "bold", size = 3
+  ) +
+
+  coord_fixed(ratio = 0.6) +
+
+  scale_fill_gradientn(
+    colors = c(
+      "#EFF4EF", "#C9DDDA", "#8DB9BA",
+      "#3F8692", "#0B4659"
+    ),
+    values = scales::rescale(c(0, 0.02, 0.04, 0.07, 0.10)),
+    limits = c(0, 0.10),
+    breaks = c(0, 0.05, 0.10),
+    labels = scales::label_percent(accuracy = 1),
+    na.value = "#DCD8CE",
+    name = "Share of monthly plays"
+  ) +
+  scale_x_discrete(
+    labels = set_names(month_labels, format(months, "%Y-%m")),
+    drop = FALSE
+  ) +
+  guides(fill = guide_colorbar(
+    direction = "horizontal",
+    title.position = "top",
+    barwidth = grid::unit(4.5, "cm"),
+    barheight = grid::unit(0.3, "cm")
+  )) +
+
+  labs(
+    title = "Evolution of most-listened artists",
+    subtitle = paste(
+      "Across 13 recorded months, no artist reached",
+      "10% of a month's listening."
+    ),
+    x = NULL, y = NULL,
+    caption = paste(
+      "Each tile shows an artist's share of all monthly plays; only the 12 most-played artists are displayed.",
+      "Orange outlines indicate shares of at least 9%. August 2026 has no records.",
+      "Source: Personal Last.fm listening history from Sep 2025–Oct 2026",
+      sep = "\n"
+    )
+  ) +
+
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.background = element_rect(fill = paper, color = NA),
+    panel.background = element_rect(fill = paper, color = NA),
+    panel.grid = element_blank(),
+
+    plot.title.position = "plot",
+    plot.title = element_text(
+      size = 20, face = "bold", color = "#18323D"
+    ),
+    plot.subtitle = element_text(
+      size = 11, color = "#596970",
+      margin = margin(b = 12)
+    ),
+
+    axis.text.y = element_text(
+      size = 9.5, color = "#18323D"
+    ),
+    axis.text.x = element_text(
+      size = 9, color = "#18323D",
+      margin = margin(t = 6)
+    ),
+    axis.ticks = element_blank(),
+
+    legend.position = "bottom",
+    legend.justification = "left",
+    legend.title = element_text(size = 10, face = "bold"),
+    legend.text = element_text(size = 9),
+
+    plot.caption.position = "plot",
+    plot.caption = element_text(
+      size = 8.5, color = "#596970",
+      hjust = 0, lineheight = 1.2,
+      margin = margin(t = 10)
+    ),
+    plot.margin = margin(12, 18, 12, 12)
+  )
+
+plot1
+
+```
+
+## Version 2 visualization
+
+```{r}
+leaders <- heatmap %>%
+  filter(!is.na(share)) %>%
+  group_by(month) %>%
+  slice_max(artist_plays, n = 1, with_ties = FALSE) %>%
+  ungroup()
+
+highest <- leaders %>%
+  slice_max(share, n = 1)
+
+lowest <- leaders %>%
+  slice_min(share, n = 1)
+
+leaders %>%
+  select(month, artist, artist_plays, share)
+
+```
+
+```{r}
+#| fig-width: 14
+#| fig-height: 9
+#| fig-alt: "Heatmap showing the twelve most-played artists from September 2025 to October 2026. Orange outlines identify the most-played artist each month. The highest and lowest monthly leader shares are labeled. August 2026 has no records."
+
+paper <- "#FBFAF6"
+ink <- "#18323D"
+accent <- "#DF784F"
+
+plot2 <- ggplot(heatmap, aes(month_id, artist)) +
+  geom_tile(aes(fill = share), width = 0.94, height = 0.86) +
+
+  # Month with no recorded plays
+  annotate(
+    "rect",
+    xmin = missing_x - 0.47, xmax = missing_x + 0.47,
+    ymin = 0.57, ymax = length(top_artists) + 0.43,
+    fill = "#DCD8CE"
+  ) +
+  annotate(
+    "text",
+    x = missing_x, y = (length(top_artists) + 1) / 2,
+    label = "NO RECORDS", angle = 90,
+    color = "#596970", fontface = "bold", size = 3
+  ) +
+
+  # Identify each month's most-played artist
+  geom_tile(
+    data = leaders, fill = NA, color = accent,
+    linewidth = 0.7, width = 0.94, height = 0.86
+  ) +
+
+  # Label only the highest and lowest leader shares
+  geom_text(
+    data = highest,
+    aes(label = scales::percent(share, accuracy = 0.1)),
+    color = "white", fontface = "bold", size = 3
+  ) +
+  geom_text(
+    data = lowest,
+    aes(label = scales::percent(share, accuracy = 0.1)),
+    color = ink, fontface = "bold", size = 3
+  ) +
+
+  coord_fixed(ratio = 0.6) +
+
+  scale_fill_gradientn(
+    colors = c(
+      "#EFF4EF", "#C9DDDA", "#8DB9BA",
+      "#3F8692", "#0B4659"
+    ),
+    values = scales::rescale(c(0, 0.02, 0.04, 0.07, 0.10)),
+    limits = c(0, 0.10),
+    breaks = c(0, 0.05, 0.10),
+    labels = scales::label_percent(accuracy = 1),
+    na.value = "#DCD8CE",
+    name = "Share of monthly plays"
+  ) +
+  scale_x_discrete(
+    labels = set_names(month_labels, format(months, "%Y-%m")),
+    drop = FALSE
+  ) +
+  guides(fill = guide_colorbar(
+    direction = "horizontal",
+    title.position = "top",
+    barwidth = grid::unit(4.5, "cm"),
+    barheight = grid::unit(0.3, "cm")
+  )) +
+
+  labs(
+    title = "Evolution of most-listened artists",
+    subtitle = paste(
+      "Across 13 recorded months, no artist reached",
+      "10% of a month's listening."
+    ),
+    x = NULL, y = NULL,
+    caption = paste(
+      "Each tile shows an artist's share of all monthly plays; only the 12 most-played artists are displayed.",
+      "Orange outlines mark each month's top artist; the highest and lowest leading shares are labeled. August 2026 has no records.",
+      "Source: Personal Last.fm listening history from Sep 2025–Oct 2026",
+      sep = "\n"
+    )
+  ) +
+
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.background = element_rect(fill = paper, color = NA),
+    panel.grid = element_blank(),
+    plot.title.position = "plot",
+    plot.title = element_text(
+      size = 20, face = "bold", color = ink
+    ),
+    plot.subtitle = element_text(
+      size = 11, color = "#596970",
+      margin = margin(b = 12)
+    ),
+    axis.text.y = element_text(size = 9.5, color = ink),
+    axis.text.x = element_text(
+      size = 9, color = ink, margin = margin(t = 6)
+    ),
+    legend.position = "bottom",
+    legend.justification = "left",
+    legend.title = element_text(size = 10, face = "bold"),
+    plot.caption.position = "plot",
+    plot.caption = element_text(
+      size = 8.5, color = "#596970", hjust = 0,
+      margin = margin(t = 12)
+    ),
+    plot.margin = margin(12, 18, 12, 12)
+  )
+
+plot2
+
+ggsave(
+  "pvj-version-11-9.png",
+  plot2,
+  width = 14, height = 9,
+  dpi = 300, bg = paper
+)
+```
+
