@@ -223,6 +223,8 @@ leaders %>%
 
 ```
 
+## Version 2 visualization
+
 ```{r}
 #| fig-width: 14
 #| fig-height: 9
@@ -342,5 +344,121 @@ ggsave(
   width = 14, height = 9,
   dpi = 300, bg = paper
 )
+```
+
+## Version 3 visualization (final)
+
+```{r}
+#| fig-width: 14
+#| fig-height: 9
+#| fig-alt: "Heatmap of twelve artists' monthly listening shares from September 2025 to October 2026. Orange outlines mark each month's most-played artist. The highest and lowest monthly leader shares are 9.8% and 4.5%. August 2026 has no records."
+
+paper <- "#FBFAF6"
+ink <- "#18323D"
+accent <- "#DF784F"
+
+plot3 <- ggplot(heatmap, aes(month_id, artist)) +
+  geom_tile(aes(fill = share), width = 0.94, height = 0.86) +
+
+  annotate(
+    "rect",
+    xmin = missing_x - 0.47, xmax = missing_x + 0.47,
+    ymin = 0.57, ymax = length(top_artists) + 0.43,
+    fill = "#DCD8CE"
+  ) +
+  annotate(
+    "text",
+    x = missing_x, y = (length(top_artists) + 1) / 2,
+    label = "NO RECORDS", angle = 90,
+    color = "#596970", fontface = "bold", size = 3
+  ) +
+
+  geom_tile(
+    data = leaders, fill = NA, color = accent,
+    linewidth = 0.7, width = 0.94, height = 0.86
+  ) +
+
+  geom_text(
+    data = highest,
+    aes(label = scales::percent(share, accuracy = 0.1)),
+    color = "white", fontface = "bold", size = 3
+  ) +
+  geom_text(
+    data = lowest,
+    aes(label = scales::percent(share, accuracy = 0.1)),
+    color = ink, fontface = "bold", size = 3
+  ) +
+
+  coord_fixed(ratio = 0.6) +
+
+  scale_fill_gradientn(
+    colors = c(
+      "#EFF4EF", "#C9DDDA", "#8DB9BA",
+      "#3F8692", "#0B4659"
+    ),
+    values = scales::rescale(c(0, 0.02, 0.04, 0.07, 0.10)),
+    limits = c(0, 0.10),
+    breaks = c(0, 0.05, 0.10),
+    labels = scales::label_percent(accuracy = 1),
+    na.value = "#DCD8CE",
+    name = "Share of monthly plays"
+  ) +
+  scale_x_discrete(
+    labels = set_names(month_labels, format(months, "%Y-%m")),
+    drop = FALSE
+  ) +
+  guides(fill = guide_colorbar(
+    direction = "horizontal",
+    title.position = "top",
+    barwidth = grid::unit(4.5, "cm"),
+    barheight = grid::unit(0.3, "cm")
+  )) +
+
+  labs(
+    title = "Evolution of most-listened artists",
+    subtitle = paste(
+      "Across 13 recorded months, no artist reached",
+      "10% of a month's listening."
+    ),
+    x = NULL, y = NULL,
+    caption = paste(
+      "Each tile shows an artist's share of all monthly plays; only the 12 most-played artists are displayed, ordered by total plays.",
+      "Orange outlines mark each month's top artist; 9.8% and 4.5% are the highest and lowest leading shares. August 2026 has no records.",
+      "Source: Personal Last.fm listening history from Sep 2025–Oct 2026",
+      sep = "\n"
+    )
+  ) +
+
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.background = element_rect(fill = paper, color = NA),
+    panel.grid = element_blank(),
+    plot.title.position = "plot",
+    plot.title = element_text(
+      size = 20, face = "bold", color = ink
+    ),
+    plot.subtitle = element_text(
+      size = 11, color = "#596970",
+      margin = margin(b = 12)
+    ),
+    axis.text.y = element_text(size = 9.5, color = ink),
+    axis.text.x = element_text(
+      size = 9, color = ink, margin = margin(t = 6)
+    ),
+    legend.position = "bottom",
+    legend.justification = "left",
+    legend.title = element_text(size = 10, face = "bold"),
+    plot.caption.position = "plot",
+    plot.caption = element_text(
+      size = 9, color = "#596970", hjust = 0,
+      margin = margin(t = 12)
+    ),
+    plot.margin = margin(12, 18, 12, 12)
+  )
+
+plot3
+```
+
+
 ```
 
