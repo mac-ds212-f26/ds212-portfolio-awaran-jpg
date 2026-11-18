@@ -193,7 +193,7 @@ These comparisons do not illustrate geographic distribution, but we can examine 
 ```{r}
 #| fig-width: 11
 #| fig-height: 6.5
-#| fig-alt: "World map showing 2,355 language locations. Blue points indicate languages with inclusive/exclusive marking, and orange points indicate languages without it. The distinction is particularly common in Papunesia and Australia."
+#| fig-alt: "World map of 2,355 languages. Blue points represent languages that grammatically mark 'we including you', while orange points represent languages without this distinction. Blue points are particularly common across the Philippines, New Guinea, Pacific islands, and Australia."
 
 plot3 <- ggplot() +
   geom_sf(
@@ -206,12 +206,17 @@ plot3 <- ggplot() +
     data = language_map,
     aes(color = distinction),
     size = 0.9,
-    alpha = 0.8
+    alpha = 0.55
   ) +
   scale_color_manual(
     values = c(
       "Distinction present" = "#0072B2",
       "No distinction" = "#D55E00"
+    ),
+    breaks = c("Distinction present", "No distinction"),
+    labels = c(
+      "Explicitly marks 'we including you'",
+      "No grammatical distinction recorded"
     ),
     name = NULL
   ) +
@@ -226,10 +231,11 @@ plot3 <- ggplot() +
     )
   ) +
   labs(
-    title = "Inclusive/exclusive marking is common in Papunesia and Australia",
-    subtitle = "Geographic distribution of languages with marking classifications",
+    title = "Where languages distinguish 'we including you' from 'we excluding you'",
+    subtitle = "Most common in Papunesia (the Philippines, New Guinea and other Pacific islands) and Australia",
     caption = paste(
-      "Source: Grambank via TidyTuesday (11/3/2026). By: Arun Waran.",
+      "Data: Grambank v1.0.3 (Skirgård et al., 2023), feature GB028 from TidyTuesday (11/3/2026).",
+      "2,355 language locations. By: Arun Waran.",
       sep = "\n"
     )
   ) +

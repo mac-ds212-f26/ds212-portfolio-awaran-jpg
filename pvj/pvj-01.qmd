@@ -223,8 +223,6 @@ leaders %>%
 
 ```
 
-## Version 2 visualization
-
 ```{r}
 #| fig-width: 14
 #| fig-height: 9
